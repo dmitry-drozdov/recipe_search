@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:recipe_search/models/recipe_model.dart';
 import 'package:recipe_search/repositories/recipe_repo.dart';
 
@@ -8,7 +10,7 @@ abstract class RecipeViewModel extends BaseViewModel<Recipe, void> {
 
   factory RecipeViewModel.create() => RecipeViewModelImpl();
 
-  Future<void> loadRecipes();
+  Future<void> loadRecipes(String text);
 }
 
 class RecipeViewModelImpl extends RecipeViewModel {
@@ -17,7 +19,17 @@ class RecipeViewModelImpl extends RecipeViewModel {
   RecipeViewModelImpl() : super();
 
   @override
-  Future<void> loadRecipes() async {
-    recipeRepository.getRecipes(text: "Coffee");
+  Future<void> loadRecipes(String text) async {
+    setLoading(value: true);
+    try {
+      final request = await recipeRepository.getRecipes(text: text);
+      if (request.result) {
+        silenceClearItems();
+        silenceAddRange(request.value);
+      }
+    } on Exception catch (e) {
+      log('Exception during getting recipes: $e');
+    }
+    setLoading(value: false);
   }
 }

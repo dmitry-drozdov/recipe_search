@@ -30,7 +30,7 @@ class RecipeRepositoryImpl extends RecipeRepository {
     logRequest(query, response);
     final recipes = <Recipe>[];
     final jsonData = jsonDecode(response.body);
-    if (jsonData['hits'][0] == null) {
+    if (jsonData['hits'].length == 0 || jsonData['hits'][0] == null) {
       return RequestResultModel(result: false);
     }
     jsonData['hits'].forEach((r) => recipes.add(Recipe.fromJson(r['recipe'])));

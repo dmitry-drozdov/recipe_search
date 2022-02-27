@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:recipe_search/helpers/common.dart';
+import 'package:recipe_search/helpers/logger.dart';
 import 'package:recipe_search/helpers/request_result_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:recipe_search/models/recipe_model.dart';

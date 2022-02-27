@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:recipe_search/view/recipe_card.dart';
 import 'package:recipe_search/viewmodels/recipe_viewmodel.dart';
 import 'package:recipe_search/viewmodels/viewmodel_provider.dart';
 
@@ -60,6 +61,8 @@ class _MyHomePageState extends State<MyHomePage> {
             TextField(controller: controller, onChanged: (value) => {
               searchText = value
             },),
+            if (recipeViewMode.items.length > 0)
+            RecipeCard(recipe: recipeViewMode.items[0]),
           ],
         ),
       ),

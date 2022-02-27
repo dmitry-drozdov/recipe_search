@@ -24,17 +24,21 @@ class RecipeCard extends StatelessWidget {
               fit: BoxFit.contain,
               width: 90,
             ),
-            Padding(
+            Container(
+              width: 270,
               padding: const EdgeInsets.all(5),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
                     padding: verticalPadding,
-                    child: Text(recipe.label, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                    child: Text(
+                      recipe.label,
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
-                  Container(
-                    width: 270,
+                  Padding(
                     padding: verticalPadding,
                     child: titleValue(title: 'Ingredients: ', value: recipe.ingredients.map((e) => e.food).join(', ')),
                   ),

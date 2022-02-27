@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:recipe_search/view/recipe/recipe_card.dart';
+import 'package:recipe_search/view/recipe/recipe_list.dart';
 import 'package:recipe_search/viewmodels/recipe_viewmodel.dart';
 import 'package:recipe_search/viewmodels/viewmodel_provider.dart';
 
@@ -43,6 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height * 0.7 - MediaQuery.of(context).viewInsets.bottom;
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -61,8 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
             TextField(controller: controller, onChanged: (value) => {
               searchText = value
             },),
-            if (recipeViewMode.items.length > 0)
-            RecipeCard(recipe: recipeViewMode.items[0]),
+            SizedBox(height: height, child: RecipeList()),
           ],
         ),
       ),

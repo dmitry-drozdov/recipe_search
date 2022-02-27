@@ -25,7 +25,7 @@ class RecipeRepositoryImpl extends RecipeRepository {
 
   @override
   Future<RequestResultModel> getRecipes({required String text}) async {
-    final query = 'https://api.edamam.com/search?q=$text&app_id=$applicationId&app_key=$applicationKey&from=0&to=20';
+    final query = 'https://api.edamam.com/api/recipes/v2?type=public&q=$text&app_id=$applicationId&app_key=$applicationKey&from=0&to=20';
     final response = await http.get(Uri.parse(query));
     logRequest(query, response);
     final recipes = <Recipe>[];

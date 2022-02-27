@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:recipe_search/models/ingredient_model.dart';
+import 'package:recipe_search/models/ingredient/ingredient_model.dart';
 
 part 'recipe_model.g.dart';
 

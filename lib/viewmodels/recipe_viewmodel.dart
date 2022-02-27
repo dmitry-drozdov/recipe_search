@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:recipe_search/models/recipe_model.dart';
+import 'package:recipe_search/models/recipe/recipe_model.dart';
 import 'package:recipe_search/repositories/recipe_repo.dart';
 
 import 'base_view_model.dart';

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:recipe_search/models/recipe_model.dart';
+import 'package:recipe_search/models/recipe/recipe_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-import 'common.dart';
+import '../common.dart';
 
 const verticalPadding = EdgeInsets.symmetric(vertical: 1);
 

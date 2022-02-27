@@ -6,6 +6,8 @@ import '../common.dart';
 
 const verticalPadding = EdgeInsets.symmetric(vertical: 1);
 
+final placeHolder = Icon(Icons.food_bank_outlined, color: Colors.grey.shade400, size: 65);
+
 class RecipeCard extends StatelessWidget {
   final Recipe recipe;
 
@@ -22,6 +24,7 @@ class RecipeCard extends StatelessWidget {
             CachedNetworkImage(
               imageUrl: recipe.image,
               fit: BoxFit.contain,
+              placeholder: (_, __) => placeHolder,
               width: 90,
             ),
             Container(

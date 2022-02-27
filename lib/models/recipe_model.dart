@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:recipe_search/models/ingredient_model.dart';
 
 part 'recipe_model.g.dart';
 
@@ -14,6 +15,7 @@ class Recipe {
   final List<String> healthLabels;
   final List<String> cautions;
   final List<String> ingredientLines;
+  final List<Ingredient> ingredients;
   final double calories;
   final int? glycemicIndex;
   final int? totalCO2Emissions;
@@ -34,6 +36,7 @@ class Recipe {
     required this.healthLabels,
     required this.cautions,
     required this.ingredientLines,
+    required this.ingredients,
     required this.calories,
     this.glycemicIndex,
     this.totalCO2Emissions,

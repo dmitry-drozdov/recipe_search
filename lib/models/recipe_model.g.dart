@@ -24,6 +24,9 @@ Recipe _$RecipeFromJson(Map<String, dynamic> json) => Recipe(
       ingredientLines: (json['ingredientLines'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
+      ingredients: (json['ingredients'] as List<dynamic>)
+          .map((e) => Ingredient.fromJson(e as Map<String, dynamic>))
+          .toList(),
       calories: (json['calories'] as num).toDouble(),
       glycemicIndex: json['glycemicIndex'] as int?,
       totalCO2Emissions: json['totalCO2Emissions'] as int?,

@@ -14,11 +14,11 @@ class Recipe {
   final List<String> healthLabels;
   final List<String> cautions;
   final List<String> ingredientLines;
-  final int calories;
-  final int glycemicIndex;
-  final int totalCO2Emissions;
-  final String co2EmissionsClass;
-  final int totalWeight;
+  final double calories;
+  final int? glycemicIndex;
+  final int? totalCO2Emissions;
+  final String? co2EmissionsClass;
+  final double totalWeight;
   final List<String> cuisineType;
   final List<String> mealType;
   final List<String> dishType;
@@ -35,9 +35,9 @@ class Recipe {
     required this.cautions,
     required this.ingredientLines,
     required this.calories,
-    required this.glycemicIndex,
-    required this.totalCO2Emissions,
-    required this.co2EmissionsClass,
+    this.glycemicIndex,
+    this.totalCO2Emissions,
+    this.co2EmissionsClass,
     required this.totalWeight,
     required this.cuisineType,
     required this.mealType,

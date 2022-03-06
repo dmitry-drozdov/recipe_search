@@ -19,7 +19,7 @@ class RecipeList extends StatelessWidget {
             children: [
               ListView.builder(
                 itemBuilder: (ctx, i) {
-                  if (i == viewModel.items.length - 1) {
+                  if (i == viewModel.items.length - 1 && !viewModel.loading) {
                     WidgetsBinding.instance?.addPostFrameCallback((_){
                       viewModel.loadRecipes();
                     });

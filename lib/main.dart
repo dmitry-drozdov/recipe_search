@@ -38,7 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String searchText = '';
 
   void _incrementCounter() {
-    recipeViewMode.loadRecipes(searchText);
+    recipeViewMode.loadRecipes(text: searchText);
   }
 
   @override

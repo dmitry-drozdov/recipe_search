@@ -15,17 +15,19 @@ abstract class RecipeRepository {
 
   Future<RequestResultModel> getRecipes({
     required String text,
+    required int from,
+    required int to,
   });
 }
 
-
 class RecipeRepositoryImpl extends RecipeRepository {
-
   RecipeRepositoryImpl();
 
   @override
-  Future<RequestResultModel> getRecipes({required String text}) async {
-    final query = 'https://api.edamam.com/api/recipes/v2?type=public&q=$text&app_id=$applicationId&app_key=$applicationKey&from=0&to=20';
+  Future<RequestResultModel> getRecipes({required String text, required int from, required int to}) async {
+    assert(to - from <= 20);
+    final query =
+        'https://api.edamam.com/api/recipes/v2?type=public&q=$text&app_id=$applicationId&app_key=$applicationKey&from=$from&to=$to';
     final response = await http.get(Uri.parse(query));
     logRequest(query, response);
     final recipes = <Recipe>[];

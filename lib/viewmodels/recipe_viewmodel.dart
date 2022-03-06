@@ -10,7 +10,7 @@ abstract class RecipeViewModel extends BaseViewModel<Recipe, void> {
 
   factory RecipeViewModel.create() => RecipeViewModelImpl();
 
-  Future<void> loadRecipes(String text);
+  Future<void> loadRecipes({String text});
 }
 
 class RecipeViewModelImpl extends RecipeViewModel {
@@ -18,13 +18,20 @@ class RecipeViewModelImpl extends RecipeViewModel {
 
   RecipeViewModelImpl() : super();
 
+  String? previousText;
+
   @override
-  Future<void> loadRecipes(String text) async {
+  Future<void> loadRecipes({String? text}) async {
     setLoading(value: true);
+    if (text != null && previousText != text) {
+      silenceClearItems();
+      previousText = text;
+    }
+    text ??= previousText;
+
     try {
-      final request = await recipeRepository.getRecipes(text: text);
+      final request = await recipeRepository.getRecipes(text: text!, from: items.length + 1, to: items.length + 11);
       if (request.result) {
-        silenceClearItems();
         silenceAddRange(request.value);
       }
     } on Exception catch (e) {

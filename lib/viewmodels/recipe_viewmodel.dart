@@ -6,18 +6,28 @@ import 'package:recipe_search/repositories/recipe_result.dart';
 
 import 'base_view_model.dart';
 
-abstract class RecipeViewModel extends BaseViewModel<Recipe, void> {
+enum RecipeEvent {
+  openRecipe,
+}
+
+abstract class RecipeViewModel extends BaseViewModel<Recipe, RecipeEvent> {
   RecipeViewModel() : super();
 
   factory RecipeViewModel.create() => RecipeViewModelImpl();
 
   Future<void> loadRecipes({String? text});
+
+  void onRecipeTap({required String id});
+
+  String? get currentRecipeId;
 }
 
 class RecipeViewModelImpl extends RecipeViewModel {
   RecipeRepository recipeRepository = RecipeRepository.create();
 
   RecipeViewModelImpl() : super();
+
+  // Search recipes by text
 
   String? previousText;
   String? nextUrl;
@@ -52,4 +62,23 @@ class RecipeViewModelImpl extends RecipeViewModel {
     }
     setLoading(value: false);
   }
+
+  // Open recipe full information
+
+  String? _currentRecipeId;
+
+  @override
+  void onRecipeTap({required String id}) {
+    processingIds.add(id);
+    notifyListeners();
+
+    _currentRecipeId = id;
+    uiEventSubject.add(RecipeEvent.openRecipe);
+
+    processingIds.remove(id);
+    notifyListeners();
+  }
+
+  @override
+  String? get currentRecipeId => _currentRecipeId;
 }

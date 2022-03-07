@@ -48,4 +48,12 @@ class Recipe {
   });
 
   factory Recipe.fromJson(Map<String, dynamic> json) => _$RecipeFromJson(json);
+
+  String get id {
+    final index = uri.indexOf("_");
+    if (index == -1) {
+      throw Exception("Cannot get id. Incorrect uri provider: $uri");
+    }
+    return uri.substring(index);
+  }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:recipe_search/view/recipe/recipe_card.dart';
+import 'package:recipe_search/view/recipe/recipe_full.dart';
 import 'package:recipe_search/viewmodels/recipe_viewmodel.dart';
 import 'package:recipe_search/viewmodels/viewmodel_provider.dart';
 
@@ -20,7 +21,18 @@ class _RecipeListState extends State<RecipeList> {
     recipeViewModel.startUIListening((event) {
       switch (event) {
         case RecipeEvent.openRecipe:
-
+          final id = recipeViewModel.currentRecipeId;
+          if (id == null) {
+            throw Exception('Cannot open recipe full page. It was null');
+          }
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => RecipeFull(
+                key: Key('recipeFull$id'),
+                id: id,
+              ),
+            ),
+          );
           break;
       }
     });

@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:recipe_search/helpers/images/images_model.dart';
 import 'package:recipe_search/models/ingredient/ingredient_model.dart';
 
 part 'recipe_model.g.dart';
@@ -8,6 +9,7 @@ class Recipe {
   final String uri;
   final String label;
   final String image;
+  final Images images;
   final String source;
   final String url;
   final String shareAs;
@@ -29,6 +31,7 @@ class Recipe {
     required this.uri,
     required this.label,
     required this.image,
+    required this.images,
     required this.source,
     required this.url,
     required this.shareAs,
@@ -56,4 +59,14 @@ class Recipe {
     }
     return uri.substring(index);
   }
+
+  Image? get thumbnailImg => images.thumbnail;
+
+  Image? get smallImg => images.small;
+
+  Image? get regularImg => images.regular;
+
+  Image? get largeImg => images.large;
+
+  Image? get bestImg => largeImg ?? regularImg ?? smallImg ?? thumbnailImg;
 }

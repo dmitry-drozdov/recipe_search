@@ -10,6 +10,7 @@ Recipe _$RecipeFromJson(Map<String, dynamic> json) => Recipe(
       uri: json['uri'] as String,
       label: json['label'] as String,
       image: json['image'] as String,
+      images: Images.fromJson(json['images'] as Map<String, dynamic>),
       source: json['source'] as String,
       url: json['url'] as String,
       shareAs: json['shareAs'] as String,

@@ -44,7 +44,7 @@ class _RecipeFullState extends State<RecipeFull> {
                   pinned: true,
                   stretch: true,
                   expandedHeight: 260,
-                  flexibleSpace: CachedNetworkImage(imageUrl: recipe.image),
+                  flexibleSpace: CachedNetworkImage(imageUrl: recipe.bestImg!.url),
                 ),
                 SliverList(
                   delegate: SliverChildListDelegate(

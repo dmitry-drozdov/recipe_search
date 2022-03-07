@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:recipe_search/helpers/consts.dart';
 import 'package:recipe_search/models/recipe/recipe_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 import '../common.dart';
 
 const verticalPadding = EdgeInsets.symmetric(vertical: 1);
-
-final placeHolder = Icon(Icons.food_bank_outlined, color: Colors.grey.shade400, size: 65);
 
 class RecipeCard extends StatelessWidget {
   final Recipe recipe;

@@ -30,7 +30,7 @@ class RecipeCard extends StatelessWidget {
               CachedNetworkImage(
                 imageUrl: recipe.image,
                 fit: BoxFit.contain,
-                placeholder: (_, __) => placeHolder,
+                placeholder: (_, __) => placeholder,
                 width: 90,
               ),
               Container(

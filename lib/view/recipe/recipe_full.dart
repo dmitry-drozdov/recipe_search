@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:recipe_search/helpers/consts.dart';
 import 'package:recipe_search/models/recipe/recipe_model.dart';
 import 'package:recipe_search/viewmodels/recipe_viewmodel.dart';
 import 'package:recipe_search/viewmodels/viewmodel_provider.dart';
@@ -36,15 +37,20 @@ class _RecipeFullState extends State<RecipeFull> {
             child: CustomScrollView(
               slivers: <Widget>[
                 SliverAppBar(
-                  title: Title(
+                 /* title: Title(
                     color: theme.backgroundColor,
                     child: Text(recipe.label),
                     title: recipe.label,
-                  ),
+                  ),*/
+                  backgroundColor: Colors.white,
                   pinned: true,
                   stretch: true,
                   expandedHeight: 260,
-                  flexibleSpace: CachedNetworkImage(imageUrl: recipe.bestImg!.url),
+                  flexibleSpace: CachedNetworkImage(
+                    imageUrl: recipe.bestImg!.url,
+                    placeholder: (_, __) => placeholderLarge,
+                    fit: BoxFit.fill,
+                  ),
                 ),
                 SliverList(
                   delegate: SliverChildListDelegate(

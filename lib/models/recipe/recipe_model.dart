@@ -60,6 +60,8 @@ class Recipe {
     return uri.substring(index);
   }
 
+  // Getters for image
+
   Image? get thumbnailImg => images.thumbnail;
 
   Image? get smallImg => images.small;
@@ -69,4 +71,6 @@ class Recipe {
   Image? get largeImg => images.large;
 
   Image? get bestImg => largeImg ?? regularImg ?? smallImg ?? thumbnailImg;
+
+  // String getters for fields
 }

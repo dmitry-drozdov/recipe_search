@@ -22,6 +22,34 @@ class Title extends StatelessWidget {
   }
 }
 
+class TitleValue extends StatelessWidget {
+  final String title;
+  final String value;
+  final Color? color;
+
+  const TitleValue({
+    Key? key,
+    required this.title,
+    required this.value,
+    this.color,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(8.0),
+      color: color ?? Colors.indigo.withOpacity(0.1),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
+          Text(value, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w400)),
+        ],
+      ),
+    );
+  }
+}
+
 class Value extends StatelessWidget {
   final String value;
 
@@ -32,6 +60,40 @@ class Value extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Text(value, style: const TextStyle(fontSize: 18)),
+    );
+  }
+}
+
+class CircleInfo extends StatelessWidget {
+  final String title;
+  final String value;
+  final Color borderColor;
+
+  const CircleInfo({Key? key, required this.title, required this.value, required this.borderColor}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: borderColor.withOpacity(0.05),
+        border: Border.all(color: borderColor, width: 2),
+        borderRadius: const BorderRadius.all(Radius.circular(100)),
+      ),
+      height: 100,
+      width: 100,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            value,
+            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
+          ),
+          Text(
+            title,
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -61,6 +123,7 @@ class _RecipeFullState extends State<RecipeFull> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final blueColor = theme.primaryColor.withOpacity(0.1);
     return Scaffold(
       body: Column(
         children: <Widget>[
@@ -100,6 +163,24 @@ class _RecipeFullState extends State<RecipeFull> {
                             style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: Colors.indigo),
                           ),
                         ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              CircleInfo(
+                                title: 'Weight',
+                                value: recipe.totalWeight.toStringAsFixed(0),
+                                borderColor: theme.primaryColor,
+                              ),
+                              CircleInfo(
+                                title: 'Calories',
+                                value: recipe.calories.toStringAsFixed(0),
+                                borderColor: theme.primaryColor,
+                              ),
+                            ],
+                          ),
+                        ),
                         //-----------------------------------------------
                         if (recipe.ingredients.isNotEmpty) ...[
                           const Title(title: 'Ingredients'),
@@ -136,7 +217,18 @@ class _RecipeFullState extends State<RecipeFull> {
                           Value(value: recipe.healthLabels.view),
                         ],
                         //-----------------------------------------------
-
+                        if (recipe.glycemicIndex != null || true)
+                          TitleValue(title: 'Glycemic index', value: recipe.glycemicIndex.toString(), color: blueColor),
+                        //-----------------------------------------------
+                        if (recipe.totalCO2Emissions != null)
+                          TitleValue(
+                            title: 'Total CO2 Emissions',
+                            value: recipe.totalCO2Emissions.toString(),
+                            color: blueColor,
+                          ),
+                        //-----------------------------------------------
+                        if (recipe.co2EmissionsClass != null)
+                          TitleValue(title: 'CO2 Emissions Class', value: recipe.co2EmissionsClass!, color: blueColor),
                       ],
                     ),
                   ),

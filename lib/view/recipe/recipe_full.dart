@@ -130,9 +130,9 @@ class _RecipeFullState extends State<RecipeFull> {
         Value(value: recipe.dietLabels.view),
       ],
       //-----------------------------------------------
-      if (recipe.dishType.isNotEmpty) ...[
+      if (recipe.dishType?.isNotEmpty == true) ...[
         const TitleWidget(title: 'Dish type'),
-        Value(value: recipe.dishType.view),
+        Value(value: recipe.dishType!.view),
       ],
       //-----------------------------------------------
       if (recipe.mealType.isNotEmpty) ...[

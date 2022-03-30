@@ -38,6 +38,7 @@ Recipe _$RecipeFromJson(Map<String, dynamic> json) => Recipe(
           .toList(),
       mealType:
           (json['mealType'] as List<dynamic>).map((e) => e as String).toList(),
-      dishType:
-          (json['dishType'] as List<dynamic>).map((e) => e as String).toList(),
+      dishType: (json['dishType'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
     );

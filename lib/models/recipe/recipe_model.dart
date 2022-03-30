@@ -25,7 +25,7 @@ class Recipe {
   final double totalWeight;
   final List<String> cuisineType;
   final List<String> mealType;
-  final List<String> dishType;
+  final List<String>? dishType;
 
   Recipe({
     required this.uri,
@@ -47,7 +47,7 @@ class Recipe {
     required this.totalWeight,
     required this.cuisineType,
     required this.mealType,
-    required this.dishType,
+    this.dishType,
   });
 
   factory Recipe.fromJson(Map<String, dynamic> json) => _$RecipeFromJson(json);

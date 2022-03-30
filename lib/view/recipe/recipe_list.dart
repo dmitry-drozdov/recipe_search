@@ -44,36 +44,37 @@ class _RecipeListState extends State<RecipeList> {
       value: recipeViewModel,
       child: Consumer<RecipeViewModel>(
         builder: (_, viewModel, ___) {
-          return Stack(
-            children: [
-              ListView.builder(
-                keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-                itemBuilder: (ctx, i) {
-                  if (i == viewModel.items.length - 1 && !viewModel.loading) {
-                    WidgetsBinding.instance?.addPostFrameCallback((_) {
-                      viewModel.loadRecipes();
-                    });
-                  }
-                  final element = viewModel.items[i];
-                  final id = element.id;
-                  return RecipeCard(
-                    key: Key('recipeCard$id'),
-                    recipe: element,
-                    onTap: viewModel.processingIds.contains(id) ? null : () => viewModel.onRecipeTap(id: id),
-                  );
-                },
-                itemCount: viewModel.items.length,
-              ),
-              if (viewModel.loading)
-                Container(
-                  color: Colors.transparent,
-                  width: double.infinity,
-                  height: double.infinity,
-                  child: const Center(child: CircularProgressIndicator()),
-                ),
-            ],
+          if (viewModel.count == 0) return noResult();
+          return ListView.builder(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            itemBuilder: (ctx, i) {
+              if (i == viewModel.items.length - 1 && !viewModel.loading) {
+                WidgetsBinding.instance?.addPostFrameCallback((_) {
+                  viewModel.loadRecipes();
+                });
+              }
+              final element = viewModel.items[i];
+              final id = element.id;
+              return RecipeCard(
+                key: Key('recipeCard$id'),
+                recipe: element,
+                onTap: viewModel.processingIds.contains(id) ? null : () => viewModel.onRecipeTap(id: id),
+              );
+            },
+            itemCount: viewModel.items.length,
           );
         },
+      ),
+    );
+  }
+
+  Widget noResult() {
+    return Align(
+      alignment: Alignment.center,
+      child: Icon(
+        Icons.search,
+        size: 200,
+        color: Theme.of(context).primaryColor.withOpacity(0.3),
       ),
     );
   }

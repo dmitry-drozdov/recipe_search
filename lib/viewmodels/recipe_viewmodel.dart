@@ -38,8 +38,8 @@ class RecipeViewModelImpl extends RecipeViewModel {
       return;
     }
     setLoading(value: true);
-    if (text != null && previousText != text) {
-      silenceClearItems();
+    final newSearch = text != null && previousText != text;
+    if (newSearch) {
       previousText = text;
       nextUrl = null;
     }
@@ -47,6 +47,7 @@ class RecipeViewModelImpl extends RecipeViewModel {
 
     try {
       final request = await recipeRepository.getRecipes(text: text, nextUrl: nextUrl);
+      if (newSearch) silenceClearItems();
       if (request.result) {
         final value = request.value;
         if (value is RecipeResult) {

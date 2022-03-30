@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:recipe_search/view/recipe/recipe_list.dart';
 import 'package:recipe_search/viewmodels/recipe_viewmodel.dart';
 import 'package:recipe_search/viewmodels/viewmodel_provider.dart';
+import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,12 +14,14 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return KeyboardDismisser(
+      child: MaterialApp(
+        title: 'Recipe Search',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: const MyHomePage(title: 'Recipe Search'),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
@@ -37,39 +40,43 @@ class _MyHomePageState extends State<MyHomePage> {
   final controller = TextEditingController();
   String searchText = '';
 
-  void _incrementCounter() {
+  void _loadRecipes() {
     recipeViewMode.loadRecipes(text: searchText);
   }
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height * 0.7 - MediaQuery.of(context).viewInsets.bottom;
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-            TextField(controller: controller, onChanged: (value) => {
-              searchText = value
-            },),
-            SizedBox(height: height, child: RecipeList()),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Row(
+            children: [
+              Flexible(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    controller: controller,
+                    onChanged: (value) => searchText = value,
+                    onEditingComplete: _loadRecipes,
+                    textInputAction: TextInputAction.search,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextButton(
+                  child: const Text('Search'),
+                  onPressed: _loadRecipes,
+                ),
+              ),
+            ],
+          ),
+          const Flexible(child: RecipeList()),
+        ],
       ),
     );
   }

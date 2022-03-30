@@ -43,6 +43,7 @@ dependencies:
   provider: ^6.0.2
   flutter_linkify: ^5.0.2
   url_launcher: ^6.0.20
+  keyboard_dismisser: ^2.0.1
 
 dev_dependencies:
   flutter_test:

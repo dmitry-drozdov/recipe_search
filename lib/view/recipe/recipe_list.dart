@@ -47,6 +47,7 @@ class _RecipeListState extends State<RecipeList> {
           return Stack(
             children: [
               ListView.builder(
+                keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                 itemBuilder: (ctx, i) {
                   if (i == viewModel.items.length - 1 && !viewModel.loading) {
                     WidgetsBinding.instance?.addPostFrameCallback((_) {

@@ -34,6 +34,9 @@ class RecipeViewModelImpl extends RecipeViewModel {
 
   @override
   Future<void> loadRecipes({String? text}) async {
+    if (text?.isNotEmpty == true && text == previousText) {
+      return;
+    }
     setLoading(value: true);
     if (text != null && previousText != text) {
       silenceClearItems();

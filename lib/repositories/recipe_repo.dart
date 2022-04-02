@@ -33,7 +33,9 @@ class RecipeRepositoryImpl extends RecipeRepository {
       return RequestResultModel(result: false, value: response.statusCode);
     }
     jsonData['hits'].forEach((r) => recipes.add(Recipe.fromJson(r['recipe'])));
-    final result = RecipeResult(nextUrl: jsonData['_links']['next']['href'], recipes: recipes);
+    final href =
+        jsonData['_links'] == null || jsonData['_links'].isEmpty ? '' : jsonData['_links']['next']['href'];
+    final result = RecipeResult(nextUrl: href, recipes: recipes, end: href.isEmpty);
     return RequestResultModel(result: true, value: result);
   }
 }

@@ -31,20 +31,26 @@ class RecipeViewModelImpl extends RecipeViewModel {
 
   String? previousText;
   String? nextUrl;
+  bool end = false;
 
   @override
   Future<void> loadRecipes({String? text}) async {
     if (text?.isNotEmpty == true && text == previousText) {
       return;
     }
-    setLoading(value: true);
+
     final newSearch = text != null && previousText != text;
     if (newSearch) {
       previousText = text;
       nextUrl = null;
+      end = false;
+    }
+    if (end) {
+      return;
     }
     text ??= previousText;
 
+    setLoading(value: true);
     try {
       final request = await recipeRepository.getRecipes(text: text, nextUrl: nextUrl);
       if (newSearch) silenceClearItems();
@@ -53,6 +59,7 @@ class RecipeViewModelImpl extends RecipeViewModel {
         if (value is RecipeResult) {
           silenceAddRange(value.recipes);
           nextUrl = value.nextUrl;
+          end = value.end;
         } else {
           log('loadRecipes| Incorrect type of value: ${value.runtimeType}');
         }

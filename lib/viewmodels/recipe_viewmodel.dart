@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:recipe_search/models/enums/diet_label.dart';
 import 'package:recipe_search/models/recipe/recipe_model.dart';
 import 'package:recipe_search/repositories/recipe_repo.dart';
 import 'package:recipe_search/repositories/recipe_result.dart';
@@ -20,6 +21,10 @@ abstract class RecipeViewModel extends BaseViewModel<Recipe, RecipeEvent> {
   void onRecipeTap({required String id});
 
   String? get currentRecipeId;
+
+  List<DietLabel> get dietLabels;
+
+  set dietLabels(List<DietLabel> value);
 }
 
 class RecipeViewModelImpl extends RecipeViewModel {
@@ -92,4 +97,18 @@ class RecipeViewModelImpl extends RecipeViewModel {
 
   @override
   String? get currentRecipeId => _currentRecipeId;
+
+  // Labels
+  List<DietLabel> _dietLabels = DietLabel.values;
+
+  @override
+  List<DietLabel> get dietLabels {
+    return _dietLabels;
+  }
+
+  @override
+  set dietLabels(List<DietLabel> value) {
+    _dietLabels = value;
+    notifyListeners();
+  }
 }

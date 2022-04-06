@@ -30,19 +30,19 @@ extension DietLabelExtension on DietLabel {
       case DietLabel.balanced:
         return "balanced";
       case DietLabel.highFiber:
-        return "high_fiber";
+        return "high-fiber";
       case DietLabel.highProtein:
-        return "high_protein";
+        return "high-protein";
       case DietLabel.lowCarb:
-        return "low_carb";
+        return "low-carb";
       case DietLabel.lowFat:
-        return "low_fat";
+        return "low-fat";
       case DietLabel.lowSodium:
-        return "low_sodium";
+        return "low-sodium";
     }
   }
 
   String get query {
-    return 'diet=$this';
+    return 'diet=$api';
   }
 }

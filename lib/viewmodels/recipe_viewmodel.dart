@@ -57,7 +57,11 @@ class RecipeViewModelImpl extends RecipeViewModel {
 
     setLoading(value: true);
     try {
-      final request = await recipeRepository.getRecipes(text: text, nextUrl: nextUrl);
+      final request = await recipeRepository.getRecipes(
+        text: text,
+        nextUrl: nextUrl,
+        params: dietQuery(),
+      );
       if (newSearch) silenceClearItems();
       if (request.result) {
         final value = request.value;
@@ -111,4 +115,7 @@ class RecipeViewModelImpl extends RecipeViewModel {
     _dietLabels = value;
     notifyListeners();
   }
+
+  // TODO: implement class with search params that contains diet label and other labels
+  String dietQuery() => _dietLabels.map((e) => e.query).join("&");
 }

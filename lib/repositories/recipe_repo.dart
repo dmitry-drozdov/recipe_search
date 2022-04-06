@@ -14,17 +14,17 @@ abstract class RecipeRepository {
     return RecipeRepositoryImpl();
   }
 
-  Future<RequestResultModel> getRecipes({String? text, String? nextUrl});
+  Future<RequestResultModel> getRecipes({String? text, String? nextUrl, String params = ''});
 }
 
 class RecipeRepositoryImpl extends RecipeRepository {
   RecipeRepositoryImpl();
 
   @override
-  Future<RequestResultModel> getRecipes({String? text, String? nextUrl}) async {
+  Future<RequestResultModel> getRecipes({String? text, String? nextUrl, String params = ''}) async {
     assert(text != null || nextUrl != null);
     final query = nextUrl ??
-        'https://api.edamam.com/api/recipes/v2?type=public&q=$text&app_id=$applicationId&app_key=$applicationKey';
+        'https://api.edamam.com/api/recipes/v2?type=public&q=$text&app_id=$applicationId&app_key=$applicationKey&$params';
     final response = await http.get(Uri.parse(query));
     logRequest(query, response);
     final recipes = <Recipe>[];
@@ -33,8 +33,7 @@ class RecipeRepositoryImpl extends RecipeRepository {
       return RequestResultModel(result: false, value: response.statusCode);
     }
     jsonData['hits'].forEach((r) => recipes.add(Recipe.fromJson(r['recipe'])));
-    final href =
-        jsonData['_links'] == null || jsonData['_links'].isEmpty ? '' : jsonData['_links']['next']['href'];
+    final href = jsonData['_links'] == null || jsonData['_links'].isEmpty ? '' : jsonData['_links']['next']['href'];
     final result = RecipeResult(nextUrl: href, recipes: recipes, end: href.isEmpty);
     return RequestResultModel(result: true, value: result);
   }

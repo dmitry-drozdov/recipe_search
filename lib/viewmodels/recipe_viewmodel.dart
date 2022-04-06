@@ -103,7 +103,7 @@ class RecipeViewModelImpl extends RecipeViewModel {
   String? get currentRecipeId => _currentRecipeId;
 
   // Labels
-  List<DietLabel> _dietLabels = DietLabel.values;
+  List<DietLabel> _dietLabels = [];
 
   @override
   List<DietLabel> get dietLabels {

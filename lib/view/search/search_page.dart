@@ -6,6 +6,7 @@ import 'package:recipe_search/models/enums/diet_label.dart';
 import 'package:recipe_search/view/recipe/recipe_list.dart';
 import 'package:recipe_search/viewmodels/recipe_viewmodel.dart';
 import 'package:recipe_search/viewmodels/viewmodel_provider.dart';
+import 'package:expandable/expandable.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key, required this.title}) : super(key: key);
@@ -73,18 +74,27 @@ class _SearchPageState extends State<SearchPage> {
             value: recipeViewModel,
             child: Consumer<RecipeViewModel>(
               builder: (_, viewModel, ___) {
-                return MultiSelectChipField<DietLabel?>(
-                  items: viewModel.dietLabels.map((e) => MultiSelectItem<DietLabel?>(e, e.view)).toList(),
-                  title: const Text("Diet labels"),
-                  headerColor: Colors.blue.withOpacity(0.4),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.blue[700]!, width: 1.8),
+                return ExpandablePanel(
+                  header: Text('Params'),
+                  collapsed: Text(
+                    'Select params',
+                    softWrap: true,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  selectedChipColor: Colors.blue.withOpacity(0.5),
-                  selectedTextStyle: TextStyle(color: Colors.blue[800]),
-                  onTap: (values) {
-                    viewModel.dietLabels = values.map((e) => e as DietLabel).toList();
-                  },
+                  expanded: MultiSelectChipField<DietLabel?>(
+                    items: DietLabel.values.map((e) => MultiSelectItem<DietLabel?>(e, e.view)).toList(),
+                    title: const Text("Diet labels"),
+                    headerColor: Colors.blue.withOpacity(0.4),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.blue[700]!, width: 1.8),
+                    ),
+                    selectedChipColor: Colors.blue.withOpacity(0.5),
+                    selectedTextStyle: TextStyle(color: Colors.blue[800]),
+                    onTap: (values) {
+                      viewModel.dietLabels = values.map((e) => e as DietLabel).toList();
+                    },
+                  ),
                 );
               },
             ),

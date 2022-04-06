@@ -74,33 +74,42 @@ class _SearchPageState extends State<SearchPage> {
             value: recipeViewModel,
             child: Consumer<RecipeViewModel>(
               builder: (_, viewModel, ___) {
-                return ExpandablePanel(
-                  header: Text('Params'),
-                  collapsed: Text(
-                    'Select params',
-                    softWrap: true,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  expanded: MultiSelectChipField<DietLabel?>(
-                    items: DietLabel.values.map((e) => MultiSelectItem<DietLabel?>(e, e.view)).toList(),
-                    title: const Text("Diet labels"),
-                    headerColor: Colors.blue.withOpacity(0.4),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.blue[700]!, width: 1.8),
-                    ),
-                    selectedChipColor: Colors.blue.withOpacity(0.5),
-                    selectedTextStyle: TextStyle(color: Colors.blue[800]),
-                    onTap: (values) {
-                      viewModel.dietLabels = values.map((e) => e as DietLabel).toList();
-                    },
-                  ),
-                );
+                return buildParams();
               },
             ),
           ),
           const Flexible(child: RecipeList()),
         ],
+      ),
+    );
+  }
+
+  Widget buildParams() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ExpandablePanel(
+        header: const Padding(
+          padding: EdgeInsets.only(left: 10),
+          child: Text('Params', style: TextStyle(fontSize: 18)),
+        ),
+        theme: ExpandableThemeData(
+          headerAlignment: ExpandablePanelHeaderAlignment.center,
+          iconColor: Theme.of(context).primaryColor,
+        ),
+        collapsed: Container(),
+        expanded: MultiSelectChipField<DietLabel?>(
+          items: DietLabel.values.map((e) => MultiSelectItem<DietLabel?>(e, e.view)).toList(),
+          title: const Text("Diet labels"),
+          headerColor: Colors.blue.withOpacity(0.4),
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.blue[700]!, width: 1.8),
+          ),
+          selectedChipColor: Colors.blue.withOpacity(0.5),
+          selectedTextStyle: TextStyle(color: Colors.blue[800]),
+          onTap: (values) {
+            recipeViewModel.dietLabels = values.map((e) => e as DietLabel).toList();
+          },
+        ),
       ),
     );
   }

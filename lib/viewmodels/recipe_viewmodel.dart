@@ -1,7 +1,9 @@
 import 'dart:developer';
 
 import 'package:recipe_search/models/enums/diet_label.dart';
+import 'package:recipe_search/models/enums/health_label.dart';
 import 'package:recipe_search/models/recipe/recipe_model.dart';
+import 'package:recipe_search/models/search_settings.dart';
 import 'package:recipe_search/repositories/recipe_repo.dart';
 import 'package:recipe_search/repositories/recipe_result.dart';
 
@@ -16,15 +18,19 @@ abstract class RecipeViewModel extends BaseViewModel<Recipe, RecipeEvent> {
 
   factory RecipeViewModel.create() => RecipeViewModelImpl();
 
-  Future<void> loadRecipes({String? text});
+  Future<void> loadRecipes();
 
   void onRecipeTap({required String id});
 
   String? get currentRecipeId;
 
-  List<DietLabel> get dietLabels;
+  SearchSettings get searchSettings;
 
-  set dietLabels(List<DietLabel> value);
+  void updateSearchSettings({
+    String? newSearch,
+    List<DietLabel>? newDietLabels,
+    List<HealthLabel>? newHealthLabels,
+  });
 }
 
 class RecipeViewModelImpl extends RecipeViewModel {
@@ -34,35 +40,43 @@ class RecipeViewModelImpl extends RecipeViewModel {
 
   // Search recipes by text
 
-  String? previousText;
+  @override
+  var searchSettings = const SearchSettings(
+    search: '',
+    dietLabels: <DietLabel>[],
+    healthLabels: <HealthLabel>[],
+  );
+
+  var updateRequire = true;
+
   String? nextUrl;
   bool end = false;
 
   @override
-  Future<void> loadRecipes({String? text}) async {
-    if (text?.isNotEmpty == true && text == previousText) {
+  Future<void> loadRecipes() async {
+    if (searchSettings.search.isEmpty || !updateRequire) {
       return;
     }
 
-    final newSearch = text != null && previousText != text;
-    if (newSearch) {
-      previousText = text;
+    if (updateRequire) {
       nextUrl = null;
       end = false;
     }
     if (end) {
       return;
     }
-    text ??= previousText;
 
     setLoading(value: true);
+
     try {
       final request = await recipeRepository.getRecipes(
-        text: text,
+        text: searchSettings.search,
         nextUrl: nextUrl,
         params: dietQuery(),
       );
-      if (newSearch) silenceClearItems();
+      if (updateRequire) {
+        silenceClearItems();
+      }
       if (request.result) {
         final value = request.value;
         if (value is RecipeResult) {
@@ -80,6 +94,7 @@ class RecipeViewModelImpl extends RecipeViewModel {
     } on Exception catch (e) {
       log('loadRecipes| Exception during getting recipes: $e');
     }
+
     setLoading(value: false);
   }
 
@@ -102,20 +117,24 @@ class RecipeViewModelImpl extends RecipeViewModel {
   @override
   String? get currentRecipeId => _currentRecipeId;
 
-  // Labels
-  List<DietLabel> _dietLabels = [];
+  String dietQuery() => searchSettings.dietLabels.map((e) => e.query).join("&");
+
+  String healthLabelsQuery() => searchSettings.healthLabels.map((e) => e.query).join("&");
 
   @override
-  List<DietLabel> get dietLabels {
-    return _dietLabels;
+  void updateSearchSettings({
+    String? newSearch,
+    List<DietLabel>? newDietLabels,
+    List<HealthLabel>? newHealthLabels,
+  }) {
+    final newSearchSettings = SearchSettings.copyWith(
+      searchSettings,
+      search: newSearch,
+      dietLabels: newDietLabels,
+      healthLabels: newHealthLabels,
+    );
+    // if newSearch isn't provided => change only labels
+    updateRequire = !(newSearch == null && searchSettings == newSearchSettings);
+    searchSettings = newSearchSettings;
   }
-
-  @override
-  set dietLabels(List<DietLabel> value) {
-    _dietLabels = value;
-    notifyListeners();
-  }
-
-  // TODO: implement class with search params that contains diet label and other labels
-  String dietQuery() => _dietLabels.map((e) => e.query).join("&");
 }

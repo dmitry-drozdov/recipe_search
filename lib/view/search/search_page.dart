@@ -23,7 +23,10 @@ class _SearchPageState extends State<SearchPage> {
   String searchText = '';
 
   void _loadRecipes() {
-    recipeViewModel.loadRecipes(text: searchText);
+    if (searchText != recipeViewModel.searchSettings.search) {
+      recipeViewModel.updateSearchSettings(newSearch: searchText);
+    }
+    recipeViewModel.loadRecipes();
   }
 
   @override
@@ -97,7 +100,7 @@ class _SearchPageState extends State<SearchPage> {
           iconColor: Theme.of(context).primaryColor,
         ),
         collapsed: Container(),
-        expanded: MultiSelectChipField<DietLabel?>(
+        expanded: MultiSelectChipField(
           items: DietLabel.values.map((e) => MultiSelectItem<DietLabel?>(e, e.view)).toList(),
           title: const Text("Diet labels"),
           headerColor: Colors.blue.withOpacity(0.4),
@@ -107,7 +110,7 @@ class _SearchPageState extends State<SearchPage> {
           selectedChipColor: Colors.blue.withOpacity(0.5),
           selectedTextStyle: TextStyle(color: Colors.blue[800]),
           onTap: (values) {
-            recipeViewModel.dietLabels = values.map((e) => e as DietLabel).toList();
+            recipeViewModel.updateSearchSettings(newDietLabels: values.map((e) => e as DietLabel).toList());
           },
         ),
       ),

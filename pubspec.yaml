@@ -46,6 +46,7 @@ dependencies:
   keyboard_dismisser: ^2.0.1
   multi_select_flutter: ^4.1.2
   expandable: ^5.0.1
+  equatable: ^2.0.3
 
 dev_dependencies:
   flutter_test:

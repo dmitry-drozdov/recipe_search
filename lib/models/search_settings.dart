@@ -3,6 +3,8 @@ import 'package:recipe_search/models/enums/diet_label.dart';
 import 'package:recipe_search/models/enums/health_label.dart';
 import 'package:equatable/equatable.dart';
 
+const delimiter = '&';
+
 class SearchSettings extends Equatable {
   final String search;
   final List<DietLabel> dietLabels;
@@ -26,6 +28,12 @@ class SearchSettings extends Equatable {
       healthLabels: update(old.healthLabels, healthLabels),
     );
   }
+
+  String get dietLabelsQuery => dietLabels.map((e) => e.query).join(delimiter);
+
+  String get healthLabelsQuery => healthLabels.map((e) => e.query).join(delimiter);
+
+  String get labelsQuery => [dietLabelsQuery, healthLabelsQuery].join(delimiter);
 
   @override
   List<Object?> get props => [search, ...dietLabels, ...healthLabels];

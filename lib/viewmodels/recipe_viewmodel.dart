@@ -72,7 +72,7 @@ class RecipeViewModelImpl extends RecipeViewModel {
       final request = await recipeRepository.getRecipes(
         text: searchSettings.search,
         nextUrl: nextUrl,
-        params: dietQuery(),
+        params: searchSettings.labelsQuery,
       );
       if (updateRequire) {
         silenceClearItems();
@@ -117,9 +117,8 @@ class RecipeViewModelImpl extends RecipeViewModel {
   @override
   String? get currentRecipeId => _currentRecipeId;
 
-  String dietQuery() => searchSettings.dietLabels.map((e) => e.query).join("&");
 
-  String healthLabelsQuery() => searchSettings.healthLabels.map((e) => e.query).join("&");
+
 
   @override
   void updateSearchSettings({

@@ -35,12 +35,19 @@ enum HealthLabel {
 }
 
 extension HealthLabelExtension on HealthLabel {
-  String get view {
-    return toString().split(RegExp(r"[A-Z]")).join(" ").toLowerCase().capitalize();
+  // HealthLabel.redMeatFree -> redMeatFree
+  String get name {
+    return toString().split(".").skip(1).join();
   }
 
+  // HealthLabel.redMeatFree -> Red meat free
+  String get view {
+    return name.replaceAllMapped(RegExp(r"[A-Z]"), (m) => ' ${m[0]}').trim().toLowerCase().capitalizeFirst();
+  }
+
+  // HealthLabel.redMeatFree -> red-meat-free
   String get api {
-    return toString().split(RegExp(r"[A-Z]")).join("-").toLowerCase();
+    return view.replaceAll(" ", "-").toLowerCase();
   }
 
   String get query {

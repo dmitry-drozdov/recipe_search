@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:recipe_search/helpers/linear_loading.dart';
 import 'package:recipe_search/models/enums/diet_label.dart';
+import 'package:recipe_search/models/enums/health_label.dart';
 import 'package:recipe_search/view/recipe/recipe_list.dart';
+import 'package:recipe_search/view/search/multi_select_field.dart';
 import 'package:recipe_search/viewmodels/recipe_viewmodel.dart';
 import 'package:recipe_search/viewmodels/viewmodel_provider.dart';
 import 'package:expandable/expandable.dart';
@@ -100,18 +101,26 @@ class _SearchPageState extends State<SearchPage> {
           iconColor: Theme.of(context).primaryColor,
         ),
         collapsed: Container(),
-        expanded: MultiSelectChipField(
-          items: DietLabel.values.map((e) => MultiSelectItem<DietLabel?>(e, e.view)).toList(),
-          title: const Text("Diet labels"),
-          headerColor: Colors.blue.withOpacity(0.4),
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.blue[700]!, width: 1.8),
-          ),
-          selectedChipColor: Colors.blue.withOpacity(0.5),
-          selectedTextStyle: TextStyle(color: Colors.blue[800]),
-          onTap: (values) {
-            recipeViewModel.updateSearchSettings(newDietLabels: values.map((e) => e as DietLabel).toList());
-          },
+        expanded:
+
+        Column(
+          children: [
+            MultiSelectField<DietLabel>(
+              items: DietLabel.values,
+              onSelect: (values) {
+                recipeViewModel.updateSearchSettings(newDietLabels: values.map((e) => e as DietLabel).toList());
+              },
+              title: 'Diet labels',
+            ),
+            const SizedBox(height: 5),
+            MultiSelectField<HealthLabel>(
+              items: HealthLabel.values,
+              onSelect: (values) {
+                recipeViewModel.updateSearchSettings(newHealthLabels: values.map((e) => e as HealthLabel).toList());
+              },
+              title: 'Health labels',
+            ),
+          ],
         ),
       ),
     );

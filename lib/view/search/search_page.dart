@@ -21,6 +21,7 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   final recipeViewModel = ViewModelProvider.getOrCreate(key: recipeKey, create: () => RecipeViewModel.create());
   final controller = TextEditingController();
+  final expandableController = ExpandableController();
   String searchText = '';
 
   void _loadRecipes() {
@@ -29,6 +30,22 @@ class _SearchPageState extends State<SearchPage> {
       recipeViewModel.updateSearchSettings(newSearch: trimmedSearch);
     }
     recipeViewModel.loadRecipesFirstPage();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    recipeViewModel.startUIListening((event) {
+      switch (event) {
+        case RecipeEvent.openRecipe:
+          break;
+        case RecipeEvent.hideParams:
+          if (expandableController.expanded) {
+            expandableController.expanded = false;
+          }
+          break;
+      }
+    });
   }
 
   @override
@@ -100,7 +117,10 @@ class _SearchPageState extends State<SearchPage> {
         theme: ExpandableThemeData(
           headerAlignment: ExpandablePanelHeaderAlignment.center,
           iconColor: Theme.of(context).primaryColor,
+          animationDuration: const Duration(milliseconds: 400),
+          scrollAnimationDuration: const Duration(milliseconds: 400),
         ),
+        controller: expandableController,
         collapsed: Container(),
         expanded: Column(
           children: [

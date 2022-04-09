@@ -12,6 +12,7 @@ import 'base_view_model.dart';
 
 enum RecipeEvent {
   openRecipe,
+  hideParams,
 }
 
 abstract class RecipeViewModel extends BaseViewModel<Recipe, RecipeEvent> {
@@ -67,7 +68,7 @@ class RecipeViewModelImpl extends RecipeViewModel {
     updateRequire = false;
 
     if (searchSettings.empty) {
-      _exitWithFakeLoading();
+      await _exitWithFakeLoading();
       silenceClearItems();
       return;
     }
@@ -79,6 +80,9 @@ class RecipeViewModelImpl extends RecipeViewModel {
       );
       silenceClearItems();
       await _processRequest(request);
+      if (items.isNotEmpty) {
+        uiEventSubject.add(RecipeEvent.hideParams);
+      }
     } on Exception catch (e) {
       log('loadRecipes| Exception during getting recipes: $e');
     }

@@ -142,8 +142,11 @@ class _SearchPageState extends State<SearchPage> {
             Padding(
               padding: const EdgeInsets.all(0.0),
               child: TextButton(
-                child: const Text('Apply'),
-                onPressed: _loadRecipes,
+                child: Text(
+                  'Apply',
+                  style: TextStyle(color: recipeViewModel.searchSettingsUpdated ? null : Colors.grey),
+                ),
+                onPressed: recipeViewModel.searchSettingsUpdated ? _loadRecipes : null,
                 style: TextButton.styleFrom(padding: const EdgeInsets.all(0.0)),
               ),
             ),

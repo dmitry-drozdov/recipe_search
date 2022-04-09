@@ -29,13 +29,21 @@ class SearchSettings extends Equatable {
     );
   }
 
+  factory SearchSettings.noSettings() {
+    return const SearchSettings(
+      search: '',
+      dietLabels: <DietLabel>[],
+      healthLabels: <HealthLabel>[],
+    );
+  }
+
   String get dietLabelsQuery => dietLabels.map((e) => e.query).join(delimiter);
 
   String get healthLabelsQuery => healthLabels.map((e) => e.query).join(delimiter);
 
   String get labelsQuery => [dietLabelsQuery, healthLabelsQuery].join(delimiter);
 
-  bool get empty => search.isEmpty;
+  bool get emptySearchText => search.isEmpty;
 
   @override
   List<Object?> get props => [search, ...dietLabels, ...healthLabels];

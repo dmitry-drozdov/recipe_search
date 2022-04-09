@@ -30,6 +30,8 @@ abstract class RecipeViewModel extends BaseViewModel<Recipe, RecipeEvent> {
 
   SearchSettings get searchSettings;
 
+  bool get searchSettingsUpdated;
+
   void updateSearchSettings({
     String? newSearch,
     List<DietLabel>? newDietLabels,
@@ -42,12 +44,7 @@ class RecipeViewModelImpl extends RecipeViewModel {
 
   RecipeViewModelImpl() : super();
 
-  @override
-  var searchSettings = const SearchSettings(
-    search: '',
-    dietLabels: <DietLabel>[],
-    healthLabels: <HealthLabel>[],
-  );
+  //----------------------------------------- Search requests -----------------------------------------
 
   var updateRequire = true;
 
@@ -67,7 +64,10 @@ class RecipeViewModelImpl extends RecipeViewModel {
     end = false;
     updateRequire = false;
 
-    if (searchSettings.empty) {
+    backUpSearchSettings = searchSettings;
+    notifyListeners();
+
+    if (searchSettings.emptySearchText) {
       await _exitWithFakeLoading();
       silenceClearItems();
       return;
@@ -134,7 +134,7 @@ class RecipeViewModelImpl extends RecipeViewModel {
     }
   }
 
-  // Open recipe full information
+  //----------------------------------------- Open recipe full information -----------------------------------------
 
   String? _currentRecipeId;
 
@@ -153,6 +153,18 @@ class RecipeViewModelImpl extends RecipeViewModel {
   @override
   String? get currentRecipeId => _currentRecipeId;
 
+  //----------------------------------------- search settings -----------------------------------------
+  @override
+  var searchSettings = SearchSettings.noSettings();
+
+  // search settings with previous applied search
+  var backUpSearchSettings = SearchSettings.noSettings();
+
+  bool get firstLaunch => searchSettings == SearchSettings.noSettings() && searchSettings == backUpSearchSettings;
+
+  @override
+  bool get searchSettingsUpdated => searchSettings != backUpSearchSettings || firstLaunch;
+
   @override
   void updateSearchSettings({
     String? newSearch,
@@ -165,8 +177,11 @@ class RecipeViewModelImpl extends RecipeViewModel {
       dietLabels: newDietLabels,
       healthLabels: newHealthLabels,
     );
-    // if newSearch isn't provided => change only labels
-    updateRequire = !(newSearch == null && searchSettings == newSearchSettings);
+    updateRequire = newSearchSettings != searchSettings;
+    if (!updateRequire) {
+      return;
+    }
     searchSettings = newSearchSettings;
+    notifyListeners();
   }
 }

@@ -75,7 +75,8 @@ class _RecipeListState extends State<RecipeList> {
   }
 
   Widget noResult() {
-    final text = recipeViewModel.searchSettings.empty ? "Please enter what do you to find" : "No results found";
+    final text =
+        recipeViewModel.searchSettings.emptySearchText ? "Please enter what do you to find" : "No results found";
     return Align(
       alignment: Alignment.center,
       child: Column(

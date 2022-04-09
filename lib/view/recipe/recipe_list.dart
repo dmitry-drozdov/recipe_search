@@ -14,6 +14,7 @@ class RecipeList extends StatefulWidget {
 
 class _RecipeListState extends State<RecipeList> {
   final recipeViewModel = ViewModelProvider.get<RecipeViewModel>(recipeKey);
+  final scrollController = ScrollController();
 
   @override
   void initState() {
@@ -35,6 +36,9 @@ class _RecipeListState extends State<RecipeList> {
           break;
       }
     });
+    scrollController.addListener(() {
+      recipeViewModel.uiEventSubject.add(RecipeEvent.hideParams);
+    });
   }
 
   @override
@@ -48,6 +52,7 @@ class _RecipeListState extends State<RecipeList> {
           }
           return ListView.builder(
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            controller: scrollController,
             itemBuilder: (ctx, i) {
               if (i == viewModel.items.length - 1 && !viewModel.loading) {
                 WidgetsBinding.instance?.addPostFrameCallback((_) {

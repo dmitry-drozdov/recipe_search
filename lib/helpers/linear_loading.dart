@@ -9,7 +9,7 @@ class LinearLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 4,
+      height: 2,
       child: show
           ? LinearProgressIndicator(
               backgroundColor: Colors.transparent,

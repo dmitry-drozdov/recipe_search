@@ -74,7 +74,7 @@ class _SearchPageState extends State<SearchPage> {
             children: [
               Flexible(
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
+                  padding: const EdgeInsets.fromLTRB(8, 0, 8, 4),
                   child: TextField(
                     controller: controller,
                     onChanged: (value) => searchText = value,
@@ -84,7 +84,7 @@ class _SearchPageState extends State<SearchPage> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
+                padding: const EdgeInsets.fromLTRB(8, 0, 8, 4),
                 child: TextButton(
                   child: const Text('Search'),
                   onPressed: _loadRecipes,
@@ -108,7 +108,7 @@ class _SearchPageState extends State<SearchPage> {
 
   Widget buildParams() {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
       child: ExpandablePanel(
         header: const Padding(
           padding: EdgeInsets.only(left: 10),
@@ -138,6 +138,14 @@ class _SearchPageState extends State<SearchPage> {
                 recipeViewModel.updateSearchSettings(newHealthLabels: values.map((e) => e as HealthLabel).toList());
               },
               title: 'Health labels',
+            ),
+            Padding(
+              padding: const EdgeInsets.all(0.0),
+              child: TextButton(
+                child: const Text('Apply'),
+                onPressed: _loadRecipes,
+                style: TextButton.styleFrom(padding: const EdgeInsets.all(0.0)),
+              ),
             ),
           ],
         ),

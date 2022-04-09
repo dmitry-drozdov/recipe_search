@@ -44,13 +44,15 @@ class _RecipeListState extends State<RecipeList> {
       value: recipeViewModel,
       child: Consumer<RecipeViewModel>(
         builder: (_, viewModel, ___) {
-          if (viewModel.count == 0) return noResult();
+          if (viewModel.count == 0 && !recipeViewModel.loading) {
+            return noResult();
+          }
           return ListView.builder(
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             itemBuilder: (ctx, i) {
               if (i == viewModel.items.length - 1 && !viewModel.loading) {
                 WidgetsBinding.instance?.addPostFrameCallback((_) {
-                  viewModel.loadRecipes();
+                  viewModel.loadRecipesNextPage();
                 });
               }
               final element = viewModel.items[i];
@@ -69,12 +71,23 @@ class _RecipeListState extends State<RecipeList> {
   }
 
   Widget noResult() {
+    final text = recipeViewModel.searchSettings.empty
+        ? "Please enter what do you to find"
+        : "No results found";
     return Align(
       alignment: Alignment.center,
-      child: Icon(
-        Icons.search,
-        size: 200,
-        color: Theme.of(context).primaryColor.withOpacity(0.3),
+      child: Column(
+        children: [
+          Icon(
+            Icons.search,
+            size: 220,
+            color: Theme.of(context).primaryColor.withOpacity(0.3),
+          ),
+          Text(
+            text,
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+          ),
+        ],
       ),
     );
   }

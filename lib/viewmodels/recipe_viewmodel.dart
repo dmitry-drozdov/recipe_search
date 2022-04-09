@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:recipe_search/helpers/request_result_model.dart';
 import 'package:recipe_search/models/enums/diet_label.dart';
 import 'package:recipe_search/models/enums/health_label.dart';
 import 'package:recipe_search/models/recipe/recipe_model.dart';
@@ -18,7 +19,9 @@ abstract class RecipeViewModel extends BaseViewModel<Recipe, RecipeEvent> {
 
   factory RecipeViewModel.create() => RecipeViewModelImpl();
 
-  Future<void> loadRecipes();
+  Future<void> loadRecipesFirstPage();
+
+  Future<void> loadRecipesNextPage();
 
   void onRecipeTap({required String id});
 
@@ -38,8 +41,6 @@ class RecipeViewModelImpl extends RecipeViewModel {
 
   RecipeViewModelImpl() : super();
 
-  // Search recipes by text
-
   @override
   var searchSettings = const SearchSettings(
     search: '',
@@ -53,15 +54,45 @@ class RecipeViewModelImpl extends RecipeViewModel {
   bool end = false;
 
   @override
-  Future<void> loadRecipes() async {
-    if (searchSettings.search.isEmpty || !updateRequire) {
+  Future<void> loadRecipesFirstPage() async {
+    setLoading(value: true);
+
+    if (!updateRequire) {
+      _exitWithFakeLoading();
       return;
     }
 
-    if (updateRequire) {
-      nextUrl = null;
-      end = false;
+    nextUrl = null;
+    end = false;
+    updateRequire = false;
+
+    if (searchSettings.empty) {
+      _exitWithFakeLoading();
+      silenceClearItems();
+      return;
     }
+
+    try {
+      final request = await recipeRepository.getRecipes(
+        text: searchSettings.search,
+        params: searchSettings.labelsQuery,
+      );
+      silenceClearItems();
+      await _processRequest(request);
+    } on Exception catch (e) {
+      log('loadRecipes| Exception during getting recipes: $e');
+    }
+
+    setLoading(value: false);
+  }
+
+  Future<void> _exitWithFakeLoading() async {
+    await Future.delayed(const Duration(seconds: 1));
+    setLoading(value: false);
+  }
+
+  @override
+  Future<void> loadRecipesNextPage() async {
     if (end) {
       return;
     }
@@ -74,28 +105,29 @@ class RecipeViewModelImpl extends RecipeViewModel {
         nextUrl: nextUrl,
         params: searchSettings.labelsQuery,
       );
-      if (updateRequire) {
-        silenceClearItems();
-      }
-      if (request.result) {
-        final value = request.value;
-        if (value is RecipeResult) {
-          silenceAddRange(value.recipes);
-          nextUrl = value.nextUrl;
-          end = value.end;
-        } else {
-          log('loadRecipes| Incorrect type of value: ${value.runtimeType}');
-        }
-      } else {
-        if (request.value as int > 400) {
-          await Future.delayed(const Duration(seconds: 10));
-        }
-      }
+      await _processRequest(request);
     } on Exception catch (e) {
       log('loadRecipes| Exception during getting recipes: $e');
     }
 
     setLoading(value: false);
+  }
+
+  Future<void> _processRequest(RequestResultModel request) async {
+    if (request.result) {
+      final value = request.value;
+      if (value is RecipeResult) {
+        silenceAddRange(value.recipes);
+        nextUrl = value.nextUrl;
+        end = value.end;
+      } else {
+        log('loadRecipes| Incorrect type of value: ${value.runtimeType}');
+      }
+    } else {
+      if (request.value as int > 400) {
+        await Future.delayed(const Duration(seconds: 10));
+      }
+    }
   }
 
   // Open recipe full information
@@ -116,9 +148,6 @@ class RecipeViewModelImpl extends RecipeViewModel {
 
   @override
   String? get currentRecipeId => _currentRecipeId;
-
-
-
 
   @override
   void updateSearchSettings({

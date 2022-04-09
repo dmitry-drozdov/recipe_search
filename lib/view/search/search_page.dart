@@ -24,10 +24,11 @@ class _SearchPageState extends State<SearchPage> {
   String searchText = '';
 
   void _loadRecipes() {
-    if (searchText != recipeViewModel.searchSettings.search) {
-      recipeViewModel.updateSearchSettings(newSearch: searchText);
+    final trimmedSearch = searchText.trim();
+    if (trimmedSearch != recipeViewModel.searchSettings.search) {
+      recipeViewModel.updateSearchSettings(newSearch: trimmedSearch);
     }
-    recipeViewModel.loadRecipes();
+    recipeViewModel.loadRecipesFirstPage();
   }
 
   @override
@@ -101,9 +102,7 @@ class _SearchPageState extends State<SearchPage> {
           iconColor: Theme.of(context).primaryColor,
         ),
         collapsed: Container(),
-        expanded:
-
-        Column(
+        expanded: Column(
           children: [
             MultiSelectField<DietLabel>(
               items: DietLabel.values,

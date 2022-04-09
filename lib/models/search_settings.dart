@@ -35,6 +35,8 @@ class SearchSettings extends Equatable {
 
   String get labelsQuery => [dietLabelsQuery, healthLabelsQuery].join(delimiter);
 
+  bool get empty => search.isEmpty;
+
   @override
   List<Object?> get props => [search, ...dietLabels, ...healthLabels];
 }

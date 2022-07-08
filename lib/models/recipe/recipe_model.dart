@@ -1,6 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:recipe_search/helpers/images/images_model.dart';
 import 'package:recipe_search/models/enums/diet_label.dart';
+import 'package:recipe_search/models/enums/health_label.dart';
 import 'package:recipe_search/models/ingredient/ingredient_model.dart';
 
 part 'recipe_model.g.dart';
@@ -16,7 +17,8 @@ class Recipe {
   final String shareAs;
   @JsonKey(fromJson: dietLabelFromJson)
   final List<DietLabel> dietLabels;
-  final List<String> healthLabels;
+  @JsonKey(fromJson: healthLabelFromJson)
+  final List<HealthLabel> healthLabels;
   final List<String> cautions;
   final List<String> ingredientLines;
   final List<Ingredient> ingredients;

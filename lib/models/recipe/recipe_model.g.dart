@@ -15,9 +15,7 @@ Recipe _$RecipeFromJson(Map<String, dynamic> json) => Recipe(
       url: json['url'] as String,
       shareAs: json['shareAs'] as String,
       dietLabels: dietLabelFromJson(json['dietLabels'] as List),
-      healthLabels: (json['healthLabels'] as List<dynamic>)
-          .map((e) => e as String)
-          .toList(),
+      healthLabels: healthLabelFromJson(json['healthLabels'] as List),
       cautions:
           (json['cautions'] as List<dynamic>).map((e) => e as String).toList(),
       ingredientLines: (json['ingredientLines'] as List<dynamic>)

@@ -6,8 +6,9 @@ enum HealthLabel {
   celeryFree,
   crustaceanFree,
   dairyFree,
+  eggFree,
   fishFree,
-  fodMapFree,
+  fodmapFree,
   glutenFree,
   immunoSupportive,
   ketoFriendly,
@@ -17,10 +18,13 @@ enum HealthLabel {
   lowPotassium,
   lowSugar,
   lupineFree,
+  mediterranean,
   molluskFree,
   mustardFree,
   noOilAdded,
+  paleo,
   peanutFree,
+  pescatarian,
   porkFree,
   redMeatFree,
   sesameFree,
@@ -53,4 +57,14 @@ extension HealthLabelExtension on HealthLabel {
   String get query {
     return 'health=$api';
   }
+}
+
+HealthLabel healthLabelFromStr(String value) {
+  final lower = value.toLowerCase();
+  print(lower);
+  return HealthLabel.values.firstWhere((element) => element.api == lower || element.view.toLowerCase() == lower);
+}
+
+List<HealthLabel> healthLabelFromJson(List<dynamic> json) {
+  return json.map((e) => healthLabelFromStr(e)).toList();
 }

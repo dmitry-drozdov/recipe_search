@@ -46,3 +46,12 @@ extension DietLabelExtension on DietLabel {
     return 'diet=$api';
   }
 }
+
+DietLabel dietLabelFromStr(String value) {
+  final lower = value.toLowerCase();
+  return DietLabel.values.firstWhere((element) => element.api == lower || element.view.toLowerCase() == lower);
+}
+
+List<DietLabel> dietLabelFromJson(List<dynamic> json) {
+  return json.map((e) => dietLabelFromStr(e)).toList();
+}

@@ -4,10 +4,14 @@ class Range {
   final int min;
   final int max;
 
-  Range({
+  const Range({
     required this.min,
     required this.max,
   }) : assert(0 <= min && min <= max);
+
+  factory Range.defaultRange() {
+    return const Range(min: 0, max: 10000);
+  }
 
   factory Range.copyWith(
     Range old, {

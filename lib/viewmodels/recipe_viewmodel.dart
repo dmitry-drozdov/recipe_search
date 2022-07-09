@@ -13,6 +13,7 @@ import 'base_view_model.dart';
 enum RecipeEvent {
   openRecipe,
   hideParams,
+  openAllParams,
 }
 
 abstract class RecipeViewModel extends BaseViewModel<Recipe, RecipeEvent> {
@@ -37,6 +38,8 @@ abstract class RecipeViewModel extends BaseViewModel<Recipe, RecipeEvent> {
     List<DietLabel>? newDietLabels,
     List<HealthLabel>? newHealthLabels,
   });
+
+  void onAllParamsTap();
 }
 
 class RecipeViewModelImpl extends RecipeViewModel {
@@ -183,5 +186,10 @@ class RecipeViewModelImpl extends RecipeViewModel {
     }
     searchSettings = newSearchSettings;
     notifyListeners();
+  }
+
+  @override
+  void onAllParamsTap() {
+    uiEventSubject.add(RecipeEvent.openAllParams);
   }
 }

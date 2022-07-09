@@ -1,22 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:recipe_search/helpers/extensions/edge_extension.dart';
 import 'package:recipe_search/models/enums/diet_label.dart';
 import 'package:recipe_search/models/enums/health_label.dart';
 import 'package:recipe_search/viewmodels/recipe_viewmodel.dart';
 
 import 'multi_select_field.dart';
 
+const divider = SizedBox(height: 5);
+final buttonStyle = TextButton.styleFrom(padding: const EdgeInsets.all(0.0));
+
+enum ScreenMode { part, full }
+
 class Params extends StatelessWidget {
   final RecipeViewModel recipeViewModel;
   final void Function() onApply;
+  final ScreenMode screenMode;
 
-  const Params({
+  Params({
     Key? key,
     required this.recipeViewModel,
     required this.onApply,
+    required this.screenMode,
   }) : super(key: key);
+
+  final controller = TextEditingController();
+
+  bool get partScreen => screenMode == ScreenMode.part;
 
   @override
   Widget build(BuildContext context) {
+    if (partScreen) {
+      return content();
+    }
+    return Scaffold(
+      appBar: AppBar(title: const Text('All params')),
+      body: content().padding8880,
+    );
+  }
+
+  Widget content() {
     return Column(
       children: [
         MultiSelectField<DietLabel>(
@@ -25,24 +47,38 @@ class Params extends StatelessWidget {
             recipeViewModel.updateSearchSettings(newDietLabels: values.map((e) => e as DietLabel).toList());
           },
           title: 'Diet labels',
+          initialItems: [],
         ),
-        const SizedBox(height: 5),
+        divider,
         MultiSelectField<HealthLabel>(
           items: HealthLabel.values,
           onSelect: (values) {
             recipeViewModel.updateSearchSettings(newHealthLabels: values.map((e) => e as HealthLabel).toList());
           },
           title: 'Health labels',
+          initialItems: [],
         ),
         Padding(
           padding: const EdgeInsets.all(0.0),
-          child: TextButton(
-            child: Text(
-              'Apply',
-              style: TextStyle(color: recipeViewModel.searchSettingsUpdated ? null : Colors.grey),
-            ),
-            onPressed: recipeViewModel.searchSettingsUpdated ? onApply : null,
-            style: TextButton.styleFrom(padding: const EdgeInsets.all(0.0)),
+          child: Row(
+            mainAxisAlignment: partScreen ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+            children: [
+              if (partScreen) const SizedBox(width: 15),
+              TextButton(
+                child: Text(
+                  'Apply',
+                  style: TextStyle(color: recipeViewModel.searchSettingsUpdated ? null : Colors.grey),
+                ),
+                onPressed: recipeViewModel.searchSettingsUpdated ? onApply : null,
+                style: buttonStyle,
+              ),
+              if (partScreen)
+                TextButton(
+                  child: const Text('All params'),
+                  onPressed: recipeViewModel.onAllParamsTap,
+                  style: buttonStyle,
+                ),
+            ],
           ),
         ),
       ],

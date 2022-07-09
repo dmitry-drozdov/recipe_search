@@ -22,23 +22,29 @@ class _RecipeListState extends State<RecipeList> {
     recipeViewModel.startUIListening((event) {
       switch (event) {
         case RecipeEvent.openRecipe:
+          if (!mounted) return;
           final id = recipeViewModel.currentRecipeId;
           if (id == null) {
             throw Exception('Cannot open recipe full page. It was null');
           }
           Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => RecipeFull(key: Key('recipeFull$id'), id: id),
-            ),
+            MaterialPageRoute(builder: (_) => RecipeFull(key: Key('recipeFull$id'), id: id)),
           );
           break;
         case RecipeEvent.hideParams:
+        case RecipeEvent.openAllParams:
           break;
       }
     });
     scrollController.addListener(() {
       recipeViewModel.uiEventSubject.add(RecipeEvent.hideParams);
     });
+  }
+
+  @override
+  void dispose() {
+    recipeViewModel.stopUIListening();
+    super.dispose();
   }
 
   @override

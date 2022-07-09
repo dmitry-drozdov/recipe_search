@@ -1,6 +1,7 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:recipe_search/helpers/extensions/edge_extension.dart';
 import 'package:recipe_search/helpers/linear_loading.dart';
 import 'package:recipe_search/view/recipe/recipe_list.dart';
 import 'package:recipe_search/view/search/params.dart';
@@ -42,12 +43,26 @@ class _SearchPageState extends State<SearchPage> {
             expandableController.expanded = false;
           }
           break;
+        case RecipeEvent.openAllParams:
+          if (!mounted) return;
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => Params(
+                key: Key('params${recipeViewModel.searchSettings.hashCode}'),
+                screenMode: ScreenMode.full,
+                onApply: _loadRecipes,
+                recipeViewModel: recipeViewModel,
+              ),
+            ),
+          );
+          break;
       }
     });
   }
 
   @override
   void dispose() {
+    recipeViewModel.stopUIListening();
     controller.dispose();
     expandableController.dispose();
     super.dispose();
@@ -112,26 +127,21 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Widget buildParams() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
-      child: ExpandablePanel(
-        header: const Padding(
-          padding: EdgeInsets.only(left: 10),
-          child: Text('Params', style: TextStyle(fontSize: 18)),
-        ),
-        theme: ExpandableThemeData(
-          headerAlignment: ExpandablePanelHeaderAlignment.center,
-          iconColor: Theme.of(context).primaryColor,
-          animationDuration: const Duration(milliseconds: 400),
-          scrollAnimationDuration: const Duration(milliseconds: 400),
-        ),
-        controller: expandableController,
-        collapsed: Container(),
-        expanded: Params(
-          recipeViewModel: recipeViewModel,
-          onApply: _loadRecipes,
-        ),
+    return ExpandablePanel(
+      header: const Text('Params', style: TextStyle(fontSize: 18)),
+      theme: ExpandableThemeData(
+        headerAlignment: ExpandablePanelHeaderAlignment.center,
+        iconColor: Theme.of(context).primaryColor,
+        animationDuration: const Duration(milliseconds: 400),
+        scrollAnimationDuration: const Duration(milliseconds: 400),
       ),
-    );
+      controller: expandableController,
+      collapsed: Container(),
+      expanded: Params(
+        recipeViewModel: recipeViewModel,
+        onApply: _loadRecipes,
+        screenMode: ScreenMode.part,
+      ),
+    ).padding8880;
   }
 }

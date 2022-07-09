@@ -6,6 +6,7 @@ enum HealthLabel {
   celeryFree,
   crustaceanFree,
   dairyFree,
+  dash,
   eggFree,
   fishFree,
   fodmapFree,

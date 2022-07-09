@@ -47,6 +47,13 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   @override
+  void dispose() {
+    controller.dispose();
+    expandableController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

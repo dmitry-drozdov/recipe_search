@@ -1,13 +1,11 @@
+import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:recipe_search/helpers/linear_loading.dart';
-import 'package:recipe_search/models/enums/diet_label.dart';
-import 'package:recipe_search/models/enums/health_label.dart';
 import 'package:recipe_search/view/recipe/recipe_list.dart';
-import 'package:recipe_search/view/search/multi_select_field.dart';
+import 'package:recipe_search/view/search/params.dart';
 import 'package:recipe_search/viewmodels/recipe_viewmodel.dart';
 import 'package:recipe_search/viewmodels/viewmodel_provider.dart';
-import 'package:expandable/expandable.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key, required this.title}) : super(key: key);
@@ -122,35 +120,9 @@ class _SearchPageState extends State<SearchPage> {
         ),
         controller: expandableController,
         collapsed: Container(),
-        expanded: Column(
-          children: [
-            MultiSelectField<DietLabel>(
-              items: DietLabel.values,
-              onSelect: (values) {
-                recipeViewModel.updateSearchSettings(newDietLabels: values.map((e) => e as DietLabel).toList());
-              },
-              title: 'Diet labels',
-            ),
-            const SizedBox(height: 5),
-            MultiSelectField<HealthLabel>(
-              items: HealthLabel.values,
-              onSelect: (values) {
-                recipeViewModel.updateSearchSettings(newHealthLabels: values.map((e) => e as HealthLabel).toList());
-              },
-              title: 'Health labels',
-            ),
-            Padding(
-              padding: const EdgeInsets.all(0.0),
-              child: TextButton(
-                child: Text(
-                  'Apply',
-                  style: TextStyle(color: recipeViewModel.searchSettingsUpdated ? null : Colors.grey),
-                ),
-                onPressed: recipeViewModel.searchSettingsUpdated ? _loadRecipes : null,
-                style: TextButton.styleFrom(padding: const EdgeInsets.all(0.0)),
-              ),
-            ),
-          ],
+        expanded: Params(
+          recipeViewModel: recipeViewModel,
+          onApply: _loadRecipes,
         ),
       ),
     );

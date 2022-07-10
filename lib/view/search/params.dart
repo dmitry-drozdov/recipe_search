@@ -67,33 +67,30 @@ class Params extends StatelessWidget {
           title: 'Health labels',
           initialItems: recipeViewModel.searchSettings.healthLabels,
         ),
-        Padding(
-          padding: const EdgeInsets.all(0.0),
-          child: Row(
-            mainAxisAlignment: partScreen ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
-            children: [
-              if (partScreen) const SizedBox(width: 15),
+        Row(
+          mainAxisAlignment: partScreen ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+          children: [
+            if (partScreen) const SizedBox(width: 15),
+            TextButton(
+              child: Text(
+                'Apply',
+                style: TextStyle(color: recipeViewModel.searchSettingsUpdated ? null : Colors.grey),
+              ),
+              onPressed: recipeViewModel.searchSettingsUpdated
+                  ? () {
+                      if (fullScreen) Navigator.of(ctx).pop();
+                      onApply();
+                    }
+                  : null,
+              style: buttonStyle,
+            ),
+            if (partScreen)
               TextButton(
-                child: Text(
-                  'Apply',
-                  style: TextStyle(color: recipeViewModel.searchSettingsUpdated ? null : Colors.grey),
-                ),
-                onPressed: recipeViewModel.searchSettingsUpdated
-                    ? () {
-                        if (fullScreen) Navigator.of(ctx).pop();
-                        onApply();
-                      }
-                    : null,
+                child: const Text('All params'),
+                onPressed: recipeViewModel.onAllParamsTap,
                 style: buttonStyle,
               ),
-              if (partScreen)
-                TextButton(
-                  child: const Text('All params'),
-                  onPressed: recipeViewModel.onAllParamsTap,
-                  style: buttonStyle,
-                ),
-            ],
-          ),
+          ],
         ),
       ],
     );

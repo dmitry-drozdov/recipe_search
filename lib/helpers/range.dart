@@ -1,6 +1,7 @@
+import 'package:equatable/equatable.dart';
 import 'package:recipe_search/helpers/update_dynamic.dart';
 
-class Range {
+class Range extends Equatable {
   final int min;
   final int max;
 
@@ -38,4 +39,7 @@ class Range {
       max: update(old.max, max),
     );
   }
+
+  @override
+  List<Object?> get props => [min, max];
 }

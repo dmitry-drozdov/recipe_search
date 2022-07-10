@@ -53,5 +53,5 @@ class SearchSettings extends Equatable {
   bool get emptySearchText => search.isEmpty;
 
   @override
-  List<Object?> get props => [search, ...dietLabels, ...healthLabels];
+  List<Object?> get props => [search, ...dietLabels, ...healthLabels, caloriesRange];
 }

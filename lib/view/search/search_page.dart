@@ -21,14 +21,16 @@ class _SearchPageState extends State<SearchPage> {
   final recipeViewModel = ViewModelProvider.getOrCreate(key: recipeKey, create: () => RecipeViewModel.create());
   final controller = TextEditingController();
   final expandableController = ExpandableController();
+  final focusNode = FocusNode();
   String searchText = '';
 
-  void _loadRecipes() {
+  Future<void> _loadRecipes() async {
     final trimmedSearch = searchText.trim();
     if (trimmedSearch != recipeViewModel.searchSettings.search) {
       recipeViewModel.updateSearchSettings(newSearch: trimmedSearch);
     }
-    recipeViewModel.loadRecipesFirstPage();
+    await recipeViewModel.loadRecipesFirstPage();
+    focusNode.unfocus();
   }
 
   @override
@@ -65,6 +67,7 @@ class _SearchPageState extends State<SearchPage> {
     recipeViewModel.stopUIListening();
     controller.dispose();
     expandableController.dispose();
+    focusNode.dispose();
     super.dispose();
   }
 
@@ -97,6 +100,7 @@ class _SearchPageState extends State<SearchPage> {
                   padding: const EdgeInsets.fromLTRB(8, 0, 8, 4),
                   child: TextField(
                     controller: controller,
+                    focusNode: focusNode,
                     onChanged: (value) => searchText = value,
                     onEditingComplete: _loadRecipes,
                     textInputAction: TextInputAction.search,

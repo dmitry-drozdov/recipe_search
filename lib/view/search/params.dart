@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:recipe_search/helpers/extensions/edge_extension.dart';
 import 'package:recipe_search/models/enums/diet_label.dart';
 import 'package:recipe_search/models/enums/health_label.dart';
@@ -39,49 +40,56 @@ class Params extends StatelessWidget {
   }
 
   Widget content() {
-    return Column(
-      children: [
-        MultiSelectField<DietLabel>(
-          items: DietLabel.values,
-          onSelect: (values) {
-            recipeViewModel.updateSearchSettings(newDietLabels: values.map((e) => e as DietLabel).toList());
-          },
-          title: 'Diet labels',
-          initialItems: [],
-        ),
-        divider,
-        MultiSelectField<HealthLabel>(
-          items: HealthLabel.values,
-          onSelect: (values) {
-            recipeViewModel.updateSearchSettings(newHealthLabels: values.map((e) => e as HealthLabel).toList());
-          },
-          title: 'Health labels',
-          initialItems: [],
-        ),
-        Padding(
-          padding: const EdgeInsets.all(0.0),
-          child: Row(
-            mainAxisAlignment: partScreen ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+    return ChangeNotifierProvider.value(
+      value: recipeViewModel,
+      child: Consumer<RecipeViewModel>(
+        builder: (_, viewModel, ___) {
+          return Column(
             children: [
-              if (partScreen) const SizedBox(width: 15),
-              TextButton(
-                child: Text(
-                  'Apply',
-                  style: TextStyle(color: recipeViewModel.searchSettingsUpdated ? null : Colors.grey),
-                ),
-                onPressed: recipeViewModel.searchSettingsUpdated ? onApply : null,
-                style: buttonStyle,
+              MultiSelectField<DietLabel>(
+                items: DietLabel.values,
+                onSelect: (values) {
+                  recipeViewModel.updateSearchSettings(newDietLabels: values.map((e) => e as DietLabel).toList());
+                },
+                title: 'Diet labels',
+                initialItems: recipeViewModel.searchSettings.dietLabels,
               ),
-              if (partScreen)
-                TextButton(
-                  child: const Text('All params'),
-                  onPressed: recipeViewModel.onAllParamsTap,
-                  style: buttonStyle,
+              divider,
+              MultiSelectField<HealthLabel>(
+                items: HealthLabel.values,
+                onSelect: (values) {
+                  recipeViewModel.updateSearchSettings(newHealthLabels: values.map((e) => e as HealthLabel).toList());
+                },
+                title: 'Health labels',
+                initialItems: recipeViewModel.searchSettings.healthLabels,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(0.0),
+                child: Row(
+                  mainAxisAlignment: partScreen ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+                  children: [
+                    if (partScreen) const SizedBox(width: 15),
+                    TextButton(
+                      child: Text(
+                        'Apply',
+                        style: TextStyle(color: recipeViewModel.searchSettingsUpdated ? null : Colors.grey),
+                      ),
+                      onPressed: recipeViewModel.searchSettingsUpdated ? onApply : null,
+                      style: buttonStyle,
+                    ),
+                    if (partScreen)
+                      TextButton(
+                        child: const Text('All params'),
+                        onPressed: recipeViewModel.onAllParamsTap,
+                        style: buttonStyle,
+                      ),
+                  ],
                 ),
+              ),
             ],
-          ),
-        ),
-      ],
+          );
+        },
+      ),
     );
   }
 }

@@ -138,6 +138,7 @@ class _SearchPageState extends State<SearchPage> {
       controller: expandableController,
       collapsed: Container(),
       expanded: Params(
+        key: Key('searchPageParams${recipeViewModel.searchSettings.hashCode}'),
         recipeViewModel: recipeViewModel,
         onApply: _loadRecipes,
         screenMode: ScreenMode.part,

@@ -10,8 +10,8 @@ class Range extends Equatable {
     required this.max,
   }) : assert(0 <= min && min <= max);
 
-  factory Range.defaultRange() {
-    return const Range(min: 0, max: 10000);
+  factory Range.defaultCaloriesRange() {
+    return const Range(min: 100, max: 900);
   }
 
   factory Range.copyWith(

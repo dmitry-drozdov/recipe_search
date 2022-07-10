@@ -40,7 +40,7 @@ class SearchSettings extends Equatable {
       search: '',
       dietLabels: const <DietLabel>[],
       healthLabels: const <HealthLabel>[],
-      caloriesRange: Range.defaultRange(),
+      caloriesRange: Range.defaultCaloriesRange(),
     );
   }
 

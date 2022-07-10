@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_number_picker/flutter_number_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:recipe_search/helpers/extensions/edge_extension.dart';
 import 'package:recipe_search/models/enums/diet_label.dart';
@@ -67,31 +68,67 @@ class Params extends StatelessWidget {
           title: 'Health labels',
           initialItems: recipeViewModel.searchSettings.healthLabels,
         ),
-        Row(
-          mainAxisAlignment: partScreen ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
-          children: [
-            if (partScreen) const SizedBox(width: 15),
-            TextButton(
-              child: Text(
-                'Apply',
-                style: TextStyle(color: recipeViewModel.searchSettingsUpdated ? null : Colors.grey),
-              ),
-              onPressed: recipeViewModel.searchSettingsUpdated
-                  ? () {
-                      if (fullScreen) Navigator.of(ctx).pop();
-                      onApply();
-                    }
-                  : null,
-              style: buttonStyle,
-            ),
-            if (partScreen)
-              TextButton(
-                child: const Text('All params'),
-                onPressed: recipeViewModel.onAllParamsTap,
-                style: buttonStyle,
-              ),
-          ],
+        caloriesRow(ctx),
+        buttonsRow(ctx),
+      ],
+    );
+  }
+
+  Widget buttonsRow(BuildContext ctx) {
+    return Row(
+      mainAxisAlignment: partScreen ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+      children: [
+        if (partScreen) const SizedBox(width: 15),
+        TextButton(
+          child: Text(
+            'Apply',
+            style: TextStyle(color: recipeViewModel.searchSettingsUpdated ? null : Colors.grey),
+          ),
+          onPressed: recipeViewModel.searchSettingsUpdated
+              ? () {
+                  if (fullScreen) Navigator.of(ctx).pop();
+                  onApply();
+                }
+              : null,
+          style: buttonStyle,
         ),
+        if (partScreen)
+          TextButton(
+            child: const Text('All params'),
+            onPressed: recipeViewModel.onAllParamsTap,
+            style: buttonStyle,
+          ),
+      ],
+    );
+  }
+
+  Widget caloriesRow(BuildContext ctx) {
+    final settingsMin = recipeViewModel.searchSettings.caloriesRange.min;
+    final settingsMax = recipeViewModel.searchSettings.caloriesRange.max;
+    return Row(
+      children: [
+        CustomNumberPicker(
+          shape: RoundedRectangleBorder(side: BorderSide(color: Colors.blue[700]!, width: 1.8)),
+          initialValue: settingsMin,
+          maxValue: settingsMax,
+          minValue: 0,
+          step: 10,
+          enable: true,
+          onValue: (value) {
+            recipeViewModel.updateSearchSettings(caloriesMin: value as int);
+          },
+        ),
+        CustomNumberPicker(
+          shape: RoundedRectangleBorder(side: BorderSide(color: Colors.blue[700]!, width: 1.8)),
+          initialValue: settingsMax,
+          maxValue: 10000,
+          minValue: settingsMin,
+          step: 10,
+          enable: true,
+          onValue: (value) {
+            recipeViewModel.updateSearchSettings(caloriesMax: value as int);
+          },
+        )
       ],
     );
   }

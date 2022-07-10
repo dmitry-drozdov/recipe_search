@@ -27,6 +27,7 @@ class Params extends StatelessWidget {
   final controller = TextEditingController();
 
   bool get partScreen => screenMode == ScreenMode.part;
+  bool get fullScreen => screenMode == ScreenMode.full;
 
   @override
   Widget build(BuildContext context) {
@@ -42,11 +43,11 @@ class Params extends StatelessWidget {
   Widget consumerContent() {
     return ChangeNotifierProvider.value(
       value: recipeViewModel,
-      child: Consumer<RecipeViewModel>(builder: (_, __, ___) => content()),
+      child: Consumer<RecipeViewModel>(builder: (ctx, _, __) => content(ctx)),
     );
   }
 
-  Widget content() {
+  Widget content(BuildContext ctx) {
     return Column(
       children: [
         MultiSelectField<DietLabel>(
@@ -77,7 +78,12 @@ class Params extends StatelessWidget {
                   'Apply',
                   style: TextStyle(color: recipeViewModel.searchSettingsUpdated ? null : Colors.grey),
                 ),
-                onPressed: recipeViewModel.searchSettingsUpdated ? onApply : null,
+                onPressed: recipeViewModel.searchSettingsUpdated
+                    ? () {
+                        if (fullScreen) Navigator.of(ctx).pop();
+                        onApply();
+                      }
+                    : null,
                 style: buttonStyle,
               ),
               if (partScreen)

@@ -31,65 +31,65 @@ class Params extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (partScreen) {
-      return content();
+      return consumerContent();
     }
     return Scaffold(
       appBar: AppBar(title: const Text('All params')),
-      body: content().padding8880,
+      body: consumerContent().padding8880,
+    );
+  }
+
+  Widget consumerContent() {
+    return ChangeNotifierProvider.value(
+      value: recipeViewModel,
+      child: Consumer<RecipeViewModel>(builder: (_, __, ___) => content()),
     );
   }
 
   Widget content() {
-    return ChangeNotifierProvider.value(
-      value: recipeViewModel,
-      child: Consumer<RecipeViewModel>(
-        builder: (_, viewModel, ___) {
-          return Column(
+    return Column(
+      children: [
+        MultiSelectField<DietLabel>(
+          items: DietLabel.values,
+          onSelect: (values) {
+            recipeViewModel.updateSearchSettings(newDietLabels: values.map((e) => e as DietLabel).toList());
+          },
+          title: 'Diet labels',
+          initialItems: recipeViewModel.searchSettings.dietLabels,
+        ),
+        divider,
+        MultiSelectField<HealthLabel>(
+          items: HealthLabel.values,
+          onSelect: (values) {
+            recipeViewModel.updateSearchSettings(newHealthLabels: values.map((e) => e as HealthLabel).toList());
+          },
+          title: 'Health labels',
+          initialItems: recipeViewModel.searchSettings.healthLabels,
+        ),
+        Padding(
+          padding: const EdgeInsets.all(0.0),
+          child: Row(
+            mainAxisAlignment: partScreen ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
             children: [
-              MultiSelectField<DietLabel>(
-                items: DietLabel.values,
-                onSelect: (values) {
-                  recipeViewModel.updateSearchSettings(newDietLabels: values.map((e) => e as DietLabel).toList());
-                },
-                title: 'Diet labels',
-                initialItems: recipeViewModel.searchSettings.dietLabels,
-              ),
-              divider,
-              MultiSelectField<HealthLabel>(
-                items: HealthLabel.values,
-                onSelect: (values) {
-                  recipeViewModel.updateSearchSettings(newHealthLabels: values.map((e) => e as HealthLabel).toList());
-                },
-                title: 'Health labels',
-                initialItems: recipeViewModel.searchSettings.healthLabels,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(0.0),
-                child: Row(
-                  mainAxisAlignment: partScreen ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
-                  children: [
-                    if (partScreen) const SizedBox(width: 15),
-                    TextButton(
-                      child: Text(
-                        'Apply',
-                        style: TextStyle(color: recipeViewModel.searchSettingsUpdated ? null : Colors.grey),
-                      ),
-                      onPressed: recipeViewModel.searchSettingsUpdated ? onApply : null,
-                      style: buttonStyle,
-                    ),
-                    if (partScreen)
-                      TextButton(
-                        child: const Text('All params'),
-                        onPressed: recipeViewModel.onAllParamsTap,
-                        style: buttonStyle,
-                      ),
-                  ],
+              if (partScreen) const SizedBox(width: 15),
+              TextButton(
+                child: Text(
+                  'Apply',
+                  style: TextStyle(color: recipeViewModel.searchSettingsUpdated ? null : Colors.grey),
                 ),
+                onPressed: recipeViewModel.searchSettingsUpdated ? onApply : null,
+                style: buttonStyle,
               ),
+              if (partScreen)
+                TextButton(
+                  child: const Text('All params'),
+                  onPressed: recipeViewModel.onAllParamsTap,
+                  style: buttonStyle,
+                ),
             ],
-          );
-        },
-      ),
+          ),
+        ),
+      ],
     );
   }
 }

@@ -1,4 +1,4 @@
-package com.example.recipe_search
+package com.mmcs.recipe_search
 
 import io.flutter.embedding.android.FlutterActivity
 

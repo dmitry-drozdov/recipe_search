@@ -81,7 +81,7 @@ class RecipeViewModelImpl extends RecipeViewModel {
     try {
       final request = await recipeRepository.getRecipes(
         text: searchSettings.search,
-        params: searchSettings.labelsQuery,
+        params: searchSettings.query,
       );
       silenceClearItems();
       await _processRequest(request);
@@ -112,7 +112,7 @@ class RecipeViewModelImpl extends RecipeViewModel {
       final request = await recipeRepository.getRecipes(
         text: searchSettings.search,
         nextUrl: nextUrl,
-        params: searchSettings.labelsQuery,
+        params: searchSettings.query,
       );
       await _processRequest(request);
     } on Exception catch (e) {

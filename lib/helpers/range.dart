@@ -10,10 +10,6 @@ class Range extends Equatable {
     required this.max,
   }) : assert(0 <= min && min <= max);
 
-  factory Range.defaultCaloriesRange() {
-    return const Range(min: 100, max: 900);
-  }
-
   factory Range.copyWith(
     Range old, {
     int? min,
@@ -38,6 +34,14 @@ class Range extends Equatable {
       min: update(old.min, min),
       max: update(old.max, max),
     );
+  }
+
+  factory Range.defaultCaloriesRange() {
+    return const Range(min: 100, max: 900);
+  }
+
+  String get caloriesQuery {
+    return 'calories=$min-$max';
   }
 
   @override

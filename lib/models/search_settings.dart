@@ -48,7 +48,7 @@ class SearchSettings extends Equatable {
 
   String get healthLabelsQuery => healthLabels.map((e) => e.query).join(delimiter);
 
-  String get labelsQuery => [dietLabelsQuery, healthLabelsQuery].join(delimiter);
+  String get query => [dietLabelsQuery, healthLabelsQuery, caloriesRange.caloriesQuery].join(delimiter);
 
   bool get emptySearchText => search.isEmpty;
 

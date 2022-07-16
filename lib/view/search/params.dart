@@ -6,6 +6,7 @@ import 'package:recipe_search/models/enums/diet_label.dart';
 import 'package:recipe_search/models/enums/health_label.dart';
 import 'package:recipe_search/viewmodels/recipe_viewmodel.dart';
 
+import '../../helpers/consts.dart';
 import 'multi_select_field.dart';
 
 const divider = SizedBox(height: 5);
@@ -106,9 +107,11 @@ class Params extends StatelessWidget {
     final settingsMin = recipeViewModel.searchSettings.caloriesRange.min;
     final settingsMax = recipeViewModel.searchSettings.caloriesRange.max;
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
+        const Text('Calories from', style: mainFont),
         CustomNumberPicker(
-          shape: RoundedRectangleBorder(side: BorderSide(color: Colors.blue[700]!, width: 1.8)),
+          shape: numberPickerShape,
           initialValue: settingsMin,
           maxValue: settingsMax,
           minValue: 0,
@@ -118,8 +121,9 @@ class Params extends StatelessWidget {
             recipeViewModel.updateSearchSettings(caloriesMin: value as int);
           },
         ),
+        const Text('to', style: mainFont),
         CustomNumberPicker(
-          shape: RoundedRectangleBorder(side: BorderSide(color: Colors.blue[700]!, width: 1.8)),
+          shape: numberPickerShape,
           initialValue: settingsMax,
           maxValue: 10000,
           minValue: settingsMin,

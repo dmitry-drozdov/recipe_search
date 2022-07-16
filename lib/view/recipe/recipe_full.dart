@@ -99,6 +99,11 @@ class _RecipeFullState extends State<RecipeFull> {
             value: recipe.calories.toStringAsFixed(0),
             borderColor: theme.primaryColor,
           ),
+          CircleInfo(
+            title: 'Ingrs',
+            value: recipe.ingredients.length.toString(),
+            borderColor: theme.primaryColor,
+          ),
         ],
       ).paddingB8,
       //-----------------------------------------------

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "133785963304",
+    "project_id": "recipe-search-mmcs",
+    "storage_bucket": "recipe-search-mmcs.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:133785963304:android:3fbd09ff81a66106b0de1d",
+        "android_client_info": {
+          "package_name": "com.mmcs.recipe_search"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "133785963304-pbh7pi1gr3n7ffpfcqkkfr1n5suoceo7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4LwV5T1DoHd4umdYTUtJ0sYQmpNIunLU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "133785963304-pbh7pi1gr3n7ffpfcqkkfr1n5suoceo7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

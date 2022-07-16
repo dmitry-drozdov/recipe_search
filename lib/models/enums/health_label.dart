@@ -62,7 +62,6 @@ extension HealthLabelExtension on HealthLabel {
 
 HealthLabel healthLabelFromStr(String value) {
   final lower = value.toLowerCase();
-  print(lower);
   return HealthLabel.values.firstWhere((element) => element.api == lower || element.view.toLowerCase() == lower);
 }
 

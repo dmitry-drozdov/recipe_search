@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart' ;
+import 'package:flutter/material.dart';
 import 'package:recipe_search/helpers/consts.dart';
-import 'package:recipe_search/helpers/list_extension.dart';
+import 'package:recipe_search/helpers/extensions/list_extension.dart';
 import 'package:recipe_search/models/recipe/recipe_model.dart';
 import 'package:recipe_search/viewmodels/recipe_viewmodel.dart';
 import 'package:recipe_search/viewmodels/viewmodel_provider.dart';
@@ -9,8 +9,8 @@ import 'package:recipe_search/viewmodels/viewmodel_provider.dart';
 import 'helper/circle_info_widget.dart';
 import 'helper/link_value_widget.dart';
 import 'helper/title_value_widget.dart';
-import 'helper/value_widget.dart';
 import 'helper/title_widget.dart';
+import 'helper/value_widget.dart';
 
 class RecipeFull extends StatefulWidget {
   final String id;

@@ -13,6 +13,7 @@ import 'base_view_model.dart';
 enum RecipeEvent {
   openRecipe,
   hideParams,
+  openAllParams,
 }
 
 abstract class RecipeViewModel extends BaseViewModel<Recipe, RecipeEvent> {
@@ -36,7 +37,11 @@ abstract class RecipeViewModel extends BaseViewModel<Recipe, RecipeEvent> {
     String? newSearch,
     List<DietLabel>? newDietLabels,
     List<HealthLabel>? newHealthLabels,
+    int? caloriesMin,
+    int? caloriesMax,
   });
+
+  void onAllParamsTap();
 }
 
 class RecipeViewModelImpl extends RecipeViewModel {
@@ -76,7 +81,7 @@ class RecipeViewModelImpl extends RecipeViewModel {
     try {
       final request = await recipeRepository.getRecipes(
         text: searchSettings.search,
-        params: searchSettings.labelsQuery,
+        params: searchSettings.query,
       );
       silenceClearItems();
       await _processRequest(request);
@@ -107,7 +112,7 @@ class RecipeViewModelImpl extends RecipeViewModel {
       final request = await recipeRepository.getRecipes(
         text: searchSettings.search,
         nextUrl: nextUrl,
-        params: searchSettings.labelsQuery,
+        params: searchSettings.query,
       );
       await _processRequest(request);
     } on Exception catch (e) {
@@ -170,12 +175,16 @@ class RecipeViewModelImpl extends RecipeViewModel {
     String? newSearch,
     List<DietLabel>? newDietLabels,
     List<HealthLabel>? newHealthLabels,
+    int? caloriesMin,
+    int? caloriesMax,
   }) {
     final newSearchSettings = SearchSettings.copyWith(
       searchSettings,
       search: newSearch,
       dietLabels: newDietLabels,
       healthLabels: newHealthLabels,
+      caloriesMin: caloriesMin,
+      caloriesMax: caloriesMax,
     );
     updateRequire = newSearchSettings != searchSettings;
     if (!updateRequire) {
@@ -183,5 +192,10 @@ class RecipeViewModelImpl extends RecipeViewModel {
     }
     searchSettings = newSearchSettings;
     notifyListeners();
+  }
+
+  @override
+  void onAllParamsTap() {
+    uiEventSubject.add(RecipeEvent.openAllParams);
   }
 }

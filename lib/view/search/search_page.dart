@@ -1,13 +1,12 @@
+import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:recipe_search/helpers/extensions/edge_extension.dart';
 import 'package:recipe_search/helpers/linear_loading.dart';
-import 'package:recipe_search/models/enums/diet_label.dart';
-import 'package:recipe_search/models/enums/health_label.dart';
 import 'package:recipe_search/view/recipe/recipe_list.dart';
-import 'package:recipe_search/view/search/multi_select_field.dart';
+import 'package:recipe_search/view/search/params.dart';
 import 'package:recipe_search/viewmodels/recipe_viewmodel.dart';
 import 'package:recipe_search/viewmodels/viewmodel_provider.dart';
-import 'package:expandable/expandable.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key, required this.title}) : super(key: key);
@@ -22,14 +21,16 @@ class _SearchPageState extends State<SearchPage> {
   final recipeViewModel = ViewModelProvider.getOrCreate(key: recipeKey, create: () => RecipeViewModel.create());
   final controller = TextEditingController();
   final expandableController = ExpandableController();
+  final focusNode = FocusNode();
   String searchText = '';
 
-  void _loadRecipes() {
+  Future<void> _loadRecipes() async {
     final trimmedSearch = searchText.trim();
     if (trimmedSearch != recipeViewModel.searchSettings.search) {
       recipeViewModel.updateSearchSettings(newSearch: trimmedSearch);
     }
-    recipeViewModel.loadRecipesFirstPage();
+    await recipeViewModel.loadRecipesFirstPage();
+    focusNode.unfocus();
   }
 
   @override
@@ -44,8 +45,30 @@ class _SearchPageState extends State<SearchPage> {
             expandableController.expanded = false;
           }
           break;
+        case RecipeEvent.openAllParams:
+          if (!mounted) return;
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => Params(
+                key: Key('params${recipeViewModel.searchSettings.hashCode}'),
+                screenMode: ScreenMode.full,
+                onApply: _loadRecipes,
+                recipeViewModel: recipeViewModel,
+              ),
+            ),
+          );
+          break;
       }
     });
+  }
+
+  @override
+  void dispose() {
+    recipeViewModel.stopUIListening();
+    controller.dispose();
+    expandableController.dispose();
+    focusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -77,6 +100,7 @@ class _SearchPageState extends State<SearchPage> {
                   padding: const EdgeInsets.fromLTRB(8, 0, 8, 4),
                   child: TextField(
                     controller: controller,
+                    focusNode: focusNode,
                     onChanged: (value) => searchText = value,
                     onEditingComplete: _loadRecipes,
                     textInputAction: TextInputAction.search,
@@ -107,52 +131,22 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Widget buildParams() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
-      child: ExpandablePanel(
-        header: const Padding(
-          padding: EdgeInsets.only(left: 10),
-          child: Text('Params', style: TextStyle(fontSize: 18)),
-        ),
-        theme: ExpandableThemeData(
-          headerAlignment: ExpandablePanelHeaderAlignment.center,
-          iconColor: Theme.of(context).primaryColor,
-          animationDuration: const Duration(milliseconds: 400),
-          scrollAnimationDuration: const Duration(milliseconds: 400),
-        ),
-        controller: expandableController,
-        collapsed: Container(),
-        expanded: Column(
-          children: [
-            MultiSelectField<DietLabel>(
-              items: DietLabel.values,
-              onSelect: (values) {
-                recipeViewModel.updateSearchSettings(newDietLabels: values.map((e) => e as DietLabel).toList());
-              },
-              title: 'Diet labels',
-            ),
-            const SizedBox(height: 5),
-            MultiSelectField<HealthLabel>(
-              items: HealthLabel.values,
-              onSelect: (values) {
-                recipeViewModel.updateSearchSettings(newHealthLabels: values.map((e) => e as HealthLabel).toList());
-              },
-              title: 'Health labels',
-            ),
-            Padding(
-              padding: const EdgeInsets.all(0.0),
-              child: TextButton(
-                child: Text(
-                  'Apply',
-                  style: TextStyle(color: recipeViewModel.searchSettingsUpdated ? null : Colors.grey),
-                ),
-                onPressed: recipeViewModel.searchSettingsUpdated ? _loadRecipes : null,
-                style: TextButton.styleFrom(padding: const EdgeInsets.all(0.0)),
-              ),
-            ),
-          ],
-        ),
+    return ExpandablePanel(
+      header: const Text('Params', style: TextStyle(fontSize: 18)),
+      theme: ExpandableThemeData(
+        headerAlignment: ExpandablePanelHeaderAlignment.center,
+        iconColor: Theme.of(context).primaryColor,
+        animationDuration: const Duration(milliseconds: 400),
+        scrollAnimationDuration: const Duration(milliseconds: 400),
       ),
-    );
+      controller: expandableController,
+      collapsed: Container(),
+      expanded: Params(
+        key: Key('searchPageParams${recipeViewModel.searchSettings.hashCode}'),
+        recipeViewModel: recipeViewModel,
+        onApply: _loadRecipes,
+        screenMode: ScreenMode.part,
+      ),
+    ).padding8880;
   }
 }

@@ -6,6 +6,7 @@ import 'package:recipe_search/models/enums/health_label.dart';
 
 class MultiSelectField<T> extends StatefulWidget {
   final List<T> items;
+  final List<T> initialItems;
   final Function(List) onSelect;
   final String title;
 
@@ -14,6 +15,7 @@ class MultiSelectField<T> extends StatefulWidget {
     required this.items,
     required this.onSelect,
     required this.title,
+    required this.initialItems,
   }) : super(key: key);
 
   @override
@@ -40,6 +42,7 @@ class _MultiSelectFieldState extends State<MultiSelectField> {
   Widget build(BuildContext context) {
     return MultiSelectChipField(
       items: multiSelectItems.toList(),
+      initialValue: widget.initialItems,
       title: Text(widget.title),
       headerColor: Colors.blue.withOpacity(0.4),
       decoration: BoxDecoration(border: Border.all(color: Colors.blue[700]!, width: 1.8)),

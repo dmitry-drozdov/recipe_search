@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:recipe_search/helpers/consts.dart';
+import 'package:recipe_search/helpers/extensions/edge_extension.dart';
 import 'package:recipe_search/helpers/extensions/list_extension.dart';
 import 'package:recipe_search/models/recipe/recipe_model.dart';
 import 'package:recipe_search/viewmodels/recipe_viewmodel.dart';
@@ -81,31 +82,25 @@ class _RecipeFullState extends State<RecipeFull> {
     final theme = Theme.of(context);
     final blueColor = theme.primaryColor.withOpacity(0.1);
     return [
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(
-          recipe.label,
-          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: Colors.indigo),
-        ),
-      ),
-      Padding(
-        padding: const EdgeInsets.only(bottom: 8),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            CircleInfo(
-              title: 'Weight',
-              value: recipe.totalWeight.toStringAsFixed(0),
-              borderColor: theme.primaryColor,
-            ),
-            CircleInfo(
-              title: 'Calories',
-              value: recipe.calories.toStringAsFixed(0),
-              borderColor: theme.primaryColor,
-            ),
-          ],
-        ),
-      ),
+      Text(
+        recipe.label,
+        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: Colors.indigo),
+      ).padding8888,
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          CircleInfo(
+            title: 'Weight',
+            value: recipe.totalWeight.toStringAsFixed(0),
+            borderColor: theme.primaryColor,
+          ),
+          CircleInfo(
+            title: 'Calories',
+            value: recipe.calories.toStringAsFixed(0),
+            borderColor: theme.primaryColor,
+          ),
+        ],
+      ).paddingB8,
       //-----------------------------------------------
       if (recipe.ingredients.isNotEmpty) ...[
         const TitleWidget(title: 'Ingredients', fontWeight: FontWeight.w600),

@@ -10,6 +10,7 @@ import 'package:recipe_search/viewmodels/viewmodel_provider.dart';
 
 import '../../auth.dart';
 import '../../google_sign_in_button.dart';
+import '../../helpers/circular_indicator.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key, required this.title}) : super(key: key);
@@ -131,11 +132,11 @@ class _SearchPageState extends State<SearchPage> {
             future: Authentication.initializeFirebase(),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
-                return Text('Error initializing Firebase');
+                return const Text('Error initializing Firebase');
               } else if (snapshot.connectionState == ConnectionState.done) {
-                return GoogleSignInButton();
+                return GoogleSignInButton(onSignIn: (_) => {});
               }
-              return CircularProgressIndicator();
+              return CircularLoading(Theme.of(context).primaryColor).paddingV8;
             },
           ),
           const Flexible(child: RecipeList()),

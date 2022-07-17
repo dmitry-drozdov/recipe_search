@@ -8,6 +8,9 @@ import 'package:recipe_search/view/search/params.dart';
 import 'package:recipe_search/viewmodels/recipe_viewmodel.dart';
 import 'package:recipe_search/viewmodels/viewmodel_provider.dart';
 
+import '../../auth.dart';
+import '../../google_sign_in_button.dart';
+
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key, required this.title}) : super(key: key);
 
@@ -123,6 +126,17 @@ class _SearchPageState extends State<SearchPage> {
                 return buildParams();
               },
             ),
+          ),
+          FutureBuilder(
+            future: Authentication.initializeFirebase(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Text('Error initializing Firebase');
+              } else if (snapshot.connectionState == ConnectionState.done) {
+                return GoogleSignInButton();
+              }
+              return CircularProgressIndicator();
+            },
           ),
           const Flexible(child: RecipeList()),
         ],

@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "133785963304-u2i33ia67lem2rsmfsgj0ak8igjvsfkv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mmcs.recipe_search",
+            "certificate_hash": "c1ae4cce167bba90e24a7204e7d4b2a5583cb051"
+          }
+        },
+        {
           "client_id": "133785963304-pbh7pi1gr3n7ffpfcqkkfr1n5suoceo7.apps.googleusercontent.com",
           "client_type": 3
         }

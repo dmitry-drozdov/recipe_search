@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
-import 'package:recipe_search/view/search/search_page.dart';
+import 'package:recipe_search/view/landing/landing.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
@@ -19,9 +18,8 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const SearchPage(title: 'Recipe Search'),
+        home: const Landing(title: 'Recipe Search Landing'),
       ),
     );
   }
 }
-

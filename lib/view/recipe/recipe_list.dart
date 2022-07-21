@@ -61,7 +61,7 @@ class _RecipeListState extends State<RecipeList> {
             controller: scrollController,
             itemBuilder: (ctx, i) {
               if (i == viewModel.items.length - 1 && !viewModel.loading) {
-                WidgetsBinding.instance?.addPostFrameCallback((_) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
                   viewModel.loadRecipesNextPage();
                 });
               }
@@ -82,7 +82,7 @@ class _RecipeListState extends State<RecipeList> {
 
   Widget noResult() {
     final text =
-        recipeViewModel.searchSettings.emptySearchText ? "Please enter what do you to find" : "No results found";
+        recipeViewModel.searchSettings.emptySearchText ? "Please enter what do you want to find" : "No results found";
     return Align(
       alignment: Alignment.center,
       child: Column(

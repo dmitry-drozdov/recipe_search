@@ -3,6 +3,7 @@ import 'package:recipe_search/helpers/extensions/edge_extension.dart';
 
 import '../../helpers/circular_indicator.dart';
 import '../../utils/auth.dart';
+import '../search/search_page.dart';
 import 'google_sign_in_button.dart';
 
 class Landing extends StatelessWidget {
@@ -43,7 +44,7 @@ class Landing extends StatelessWidget {
             firstLetterColor: Colors.red.shade900,
           ),
           const SizedBox(height: 50),
-          buttons(),
+          buttons(context),
         ],
       ),
     );
@@ -70,7 +71,7 @@ class Landing extends StatelessWidget {
     );
   }
 
-  Widget buttons() {
+  Widget buttons(BuildContext ctx) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
@@ -80,16 +81,28 @@ class Landing extends StatelessWidget {
             if (snapshot.hasError) {
               return const Text('Error initializing Firebase');
             } else if (snapshot.connectionState == ConnectionState.done) {
-              return GoogleSignInButton(onSignIn: (_) => {});
+              return GoogleSignInButton(onSignIn: (user) => navigateToMain(ctx, user.displayName));
             }
             return CircularLoading(Theme.of(context).primaryColor).paddingV8;
           },
         ),
         TextButton(
           child: const Text('Continue without sign in'),
-          onPressed: () {},
+          onPressed: () => navigateToMain(ctx),
         ),
       ],
+    );
+  }
+
+  void navigateToMain(BuildContext ctx, [String? name]) {
+    var suffix = "";
+    if (name?.isNotEmpty == true) {
+      suffix = " — $name";
+    }
+    Navigator.of(ctx).pushReplacement(
+      MaterialPageRoute(
+        builder: (_) => SearchPage(title: 'Recipe Search$suffix'),
+      ),
     );
   }
 }

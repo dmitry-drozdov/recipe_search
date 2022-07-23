@@ -45,7 +45,7 @@ class Authentication {
     }
 
     if (user != null) {
-      Storage.createUserSession(user, DateTime.now());
+      Storage.logUserSession(user, DateTime.now());
     }
 
     return user;

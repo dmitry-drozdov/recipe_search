@@ -7,6 +7,7 @@ import 'package:recipe_search/models/recipe/recipe_model.dart';
 import 'package:recipe_search/models/search_settings.dart';
 import 'package:recipe_search/repositories/recipe_repo.dart';
 import 'package:recipe_search/repositories/recipe_result.dart';
+import 'package:recipe_search/utils/firestore.dart';
 
 import 'base_view_model.dart';
 
@@ -84,7 +85,7 @@ class RecipeViewModelImpl extends RecipeViewModel {
         params: searchSettings.query,
       );
       silenceClearItems();
-      await _processRequest(request);
+      await _processRequest(request, firstPage: true);
       if (items.isNotEmpty) {
         uiEventSubject.add(RecipeEvent.hideParams);
       }
@@ -122,7 +123,8 @@ class RecipeViewModelImpl extends RecipeViewModel {
     setLoading(value: false);
   }
 
-  Future<void> _processRequest(RequestResultModel request) async {
+  Future<void> _processRequest(RequestResultModel request, {bool firstPage = false}) async {
+    int? errorCode;
     if (request.result) {
       final value = request.value;
       if (value is RecipeResult) {
@@ -133,10 +135,17 @@ class RecipeViewModelImpl extends RecipeViewModel {
         log('loadRecipes| Incorrect type of value: ${value.runtimeType}');
       }
     } else {
-      if (request.value as int > 400) {
+      errorCode = request.result as int;
+      if (errorCode > 400) {
         await Future.delayed(const Duration(seconds: 10));
       }
     }
+    Storage.logSearch(
+      searchSettings: searchSettings,
+      firstPage: firstPage,
+      timestamp: DateTime.now(),
+      errorCode: errorCode,
+    );
   }
 
   //----------------------------------------- Open recipe full information -----------------------------------------

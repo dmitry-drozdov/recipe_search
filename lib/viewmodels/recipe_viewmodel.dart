@@ -135,7 +135,7 @@ class RecipeViewModelImpl extends RecipeViewModel {
         log('loadRecipes| Incorrect type of value: ${value.runtimeType}');
       }
     } else {
-      errorCode = request.result as int;
+      errorCode = request.value as int;
       if (errorCode > 400) {
         await Future.delayed(const Duration(seconds: 10));
       }

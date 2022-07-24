@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:recipe_search/helpers/consts.dart';
 import 'package:recipe_search/helpers/extensions/edge_extension.dart';
 import 'package:recipe_search/helpers/extensions/list_extension.dart';
@@ -90,7 +91,7 @@ class _RecipeFullState extends State<RecipeFull> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           CircleInfo(
-            title: 'Weight',
+            title: 'Grams',
             value: recipe.totalWeight.toStringAsFixed(0),
             borderColor: theme.primaryColor,
           ),
@@ -100,7 +101,7 @@ class _RecipeFullState extends State<RecipeFull> {
             borderColor: theme.primaryColor,
           ),
           CircleInfo(
-            title: 'Ingrs',
+            title: Intl.plural(recipe.ingredients.length, one: 'Ingr', other: 'Ingrs'),
             value: recipe.ingredients.length.toString(),
             borderColor: theme.primaryColor,
           ),
@@ -117,7 +118,7 @@ class _RecipeFullState extends State<RecipeFull> {
       //-----------------------------------------------
       if (recipe.cautions.isNotEmpty) ...[
         TitleWidget(title: 'Cautions', color: Colors.red.withOpacity(0.1)),
-        Value(value: recipe.cautions.view),
+        Value(value: recipe.cautions.view, color: Colors.red.shade900, fontWeight: FontWeight.w500),
       ],
       //-----------------------------------------------
       if (recipe.cuisineType.isNotEmpty) ...[

@@ -1,11 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:recipe_search/helpers/consts.dart';
+import 'package:recipe_search/helpers/extensions/edge_extension.dart';
 import 'package:recipe_search/models/recipe/recipe_model.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 import '../common.dart';
-
-const verticalPadding = EdgeInsets.symmetric(vertical: 1);
 
 class RecipeCard extends StatelessWidget {
   final Recipe recipe;
@@ -39,27 +38,14 @@ class RecipeCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: verticalPadding,
-                      child: Text(
-                        recipe.label,
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    Padding(
-                      padding: verticalPadding,
-                      child:
-                          titleValue(title: 'Ingredients: ', value: recipe.ingredients.map((e) => e.food).join(', ')),
-                    ),
-                    Padding(
-                      padding: verticalPadding,
-                      child: titleValue(title: 'Calories: ', value: recipe.calories.toStringAsFixed(2)),
-                    ),
-                    Padding(
-                      padding: verticalPadding,
-                      child: titleValue(title: 'Weight: ', value: recipe.totalWeight.toStringAsFixed(2)),
-                    ),
+                    Text(
+                      recipe.label,
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      overflow: TextOverflow.ellipsis,
+                    ).paddingV1,
+                    titleValue(title: 'Ingredients: ', value: recipe.ingredientsStr).paddingV1,
+                    titleValue(title: 'Calories: ', value: recipe.caloriesStr).paddingV1,
+                    titleValue(title: 'Weight: ', value: recipe.totalWeightStr).paddingV1,
                   ],
                 ),
               ),

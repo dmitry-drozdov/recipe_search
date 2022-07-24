@@ -77,4 +77,9 @@ class Recipe {
   Image? get bestImg => largeImg ?? regularImg ?? smallImg ?? thumbnailImg;
 
   // String getters for fields
+  String get ingredientsStr => ingredients.map((e) => e.food).join(', ');
+
+  String get caloriesStr => calories.toStringAsFixed(2);
+
+  String get totalWeightStr => totalWeight.toStringAsFixed(2);
 }

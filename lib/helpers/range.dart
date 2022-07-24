@@ -1,6 +1,10 @@
 import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:recipe_search/helpers/update_dynamic.dart';
 
+part 'range.g.dart';
+
+@JsonSerializable(createToJson: true)
 class Range extends Equatable {
   final int min;
   final int max;
@@ -9,6 +13,10 @@ class Range extends Equatable {
     required this.min,
     required this.max,
   }) : assert(0 <= min && min <= max);
+
+  factory Range.fromJson(Map<String, dynamic> json) => _$RangeFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RangeToJson(this);
 
   factory Range.copyWith(
     Range old, {

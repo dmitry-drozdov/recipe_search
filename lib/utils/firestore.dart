@@ -8,6 +8,7 @@ import 'package:recipe_search/models/search_settings.dart';
 class Storage {
   static final _userSessions = FirebaseFirestore.instance.collection('userSessions');
   static final _searches = FirebaseFirestore.instance.collection('searches');
+  static final _favouriteRecipes = FirebaseFirestore.instance.collection('favouriteRecipes');
 
   static void logUserSession(User user, DateTime timestamp) async {
     final id = 'U${timestamp.customIso861}|${user.email}';
@@ -30,5 +31,22 @@ class Storage {
       'errorCode': errorCode,
       'timestamp': timestamp,
     });
+  }
+
+  static Future<void> addOrUpdateFavouriteRecipe({
+    // required User user,
+    required String recipeId,
+    required DateTime timestamp,
+    required bool active,
+  }) async {
+    final id = 'USER12'; //'F${user.uid}';
+    final document = await _favouriteRecipes.doc(id).get();
+    final map = document.data() ?? <String, dynamic>{};
+    map[recipeId] = {
+      'active': active,
+      'timestamp': timestamp,
+    };
+
+    _favouriteRecipes.doc(id).set(map);
   }
 }

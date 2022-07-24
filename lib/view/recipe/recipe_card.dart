@@ -5,6 +5,7 @@ import 'package:recipe_search/helpers/app_colors.dart';
 import 'package:recipe_search/helpers/consts.dart';
 import 'package:recipe_search/helpers/extensions/edge_extension.dart';
 import 'package:recipe_search/models/recipe/recipe_model.dart';
+import 'package:recipe_search/utils/firestore.dart';
 
 import '../common.dart';
 
@@ -31,7 +32,11 @@ class RecipeCard extends StatelessWidget {
               isFavorite: false,
               iconDisabledColor: AppColors.greyLike,
               valueChanged: (_isFavorite) {
-                print('Is Favorite : $_isFavorite');
+                Storage.addOrUpdateFavouriteRecipe(
+                  recipeId: recipe.id,
+                  timestamp: DateTime.now(),
+                  active: _isFavorite,
+                );
               },
             ),
           ),

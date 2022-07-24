@@ -6,6 +6,7 @@ class AppColors {
   static const black = Colors.black;
 
   static final grey = Colors.grey.shade400;
+  static final greyLike = Colors.grey.shade200;
 
   static final blueBorder = Colors.blue[700]!;
   static final blueChip = Colors.blue.withOpacity(0.4);

@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:favorite_button/favorite_button.dart';
 import 'package:flutter/material.dart';
+import 'package:recipe_search/helpers/app_colors.dart';
 import 'package:recipe_search/helpers/consts.dart';
 import 'package:recipe_search/helpers/extensions/edge_extension.dart';
 import 'package:recipe_search/models/recipe/recipe_model.dart';
@@ -22,14 +23,13 @@ class RecipeCard extends StatelessWidget {
     return Card(
       child: Stack(
         children: [
-          // Icon(Icons.),
           content(),
           Positioned(
             right: 1,
             top: 1,
             child: FavoriteButton(
-              isFavorite: true,
-              // iconDisabledColor: Colors.white,
+              isFavorite: false,
+              iconDisabledColor: AppColors.greyLike,
               valueChanged: (_isFavorite) {
                 print('Is Favorite : $_isFavorite');
               },

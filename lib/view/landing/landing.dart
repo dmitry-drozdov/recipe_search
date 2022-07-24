@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:recipe_search/helpers/app_colors.dart';
 import 'package:recipe_search/helpers/extensions/edge_extension.dart';
 
 import '../../helpers/circular_indicator.dart';
@@ -32,7 +33,7 @@ class Landing extends StatelessWidget {
               fontSize: 32,
               fontWeight: FontWeight.bold,
             ),
-            firstLetterColor: Colors.red.shade900,
+            firstLetterColor: AppColors.redLetter,
           ),
           highLightFirstLetter(
             text: 'Searching & Reviewing & Saving',
@@ -41,7 +42,7 @@ class Landing extends StatelessWidget {
               fontSize: 20,
               fontWeight: FontWeight.w400,
             ),
-            firstLetterColor: Colors.red.shade900,
+            firstLetterColor: AppColors.redLetter,
           ),
           const SizedBox(height: 50),
           buttons(context),

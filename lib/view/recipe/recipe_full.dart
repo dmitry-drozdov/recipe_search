@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:recipe_search/helpers/app_colors.dart';
 import 'package:recipe_search/helpers/consts.dart';
 import 'package:recipe_search/helpers/extensions/edge_extension.dart';
 import 'package:recipe_search/helpers/extensions/list_extension.dart';
@@ -52,7 +53,7 @@ class _RecipeFullState extends State<RecipeFull> {
                       child: RawMaterialButton(
                         onPressed: () => Navigator.of(context).pop(),
                         elevation: 2.0,
-                        fillColor: Colors.indigo.withOpacity(0.3),
+                        fillColor: AppColors.indigoButton,
                         child: const Icon(Icons.arrow_back_rounded, size: 35.0),
                         shape: const CircleBorder(),
                       ),
@@ -117,8 +118,8 @@ class _RecipeFullState extends State<RecipeFull> {
       ],
       //-----------------------------------------------
       if (recipe.cautions.isNotEmpty) ...[
-        TitleWidget(title: 'Cautions', color: Colors.red.withOpacity(0.1)),
-        Value(value: recipe.cautions.view, color: Colors.red.shade900, fontWeight: FontWeight.w500),
+        TitleWidget(title: 'Cautions', color: AppColors.redBackground),
+        Value(value: recipe.cautions.view, color: AppColors.redLetter, fontWeight: FontWeight.w500),
       ],
       //-----------------------------------------------
       if (recipe.cuisineType.isNotEmpty) ...[

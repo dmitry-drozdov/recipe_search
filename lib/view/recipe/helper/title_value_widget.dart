@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:recipe_search/helpers/app_colors.dart';
 
 class TitleValue extends StatelessWidget {
   final String title;
@@ -17,7 +18,7 @@ class TitleValue extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 2),
       padding: const EdgeInsets.all(8.0),
-      color: color ?? Colors.indigo.withOpacity(0.1),
+      color: color ?? AppColors.indigoTitle,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

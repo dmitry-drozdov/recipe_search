@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:recipe_search/helpers/app_colors.dart';
 
 class TitleWidget extends StatelessWidget {
   final String title;
@@ -16,7 +17,7 @@ class TitleWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(8.0),
-      color: color ?? Colors.indigo.withOpacity(0.1),
+      color: color ?? AppColors.indigoTitle,
       child: Text(title, style: TextStyle(fontSize: 20, fontWeight: fontWeight)),
     );
   }

@@ -34,12 +34,12 @@ class Storage {
   }
 
   static Future<void> addOrUpdateFavouriteRecipe({
-    // required User user,
+    required String userId,
     required String recipeId,
     required DateTime timestamp,
     required bool active,
   }) async {
-    final id = 'USER12'; //'F${user.uid}';
+    final id = 'F$userId';
     final document = await _favouriteRecipes.doc(id).get();
     final map = document.data() ?? <String, dynamic>{};
     map[recipeId] = {
@@ -48,5 +48,23 @@ class Storage {
     };
 
     _favouriteRecipes.doc(id).set(map);
+  }
+
+  static Future<List<String>> getFavouriteRecipes({
+    required String userId,
+  }) async {
+    final id = 'F$userId';
+    final document = await _favouriteRecipes.doc(id).get();
+    final map = document.data() ?? <String, dynamic>{};
+    final result = <String>[];
+    print("*****");
+    print(map);
+    map.forEach((key, value) {
+      if (value is Map<String, dynamic> && value['active'] == true) {
+        result.add(key);
+      }
+    });
+    print(result);
+    return result;
   }
 }

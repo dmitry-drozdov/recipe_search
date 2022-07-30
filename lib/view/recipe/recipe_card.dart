@@ -1,22 +1,26 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:favorite_button/favorite_button.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:recipe_search/helpers/app_colors.dart';
 import 'package:recipe_search/helpers/consts.dart';
 import 'package:recipe_search/helpers/extensions/edge_extension.dart';
 import 'package:recipe_search/models/recipe/recipe_model.dart';
 import 'package:recipe_search/utils/firestore.dart';
 
+import '../../viewmodels/recipe_viewmodel.dart';
 import '../common.dart';
 
 class RecipeCard extends StatelessWidget {
   final Recipe recipe;
   final void Function()? onTap;
+  final RecipeViewModel viewModel;
 
   const RecipeCard({
     Key? key,
     required this.recipe,
     required this.onTap,
+    required this.viewModel,
   }) : super(key: key);
 
   @override
@@ -28,19 +32,31 @@ class RecipeCard extends StatelessWidget {
           Positioned(
             right: 1,
             top: 1,
-            child: FavoriteButton(
-              isFavorite: false,
-              iconDisabledColor: AppColors.greyLike,
-              valueChanged: (_isFavorite) {
-                Storage.addOrUpdateFavouriteRecipe(
-                  recipeId: recipe.id,
-                  timestamp: DateTime.now(),
-                  active: _isFavorite,
-                );
-              },
-            ),
+            child: likeButton(),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget likeButton() {
+    return ChangeNotifierProvider.value(
+      value: viewModel,
+      child: Consumer<RecipeViewModel>(
+        builder: (_, viewModel, ___) {
+          return FavoriteButton(
+            isFavorite: viewModel.favoriteIds.contains(recipe.id),
+            iconDisabledColor: AppColors.greyLike,
+            valueChanged: (_isFavorite) {
+              Storage.addOrUpdateFavouriteRecipe(
+                userId: 'TestUser',
+                recipeId: recipe.id,
+                timestamp: DateTime.now(),
+                active: _isFavorite,
+              );
+            },
+          );
+        },
       ),
     );
   }

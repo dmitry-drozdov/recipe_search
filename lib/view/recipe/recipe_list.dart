@@ -71,6 +71,7 @@ class _RecipeListState extends State<RecipeList> {
                 key: Key('recipeCard$id'),
                 recipe: element,
                 onTap: viewModel.processingIds.contains(id) ? null : () => viewModel.onRecipeTap(id: id),
+                viewModel: viewModel,
               );
             },
             itemCount: viewModel.items.length,

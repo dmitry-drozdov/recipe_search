@@ -43,12 +43,22 @@ abstract class RecipeViewModel extends BaseViewModel<Recipe, RecipeEvent> {
   });
 
   void onAllParamsTap();
+
+  void addOrUpdateFavouriteRecipe({
+    required String recipeId,
+    required DateTime timestamp,
+    required bool active,
+  });
+
+  Set<String> get favoriteIds;
 }
 
 class RecipeViewModelImpl extends RecipeViewModel {
   RecipeRepository recipeRepository = RecipeRepository.create();
 
-  RecipeViewModelImpl() : super();
+  RecipeViewModelImpl() : super() {
+    loadFavoriteIds();
+  }
 
   //----------------------------------------- Search requests -----------------------------------------
 
@@ -206,5 +216,38 @@ class RecipeViewModelImpl extends RecipeViewModel {
   @override
   void onAllParamsTap() {
     uiEventSubject.add(RecipeEvent.openAllParams);
+  }
+
+  //----------------------------------------- favourite recipes  -----------------------------------------
+
+  final _favoriteIds = <String>{};
+
+  @override
+  Set<String> get favoriteIds => _favoriteIds;
+
+  Future<void> loadFavoriteIds() async {
+    final ids = await Storage.getFavouriteRecipes(userId: 'TestUser');
+    _favoriteIds.addAll(ids);
+    notifyListeners();
+  }
+
+  @override
+  void addOrUpdateFavouriteRecipe({
+    required String recipeId,
+    required DateTime timestamp,
+    required bool active,
+  }) {
+    Storage.addOrUpdateFavouriteRecipe(
+      userId: 'TestUser',
+      recipeId: recipeId,
+      timestamp: timestamp,
+      active: active,
+    );
+    if (active) {
+      _favoriteIds.add(recipeId);
+    } else {
+      _favoriteIds.remove(recipeId);
+    }
+    notifyListeners();
   }
 }

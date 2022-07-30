@@ -20,7 +20,7 @@ enum RecipeEvent {
 abstract class RecipeViewModel extends BaseViewModel<Recipe, RecipeEvent> {
   RecipeViewModel() : super();
 
-  factory RecipeViewModel.create() => RecipeViewModelImpl();
+  factory RecipeViewModel.create(String userId) => RecipeViewModelImpl(userId);
 
   Future<void> loadRecipesFirstPage();
 
@@ -55,8 +55,10 @@ abstract class RecipeViewModel extends BaseViewModel<Recipe, RecipeEvent> {
 
 class RecipeViewModelImpl extends RecipeViewModel {
   RecipeRepository recipeRepository = RecipeRepository.create();
+  late String _userId;
 
-  RecipeViewModelImpl() : super() {
+  RecipeViewModelImpl(String userId) : super() {
+    _userId = userId;
     loadFavoriteIds();
   }
 
@@ -226,7 +228,7 @@ class RecipeViewModelImpl extends RecipeViewModel {
   Set<String> get favoriteIds => _favoriteIds;
 
   Future<void> loadFavoriteIds() async {
-    final ids = await Storage.getFavouriteRecipes(userId: 'TestUser');
+    final ids = await Storage.getFavouriteRecipes(userId: _userId);
     _favoriteIds.addAll(ids);
     notifyListeners();
   }
@@ -238,7 +240,7 @@ class RecipeViewModelImpl extends RecipeViewModel {
     required bool active,
   }) {
     Storage.addOrUpdateFavouriteRecipe(
-      userId: 'TestUser',
+      userId: _userId,
       recipeId: recipeId,
       timestamp: timestamp,
       active: active,

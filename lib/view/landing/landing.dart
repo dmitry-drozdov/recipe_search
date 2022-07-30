@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:recipe_search/helpers/app_colors.dart';
 import 'package:recipe_search/helpers/extensions/edge_extension.dart';
@@ -82,7 +83,7 @@ class Landing extends StatelessWidget {
             if (snapshot.hasError) {
               return const Text('Error initializing Firebase');
             } else if (snapshot.connectionState == ConnectionState.done) {
-              return GoogleSignInButton(onSignIn: (user) => navigateToMain(ctx, user.displayName));
+              return GoogleSignInButton(onSignIn: (user) => navigateToMain(ctx, user));
             }
             return CircularLoading(Theme.of(context).primaryColor).paddingV8;
           },
@@ -95,14 +96,17 @@ class Landing extends StatelessWidget {
     );
   }
 
-  void navigateToMain(BuildContext ctx, [String? name]) {
+  void navigateToMain(BuildContext ctx, [User? user]) {
     var suffix = "";
-    if (name?.isNotEmpty == true) {
-      suffix = " — $name";
+    if (user?.displayName?.isNotEmpty == true) {
+      suffix = " — ${user?.displayName ?? 'Unknown'}";
     }
     Navigator.of(ctx).pushReplacement(
       MaterialPageRoute(
-        builder: (_) => SearchPage(title: 'Recipe Search$suffix'),
+        builder: (_) => SearchPage(
+          title: 'Recipe Search$suffix',
+          user: user,
+        ),
       ),
     );
   }

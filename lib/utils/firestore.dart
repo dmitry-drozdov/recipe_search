@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:recipe_search/helpers/extensions/date_extension.dart';
@@ -46,8 +48,8 @@ class Storage {
       'active': active,
       'timestamp': timestamp,
     };
-
     _favouriteRecipes.doc(id).set(map);
+    log('addOrUpdateFavouriteRecipe: $id $map');
   }
 
   static Future<List<String>> getFavouriteRecipes({
@@ -57,14 +59,12 @@ class Storage {
     final document = await _favouriteRecipes.doc(id).get();
     final map = document.data() ?? <String, dynamic>{};
     final result = <String>[];
-    print("*****");
-    print(map);
     map.forEach((key, value) {
       if (value is Map<String, dynamic> && value['active'] == true) {
         result.add(key);
       }
     });
-    print(result);
+    log('getFavouriteRecipes: $id $result');
     return result;
   }
 }

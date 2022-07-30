@@ -1,4 +1,5 @@
 import 'package:expandable/expandable.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:recipe_search/helpers/extensions/edge_extension.dart';
@@ -9,8 +10,13 @@ import 'package:recipe_search/viewmodels/recipe_viewmodel.dart';
 import 'package:recipe_search/viewmodels/viewmodel_provider.dart';
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({Key? key, required this.title}) : super(key: key);
+  const SearchPage({
+    Key? key,
+    this.user,
+    required this.title,
+  }) : super(key: key);
 
+  final User? user;
   final String title;
 
   @override
@@ -18,7 +24,7 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  final recipeViewModel = ViewModelProvider.getOrCreate(key: recipeKey, create: () => RecipeViewModel.create());
+  late RecipeViewModel recipeViewModel;
   final controller = TextEditingController();
   final expandableController = ExpandableController();
   final focusNode = FocusNode();
@@ -36,6 +42,10 @@ class _SearchPageState extends State<SearchPage> {
   @override
   void initState() {
     super.initState();
+    recipeViewModel = ViewModelProvider.getOrCreate(
+      key: recipeKey,
+      create: () => RecipeViewModel.create(widget.user?.uid ?? 'unknownUser'),
+    );
     recipeViewModel.startUIListening((event) {
       switch (event) {
         case RecipeEvent.openRecipe:

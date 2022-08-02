@@ -87,10 +87,14 @@ class _RecipeFullState extends State<RecipeFull> {
     return [
       Row(
         children: [
-          Text(
-            recipe.label,
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: Colors.indigo),
-          ).padding8888,
+          Container(
+            constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.8),
+            child: Text(
+              recipe.label,
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: Colors.indigo),
+              overflow: TextOverflow.ellipsis,
+            ).padding8888,
+          ),
           LikeButton(viewModel: recipeViewModel, recipeId: widget.id),
         ],
       ),

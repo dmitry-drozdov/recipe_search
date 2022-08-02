@@ -23,6 +23,7 @@ class LikeButton extends StatelessWidget {
         builder: (_, viewModel, ___) {
           return FavoriteButton(
             isFavorite: viewModel.favoriteIds.contains(recipeId),
+            iconColor: AppColors.redLetter,
             iconDisabledColor: AppColors.greyLike,
             valueChanged: (_isFavorite) {
               viewModel.addOrUpdateFavouriteRecipe(

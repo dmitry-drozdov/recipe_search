@@ -6,6 +6,7 @@ import 'package:recipe_search/helpers/consts.dart';
 import 'package:recipe_search/helpers/extensions/edge_extension.dart';
 import 'package:recipe_search/helpers/extensions/list_extension.dart';
 import 'package:recipe_search/models/recipe/recipe_model.dart';
+import 'package:recipe_search/view/recipe/like_button.dart';
 import 'package:recipe_search/viewmodels/recipe_viewmodel.dart';
 import 'package:recipe_search/viewmodels/viewmodel_provider.dart';
 
@@ -84,10 +85,15 @@ class _RecipeFullState extends State<RecipeFull> {
     final theme = Theme.of(context);
     final blueColor = theme.primaryColor.withOpacity(0.1);
     return [
-      Text(
-        recipe.label,
-        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: Colors.indigo),
-      ).padding8888,
+      Row(
+        children: [
+          Text(
+            recipe.label,
+            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: Colors.indigo),
+          ).padding8888,
+          LikeButton(viewModel: recipeViewModel, recipeId: widget.id),
+        ],
+      ),
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [

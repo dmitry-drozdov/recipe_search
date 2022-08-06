@@ -5,7 +5,7 @@ import 'package:recipe_search/helpers/extensions/edge_extension.dart';
 
 import '../../helpers/circular_indicator.dart';
 import '../../utils/auth.dart';
-import '../search/search_page.dart';
+import '../home_navigation.dart';
 import 'google_sign_in_button.dart';
 
 class Landing extends StatelessWidget {
@@ -97,16 +97,9 @@ class Landing extends StatelessWidget {
   }
 
   void navigateToMain(BuildContext ctx, [User? user]) {
-    var suffix = "";
-    if (user?.displayName?.isNotEmpty == true) {
-      suffix = " — ${user?.displayName ?? 'Unknown'}";
-    }
     Navigator.of(ctx).pushReplacement(
       MaterialPageRoute(
-        builder: (_) => SearchPage(
-          title: 'Recipe Search$suffix',
-          user: user,
-        ),
+        builder: (_) => HomeNavigation(user: user),
       ),
     );
   }

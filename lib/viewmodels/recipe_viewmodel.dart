@@ -26,6 +26,8 @@ abstract class RecipeViewModel extends BaseViewModel<Recipe, RecipeEvent> {
 
   Future<void> loadRecipesNextPage();
 
+  Future<void> loadFavoriteRecipes();
+
   void onRecipeTap({required String id});
 
   String? get currentRecipeId;
@@ -51,6 +53,8 @@ abstract class RecipeViewModel extends BaseViewModel<Recipe, RecipeEvent> {
   });
 
   Set<String> get favoriteIds;
+
+  List<Recipe> get favoriteRecipes;
 }
 
 class RecipeViewModelImpl extends RecipeViewModel {
@@ -224,13 +228,38 @@ class RecipeViewModelImpl extends RecipeViewModel {
 
   final _favoriteIds = <String>{};
 
+  final _favoriteRecipes = <Recipe>[];
+
   @override
   Set<String> get favoriteIds => _favoriteIds;
+
+  @override
+  List<Recipe> get favoriteRecipes => _favoriteRecipes;
 
   Future<void> loadFavoriteIds() async {
     final ids = await Storage.getFavouriteRecipes(userId: _userId);
     _favoriteIds.addAll(ids);
     notifyListeners();
+  }
+
+  Future<void> _processFavorite(String id) async {
+    final res = await recipeRepository.getRecipeById(id);
+    if (!res.result || res.value is! Recipe || _favoriteRecipes.contains(res.value)) {
+      return;
+    }
+    _favoriteRecipes.add(res.value);
+  }
+
+  @override
+  Future<void> loadFavoriteRecipes() async {
+    setLoading(value: true);
+
+    final alreadyFetched = _favoriteRecipes.map((e) => e.id).toSet();
+    final diff = _favoriteIds.difference(alreadyFetched);
+
+    await Future.wait(diff.map((id) => _processFavorite(id)));
+
+    setLoading(value: false);
   }
 
   @override
@@ -239,16 +268,19 @@ class RecipeViewModelImpl extends RecipeViewModel {
     required DateTime timestamp,
     required bool active,
   }) {
+    final recipe = items.firstWhere((element) => element.id == recipeId);
     Storage.addOrUpdateFavouriteRecipe(
       userId: _userId,
-      recipeId: recipeId,
+      recipeId: recipe.id,
       timestamp: timestamp,
       active: active,
     );
     if (active) {
-      _favoriteIds.add(recipeId);
+      _favoriteIds.add(recipe.id);
+      _favoriteRecipes.add(recipe);
     } else {
-      _favoriteIds.remove(recipeId);
+      _favoriteIds.remove(recipe.id);
+      _favoriteRecipes.remove(recipe);
     }
     notifyListeners();
   }

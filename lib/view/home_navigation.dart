@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:recipe_search/helpers/app_colors.dart';
+import 'package:recipe_search/view/recipe/favorite_recipes.dart';
 import 'package:recipe_search/view/search/search_page.dart';
 
 import '../helpers/screen_data.dart';
@@ -35,7 +36,7 @@ class _HomeNavigationState extends State<HomeNavigation> {
 
     _screens = [
       ScreenData(widget: SearchPage(user: widget.user), title: "Recipe search$suffix"),
-      ScreenData(widget: SearchPage(user: widget.user), title: "Favorite recipes$suffix"),
+      ScreenData(widget: FavoriteRecipes(), title: "Favorite recipes$suffix"),
     ];
   }
 

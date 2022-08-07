@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:recipe_search/view/recipe/recipe_card.dart';
@@ -15,11 +17,12 @@ class RecipeList extends StatefulWidget {
 class _RecipeListState extends State<RecipeList> {
   final recipeViewModel = ViewModelProvider.get<RecipeViewModel>(recipeKey);
   final scrollController = ScrollController();
+  late final StreamSubscription subscription;
 
   @override
   void initState() {
     super.initState();
-    recipeViewModel.startUIListening((event) {
+    subscription = recipeViewModel.startUIListening((event) {
       switch (event) {
         case RecipeEvent.openRecipe:
           if (!mounted) return;
@@ -43,7 +46,7 @@ class _RecipeListState extends State<RecipeList> {
 
   @override
   void dispose() {
-    recipeViewModel.stopUIListening();
+    recipeViewModel.removeUIListeners(subscription);
     super.dispose();
   }
 

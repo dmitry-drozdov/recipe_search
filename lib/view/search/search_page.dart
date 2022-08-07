@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:expandable/expandable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -22,10 +24,13 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  late RecipeViewModel recipeViewModel;
+  late final RecipeViewModel recipeViewModel;
+  late final StreamSubscription subscription;
+
   final controller = TextEditingController();
   final expandableController = ExpandableController();
   final focusNode = FocusNode();
+
   String searchText = '';
 
   Future<void> _loadRecipes() async {
@@ -44,7 +49,9 @@ class _SearchPageState extends State<SearchPage> {
       key: recipeKey,
       create: () => RecipeViewModel.create(widget.user?.uid ?? 'unknownUser'),
     );
-    recipeViewModel.startUIListening((event) {
+    searchText = recipeViewModel.searchSettings.search;
+    controller.text = searchText;
+    subscription = recipeViewModel.startUIListening((event) {
       switch (event) {
         case RecipeEvent.openRecipe:
           break;
@@ -72,7 +79,7 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   void dispose() {
-    recipeViewModel.stopUIListening();
+    recipeViewModel.removeUIListeners(subscription);
     controller.dispose();
     expandableController.dispose();
     focusNode.dispose();

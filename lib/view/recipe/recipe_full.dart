@@ -35,7 +35,9 @@ class _RecipeFullState extends State<RecipeFull> {
   @override
   void initState() {
     super.initState();
-    recipe = recipeViewModel.items.firstWhere((element) => element.id == widget.id);
+    final items = recipeViewModel.items.toSet();
+    items.addAll(recipeViewModel.favoriteRecipes);
+    recipe = items.firstWhere((element) => element.id == widget.id);
   }
 
   @override

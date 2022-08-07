@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:recipe_search/view/recipe/recipe_card.dart';
@@ -5,6 +7,7 @@ import 'package:recipe_search/view/recipe/recipe_card.dart';
 import '../../helpers/linear_loading.dart';
 import '../../viewmodels/recipe_viewmodel.dart';
 import '../../viewmodels/viewmodel_provider.dart';
+import 'recipe_full.dart';
 
 class FavoriteRecipes extends StatefulWidget {
   const FavoriteRecipes({Key? key}) : super(key: key);
@@ -15,11 +18,35 @@ class FavoriteRecipes extends StatefulWidget {
 
 class _FavoriteRecipesState extends State<FavoriteRecipes> {
   final recipeViewModel = ViewModelProvider.get<RecipeViewModel>(recipeKey);
+  late final StreamSubscription subscription;
 
   @override
   void initState() {
     super.initState();
+    subscription = recipeViewModel.startUIListening((event) {
+      switch (event) {
+        case RecipeEvent.openRecipe:
+          if (!mounted) return;
+          final id = recipeViewModel.currentRecipeId;
+          if (id == null) {
+            throw Exception('Cannot open recipe full page. It was null');
+          }
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (_) => RecipeFull(key: Key('recipeFull$id'), id: id)),
+          );
+          break;
+        case RecipeEvent.hideParams:
+        case RecipeEvent.openAllParams:
+          break;
+      }
+    });
     recipeViewModel.loadFavoriteRecipes();
+  }
+
+  @override
+  void dispose() {
+    recipeViewModel.removeUIListeners(subscription);
+    super.dispose();
   }
 
   @override

@@ -268,7 +268,9 @@ class RecipeViewModelImpl extends RecipeViewModel {
     required DateTime timestamp,
     required bool active,
   }) {
-    final recipe = items.firstWhere((element) => element.id == recipeId);
+    final recipe = active
+        ? items.firstWhere((element) => element.id == recipeId)
+        : _favoriteRecipes.firstWhere((element) => element.id == recipeId);
     Storage.addOrUpdateFavouriteRecipe(
       userId: _userId,
       recipeId: recipe.id,

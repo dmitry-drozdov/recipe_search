@@ -1,9 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:recipe_search/helpers/app_colors.dart';
 import 'package:recipe_search/helpers/extensions/edge_extension.dart';
 
-import '../../helpers/circular_indicator.dart';
+import '../../helpers/widgets/circular_indicator.dart';
 import '../../utils/auth.dart';
-import '../search/search_page.dart';
+import '../home_navigation.dart';
 import 'google_sign_in_button.dart';
 
 class Landing extends StatelessWidget {
@@ -32,7 +34,7 @@ class Landing extends StatelessWidget {
               fontSize: 32,
               fontWeight: FontWeight.bold,
             ),
-            firstLetterColor: Colors.red.shade900,
+            firstLetterColor: AppColors.redLetter,
           ),
           highLightFirstLetter(
             text: 'Searching & Reviewing & Saving',
@@ -41,7 +43,7 @@ class Landing extends StatelessWidget {
               fontSize: 20,
               fontWeight: FontWeight.w400,
             ),
-            firstLetterColor: Colors.red.shade900,
+            firstLetterColor: AppColors.redLetter,
           ),
           const SizedBox(height: 50),
           buttons(context),
@@ -81,7 +83,7 @@ class Landing extends StatelessWidget {
             if (snapshot.hasError) {
               return const Text('Error initializing Firebase');
             } else if (snapshot.connectionState == ConnectionState.done) {
-              return GoogleSignInButton(onSignIn: (user) => navigateToMain(ctx, user.displayName));
+              return GoogleSignInButton(onSignIn: (user) => navigateToMain(ctx, user));
             }
             return CircularLoading(Theme.of(context).primaryColor).paddingV8;
           },
@@ -94,14 +96,10 @@ class Landing extends StatelessWidget {
     );
   }
 
-  void navigateToMain(BuildContext ctx, [String? name]) {
-    var suffix = "";
-    if (name?.isNotEmpty == true) {
-      suffix = " — $name";
-    }
+  void navigateToMain(BuildContext ctx, [User? user]) {
     Navigator.of(ctx).pushReplacement(
       MaterialPageRoute(
-        builder: (_) => SearchPage(title: 'Recipe Search$suffix'),
+        builder: (_) => HomeNavigation(user: user),
       ),
     );
   }

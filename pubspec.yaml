@@ -45,7 +45,10 @@ dependencies:
   flutter_linkify: ^5.0.2
   url_launcher: ^6.0.20
   keyboard_dismisser: ^3.0.0
-  multi_select_flutter: ^4.1.2
+  multi_select_flutter:
+    git:
+      url: https://github.com/umersaddiq/multi_select_flutter
+      ref: 115fa6ee7962dd2e6d828c9947f9cdc5ae5e802a
   expandable: ^5.0.1
   equatable: ^2.0.3
   flutter_number_picker: ^1.0.4
@@ -53,6 +56,9 @@ dependencies:
   google_sign_in: ^5.4.0
   firebase_core: ^1.19.2
   cloud_firestore: ^3.4.0
+  intl: ^0.17.0
+  favorite_button: ^0.0.4
+  sorted_list: ^1.0.0
 
 dev_dependencies:
   flutter_test:

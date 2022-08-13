@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/chip_field/multi_select_chip_field.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
+import 'package:recipe_search/helpers/app_colors.dart';
 import 'package:recipe_search/models/enums/diet_label.dart';
 import 'package:recipe_search/models/enums/health_label.dart';
 
@@ -44,10 +45,10 @@ class _MultiSelectFieldState extends State<MultiSelectField> {
       items: multiSelectItems.toList(),
       initialValue: widget.initialItems,
       title: Text(widget.title),
-      headerColor: Colors.blue.withOpacity(0.4),
-      decoration: BoxDecoration(border: Border.all(color: Colors.blue[700]!, width: 1.8)),
-      selectedChipColor: Colors.blue.withOpacity(0.5),
-      selectedTextStyle: TextStyle(color: Colors.blue[800]),
+      headerColor: AppColors.blueChip,
+      decoration: BoxDecoration(border: Border.all(color: AppColors.blueBorder, width: 1.8)),
+      selectedChipColor: AppColors.blueChip,
+      selectedTextStyle: const TextStyle(color: AppColors.black),
       onTap: (values) => widget.onSelect(values),
     );
   }

@@ -225,6 +225,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0"
+  favorite_button:
+    dependency: "direct main"
+    description:
+      name: favorite_button
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.4"
   ffi:
     dependency: transitive
     description:
@@ -423,7 +430,7 @@ packages:
     source: hosted
     version: "4.0.1"
   intl:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: intl
       url: "https://pub.dartlang.org"
@@ -516,9 +523,11 @@ packages:
   multi_select_flutter:
     dependency: "direct main"
     description:
-      name: multi_select_flutter
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: "115fa6ee7962dd2e6d828c9947f9cdc5ae5e802a"
+      resolved-ref: "115fa6ee7962dd2e6d828c9947f9cdc5ae5e802a"
+      url: "https://github.com/umersaddiq/multi_select_flutter"
+    source: git
     version: "4.1.2"
   nested:
     dependency: transitive
@@ -707,6 +716,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
+  sorted_list:
+    dependency: "direct main"
+    description:
+      name: sorted_list
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   source_gen:
     dependency: transitive
     description:

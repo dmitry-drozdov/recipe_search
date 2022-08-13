@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:recipe_search/helpers/request_result_model.dart';
 import 'package:recipe_search/models/enums/diet_label.dart';
 import 'package:recipe_search/models/enums/health_label.dart';
 import 'package:recipe_search/models/recipe/recipe_model.dart';
@@ -8,7 +7,9 @@ import 'package:recipe_search/models/search_settings.dart';
 import 'package:recipe_search/repositories/recipe_repo.dart';
 import 'package:recipe_search/repositories/recipe_result.dart';
 import 'package:recipe_search/utils/firestore.dart';
+import 'package:sorted_list/sorted_list.dart';
 
+import '../helpers/models/request_result_model.dart';
 import 'base_view_model.dart';
 
 enum RecipeEvent {
@@ -20,11 +21,13 @@ enum RecipeEvent {
 abstract class RecipeViewModel extends BaseViewModel<Recipe, RecipeEvent> {
   RecipeViewModel() : super();
 
-  factory RecipeViewModel.create() => RecipeViewModelImpl();
+  factory RecipeViewModel.create(String userId) => RecipeViewModelImpl(userId);
 
   Future<void> loadRecipesFirstPage();
 
   Future<void> loadRecipesNextPage();
+
+  Future<void> loadFavoriteRecipes();
 
   void onRecipeTap({required String id});
 
@@ -43,12 +46,26 @@ abstract class RecipeViewModel extends BaseViewModel<Recipe, RecipeEvent> {
   });
 
   void onAllParamsTap();
+
+  void addOrUpdateFavouriteRecipe({
+    required String recipeId,
+    required DateTime timestamp,
+    required bool active,
+  });
+
+  Set<String> get favoriteIds;
+
+  List<Recipe> get favoriteRecipes;
 }
 
 class RecipeViewModelImpl extends RecipeViewModel {
   RecipeRepository recipeRepository = RecipeRepository.create();
+  late String _userId;
 
-  RecipeViewModelImpl() : super();
+  RecipeViewModelImpl(String userId) : super() {
+    _userId = userId;
+    loadFavoriteIds();
+  }
 
   //----------------------------------------- Search requests -----------------------------------------
 
@@ -206,5 +223,71 @@ class RecipeViewModelImpl extends RecipeViewModel {
   @override
   void onAllParamsTap() {
     uiEventSubject.add(RecipeEvent.openAllParams);
+  }
+
+  //----------------------------------------- favourite recipes  -----------------------------------------
+
+  final FavouriteData _favoriteData = {};
+
+  final _favoriteRecipes = SortedList<Recipe>((a, b) => b.likeTimeOrNow.compareTo(a.likeTimeOrNow));
+
+  @override
+  Set<String> get favoriteIds => _favoriteData.keys.toSet();
+
+  @override
+  List<Recipe> get favoriteRecipes => _favoriteRecipes;
+
+  Future<void> loadFavoriteIds() async {
+    final data = await Storage.getFavouriteRecipes(userId: _userId);
+    _favoriteData.addAll(data);
+    notifyListeners();
+  }
+
+  Future<void> _processFavorite(String id) async {
+    final res = await recipeRepository.getRecipeById(id);
+    if (!res.result || res.value is! Recipe || _favoriteRecipes.contains(res.value)) {
+      return;
+    }
+    final recipe = res.value as Recipe;
+    recipe.likeTime = _favoriteData[recipe.id];
+    _favoriteRecipes.add(recipe);
+  }
+
+  @override
+  Future<void> loadFavoriteRecipes() async {
+    setLoading(value: true);
+
+    final alreadyFetched = _favoriteRecipes.map((e) => e.id).toSet();
+    final diff = favoriteIds.difference(alreadyFetched);
+
+    await Future.wait(diff.map((id) => _processFavorite(id)));
+
+    setLoading(value: false);
+  }
+
+  @override
+  void addOrUpdateFavouriteRecipe({
+    required String recipeId,
+    required DateTime timestamp,
+    required bool active,
+  }) {
+    final recipe = active
+        ? items.firstWhere((element) => element.id == recipeId)
+        : _favoriteRecipes.firstWhere((element) => element.id == recipeId);
+    Storage.addOrUpdateFavouriteRecipe(
+      userId: _userId,
+      recipeId: recipe.id,
+      timestamp: timestamp,
+      active: active,
+    );
+    if (active) {
+      _favoriteData[recipe.id] = timestamp;
+      recipe.likeTime = timestamp;
+      _favoriteRecipes.add(recipe);
+    } else {
+      _favoriteData.remove(recipe.id);
+      _favoriteRecipes.remove(recipe);
+    }
+    notifyListeners();
   }
 }

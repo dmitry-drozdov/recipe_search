@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:recipe_search/helpers/images/images_model.dart';
 import 'package:recipe_search/models/enums/diet_label.dart';
@@ -7,7 +8,7 @@ import 'package:recipe_search/models/ingredient/ingredient_model.dart';
 part 'recipe_model.g.dart';
 
 @JsonSerializable(createToJson: false)
-class Recipe {
+class Recipe extends Equatable {
   final String uri;
   final String label;
   final String image;
@@ -30,6 +31,9 @@ class Recipe {
   final List<String> cuisineType;
   final List<String> mealType;
   final List<String>? dishType;
+  DateTime? likeTime;
+
+  DateTime get likeTimeOrNow => likeTime ?? DateTime.now();
 
   Recipe({
     required this.uri,
@@ -52,6 +56,7 @@ class Recipe {
     required this.cuisineType,
     required this.mealType,
     this.dishType,
+    this.likeTime,
   });
 
   factory Recipe.fromJson(Map<String, dynamic> json) => _$RecipeFromJson(json);
@@ -77,4 +82,12 @@ class Recipe {
   Image? get bestImg => largeImg ?? regularImg ?? smallImg ?? thumbnailImg;
 
   // String getters for fields
+  String get ingredientsStr => ingredients.map((e) => e.food).join(', ');
+
+  String get caloriesStr => calories.toStringAsFixed(2);
+
+  String get totalWeightStr => totalWeight.toStringAsFixed(2);
+
+  @override
+  List<Object?> get props => [id];
 }

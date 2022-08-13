@@ -1,9 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:recipe_search/helpers/app_colors.dart';
 import 'package:recipe_search/helpers/consts.dart';
 import 'package:recipe_search/helpers/extensions/edge_extension.dart';
 import 'package:recipe_search/helpers/extensions/list_extension.dart';
 import 'package:recipe_search/models/recipe/recipe_model.dart';
+import 'package:recipe_search/view/recipe/like_button.dart';
 import 'package:recipe_search/viewmodels/recipe_viewmodel.dart';
 import 'package:recipe_search/viewmodels/viewmodel_provider.dart';
 
@@ -32,7 +35,9 @@ class _RecipeFullState extends State<RecipeFull> {
   @override
   void initState() {
     super.initState();
-    recipe = recipeViewModel.items.firstWhere((element) => element.id == widget.id);
+    final items = recipeViewModel.items.toSet();
+    items.addAll(recipeViewModel.favoriteRecipes);
+    recipe = items.firstWhere((element) => element.id == widget.id);
   }
 
   @override
@@ -51,7 +56,7 @@ class _RecipeFullState extends State<RecipeFull> {
                       child: RawMaterialButton(
                         onPressed: () => Navigator.of(context).pop(),
                         elevation: 2.0,
-                        fillColor: Colors.indigo.withOpacity(0.3),
+                        fillColor: AppColors.indigoButton,
                         child: const Icon(Icons.arrow_back_rounded, size: 35.0),
                         shape: const CircleBorder(),
                       ),
@@ -82,15 +87,24 @@ class _RecipeFullState extends State<RecipeFull> {
     final theme = Theme.of(context);
     final blueColor = theme.primaryColor.withOpacity(0.1);
     return [
-      Text(
-        recipe.label,
-        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: Colors.indigo),
-      ).padding8888,
+      Row(
+        children: [
+          Container(
+            constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.8),
+            child: Text(
+              recipe.label,
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: Colors.indigo),
+              overflow: TextOverflow.ellipsis,
+            ).padding8888,
+          ),
+          LikeButton(viewModel: recipeViewModel, recipeId: widget.id),
+        ],
+      ),
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           CircleInfo(
-            title: 'Weight',
+            title: 'Grams',
             value: recipe.totalWeight.toStringAsFixed(0),
             borderColor: theme.primaryColor,
           ),
@@ -100,7 +114,7 @@ class _RecipeFullState extends State<RecipeFull> {
             borderColor: theme.primaryColor,
           ),
           CircleInfo(
-            title: 'Ingrs',
+            title: Intl.plural(recipe.ingredients.length, one: 'Ingr', other: 'Ingrs'),
             value: recipe.ingredients.length.toString(),
             borderColor: theme.primaryColor,
           ),
@@ -116,8 +130,8 @@ class _RecipeFullState extends State<RecipeFull> {
       ],
       //-----------------------------------------------
       if (recipe.cautions.isNotEmpty) ...[
-        TitleWidget(title: 'Cautions', color: Colors.red.withOpacity(0.1)),
-        Value(value: recipe.cautions.view),
+        TitleWidget(title: 'Cautions', color: AppColors.redBackground),
+        Value(value: recipe.cautions.view, color: AppColors.redLetter, fontWeight: FontWeight.w500),
       ],
       //-----------------------------------------------
       if (recipe.cuisineType.isNotEmpty) ...[

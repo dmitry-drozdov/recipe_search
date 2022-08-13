@@ -1,27 +1,36 @@
+import 'dart:async';
+
 import 'package:expandable/expandable.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:recipe_search/helpers/extensions/edge_extension.dart';
-import 'package:recipe_search/helpers/linear_loading.dart';
+import 'package:recipe_search/helpers/widgets/linear_loading.dart';
 import 'package:recipe_search/view/recipe/recipe_list.dart';
 import 'package:recipe_search/view/search/params.dart';
 import 'package:recipe_search/viewmodels/recipe_viewmodel.dart';
 import 'package:recipe_search/viewmodels/viewmodel_provider.dart';
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({Key? key, required this.title}) : super(key: key);
+  const SearchPage({
+    Key? key,
+    this.user,
+  }) : super(key: key);
 
-  final String title;
+  final User? user;
 
   @override
   State<SearchPage> createState() => _SearchPageState();
 }
 
 class _SearchPageState extends State<SearchPage> {
-  final recipeViewModel = ViewModelProvider.getOrCreate(key: recipeKey, create: () => RecipeViewModel.create());
+  late final RecipeViewModel recipeViewModel;
+  late final StreamSubscription subscription;
+
   final controller = TextEditingController();
   final expandableController = ExpandableController();
   final focusNode = FocusNode();
+
   String searchText = '';
 
   Future<void> _loadRecipes() async {
@@ -36,7 +45,13 @@ class _SearchPageState extends State<SearchPage> {
   @override
   void initState() {
     super.initState();
-    recipeViewModel.startUIListening((event) {
+    recipeViewModel = ViewModelProvider.getOrCreate(
+      key: recipeKey,
+      create: () => RecipeViewModel.create(widget.user?.uid ?? 'unknownUser'),
+    );
+    searchText = recipeViewModel.searchSettings.search;
+    controller.text = searchText;
+    subscription = recipeViewModel.startUIListening((event) {
       switch (event) {
         case RecipeEvent.openRecipe:
           break;
@@ -64,7 +79,7 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   void dispose() {
-    recipeViewModel.stopUIListening();
+    recipeViewModel.removeUIListeners(subscription);
     controller.dispose();
     expandableController.dispose();
     focusNode.dispose();
@@ -73,60 +88,55 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Column(
-        children: <Widget>[
-          ChangeNotifierProvider.value(
-            value: recipeViewModel,
-            child: Consumer<RecipeViewModel>(
-              builder: (_, viewModel, ___) {
-                return Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                  child: LinearLoading(
-                    Theme.of(context).primaryColor,
-                    show: recipeViewModel.loading,
-                  ),
-                );
-              },
-            ),
-          ),
-          Row(
-            children: [
-              Flexible(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 0, 8, 4),
-                  child: TextField(
-                    controller: controller,
-                    focusNode: focusNode,
-                    onChanged: (value) => searchText = value,
-                    onEditingComplete: _loadRecipes,
-                    textInputAction: TextInputAction.search,
-                  ),
+    return Column(
+      children: <Widget>[
+        ChangeNotifierProvider.value(
+          value: recipeViewModel,
+          child: Consumer<RecipeViewModel>(
+            builder: (_, viewModel, ___) {
+              return Padding(
+                padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                child: LinearLoading(
+                  Theme.of(context).primaryColor,
+                  show: recipeViewModel.loading,
                 ),
-              ),
-              Padding(
+              );
+            },
+          ),
+        ),
+        Row(
+          children: [
+            Flexible(
+              child: Padding(
                 padding: const EdgeInsets.fromLTRB(8, 0, 8, 4),
-                child: TextButton(
-                  child: const Text('Search'),
-                  onPressed: _loadRecipes,
+                child: TextField(
+                  controller: controller,
+                  focusNode: focusNode,
+                  onChanged: (value) => searchText = value,
+                  onEditingComplete: _loadRecipes,
+                  textInputAction: TextInputAction.search,
                 ),
               ),
-            ],
-          ),
-          ChangeNotifierProvider.value(
-            value: recipeViewModel,
-            child: Consumer<RecipeViewModel>(
-              builder: (_, viewModel, ___) {
-                return buildParams();
-              },
             ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 0, 8, 4),
+              child: TextButton(
+                child: const Text('Search'),
+                onPressed: _loadRecipes,
+              ),
+            ),
+          ],
+        ),
+        ChangeNotifierProvider.value(
+          value: recipeViewModel,
+          child: Consumer<RecipeViewModel>(
+            builder: (_, viewModel, ___) {
+              return buildParams();
+            },
           ),
-          const Flexible(child: RecipeList()),
-        ],
-      ),
+        ),
+        const Flexible(child: RecipeList()),
+      ],
     );
   }
 

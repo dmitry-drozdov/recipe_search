@@ -22,3 +22,5 @@ final signButtonStyle = ButtonStyle(
   minimumSize: buttonSize,
   maximumSize: buttonSize,
 );
+
+final alertTextStyle = TextStyle(color: AppColors.blueBorder, fontWeight: FontWeight.w500, height: 1.5);

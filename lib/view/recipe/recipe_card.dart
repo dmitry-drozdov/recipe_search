@@ -10,19 +10,23 @@ import '../../helpers/app_colors.dart';
 import '../../viewmodels/recipe_viewmodel.dart';
 import '../common.dart';
 
+enum PageType { searchPage, favoritePage }
+
 class RecipeCard extends StatelessWidget {
   final Recipe recipe;
   final void Function()? onTap;
   final RecipeViewModel viewModel;
-  final bool showSaveTime;
+  final PageType pageType;
 
   const RecipeCard({
     Key? key,
     required this.recipe,
     required this.onTap,
     required this.viewModel,
-    required this.showSaveTime,
+    required this.pageType,
   }) : super(key: key);
+
+  bool get showSaveTime => pageType == PageType.favoritePage;
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +40,7 @@ class RecipeCard extends StatelessWidget {
             child: LikeButton(
               viewModel: viewModel,
               recipeId: recipe.id,
+              removingConfirmation: pageType == PageType.favoritePage,
             ),
           ),
         ],

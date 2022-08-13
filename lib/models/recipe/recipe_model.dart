@@ -31,6 +31,9 @@ class Recipe extends Equatable {
   final List<String> cuisineType;
   final List<String> mealType;
   final List<String>? dishType;
+  DateTime? likeTime;
+
+  DateTime get likeTimeOrNow => likeTime ?? DateTime.now();
 
   Recipe({
     required this.uri,
@@ -53,6 +56,7 @@ class Recipe extends Equatable {
     required this.cuisineType,
     required this.mealType,
     this.dishType,
+    this.likeTime,
   });
 
   factory Recipe.fromJson(Map<String, dynamic> json) => _$RecipeFromJson(json);

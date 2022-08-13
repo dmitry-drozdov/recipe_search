@@ -58,6 +58,7 @@ dependencies:
   cloud_firestore: ^3.4.0
   intl: ^0.17.0
   favorite_button: ^0.0.4
+  sorted_list: ^1.0.0
 
 dev_dependencies:
   flutter_test:

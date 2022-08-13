@@ -7,6 +7,7 @@ import 'package:recipe_search/models/search_settings.dart';
 import 'package:recipe_search/repositories/recipe_repo.dart';
 import 'package:recipe_search/repositories/recipe_result.dart';
 import 'package:recipe_search/utils/firestore.dart';
+import 'package:sorted_list/sorted_list.dart';
 
 import '../helpers/models/request_result_model.dart';
 import 'base_view_model.dart';
@@ -226,19 +227,19 @@ class RecipeViewModelImpl extends RecipeViewModel {
 
   //----------------------------------------- favourite recipes  -----------------------------------------
 
-  final _favoriteIds = <String>{};
+  final FavouriteData _favoriteData = {};
 
-  final _favoriteRecipes = <Recipe>[];
+  final _favoriteRecipes = SortedList<Recipe>((a, b) => b.likeTimeOrNow.compareTo(a.likeTimeOrNow));
 
   @override
-  Set<String> get favoriteIds => _favoriteIds;
+  Set<String> get favoriteIds => _favoriteData.keys.toSet();
 
   @override
   List<Recipe> get favoriteRecipes => _favoriteRecipes;
 
   Future<void> loadFavoriteIds() async {
-    final ids = await Storage.getFavouriteRecipes(userId: _userId);
-    _favoriteIds.addAll(ids);
+    final data = await Storage.getFavouriteRecipes(userId: _userId);
+    _favoriteData.addAll(data);
     notifyListeners();
   }
 
@@ -247,7 +248,9 @@ class RecipeViewModelImpl extends RecipeViewModel {
     if (!res.result || res.value is! Recipe || _favoriteRecipes.contains(res.value)) {
       return;
     }
-    _favoriteRecipes.add(res.value);
+    final recipe = res.value as Recipe;
+    recipe.likeTime = _favoriteData[recipe.id];
+    _favoriteRecipes.add(recipe);
   }
 
   @override
@@ -255,7 +258,7 @@ class RecipeViewModelImpl extends RecipeViewModel {
     setLoading(value: true);
 
     final alreadyFetched = _favoriteRecipes.map((e) => e.id).toSet();
-    final diff = _favoriteIds.difference(alreadyFetched);
+    final diff = favoriteIds.difference(alreadyFetched);
 
     await Future.wait(diff.map((id) => _processFavorite(id)));
 
@@ -278,10 +281,11 @@ class RecipeViewModelImpl extends RecipeViewModel {
       active: active,
     );
     if (active) {
-      _favoriteIds.add(recipe.id);
+      _favoriteData[recipe.id] = timestamp;
+      recipe.likeTime = timestamp;
       _favoriteRecipes.add(recipe);
     } else {
-      _favoriteIds.remove(recipe.id);
+      _favoriteData.remove(recipe.id);
       _favoriteRecipes.remove(recipe);
     }
     notifyListeners();

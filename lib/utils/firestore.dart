@@ -7,6 +7,8 @@ import 'package:recipe_search/helpers/extensions/search_settings_extension.dart'
 import 'package:recipe_search/helpers/extensions/user_extension.dart';
 import 'package:recipe_search/models/search_settings.dart';
 
+typedef FavouriteData = Map<String, DateTime>;
+
 class Storage {
   static final _userSessions = FirebaseFirestore.instance.collection('userSessions');
   static final _searches = FirebaseFirestore.instance.collection('searches');
@@ -52,16 +54,16 @@ class Storage {
     log('addOrUpdateFavouriteRecipe: $id $map');
   }
 
-  static Future<List<String>> getFavouriteRecipes({
+  static Future<FavouriteData> getFavouriteRecipes({
     required String userId,
   }) async {
     final id = 'F$userId';
     final document = await _favouriteRecipes.doc(id).get();
     final map = document.data() ?? <String, dynamic>{};
-    final result = <String>[];
+    final FavouriteData result = {};
     map.forEach((key, value) {
-      if (value is Map<String, dynamic> && value['active'] == true) {
-        result.add(key);
+      if (value is Map<String, dynamic> && value['active'] == true && value['timestamp'] is Timestamp) {
+        result[key] = (value['timestamp'] as Timestamp).toDate();
       }
     });
     log('getFavouriteRecipes: $id $result');

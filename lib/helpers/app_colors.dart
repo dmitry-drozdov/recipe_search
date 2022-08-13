@@ -5,7 +5,8 @@ class AppColors {
 
   static const black = Colors.black;
 
-  static final grey = Colors.grey.shade400;
+  static const grey = Colors.grey;
+  static final greyMedium = Colors.grey.shade400;
   static final greyLike = Colors.grey.shade200;
 
   static final blueBorder = Colors.blue[700]!;

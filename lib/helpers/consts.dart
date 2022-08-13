@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'app_colors.dart';
 
-final placeholder = Icon(Icons.food_bank_outlined, color: AppColors.grey, size: 65);
+final placeholder = Icon(Icons.food_bank_outlined, color: AppColors.greyMedium, size: 65);
 
-final placeholderLarge = Icon(Icons.food_bank_outlined, color: AppColors.grey, size: 260);
+final placeholderLarge = Icon(Icons.food_bank_outlined, color: AppColors.greyMedium, size: 260);
 
 const listMarker = ' • ';
 

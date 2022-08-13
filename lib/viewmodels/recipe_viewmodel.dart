@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:recipe_search/helpers/request_result_model.dart';
 import 'package:recipe_search/models/enums/diet_label.dart';
 import 'package:recipe_search/models/enums/health_label.dart';
 import 'package:recipe_search/models/recipe/recipe_model.dart';
@@ -9,6 +8,7 @@ import 'package:recipe_search/repositories/recipe_repo.dart';
 import 'package:recipe_search/repositories/recipe_result.dart';
 import 'package:recipe_search/utils/firestore.dart';
 
+import '../helpers/models/request_result_model.dart';
 import 'base_view_model.dart';
 
 enum RecipeEvent {

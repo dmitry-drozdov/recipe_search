@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:recipe_search/helpers/range.dart';
+import 'package:recipe_search/helpers/models/range.dart';
 import 'package:recipe_search/helpers/update_dynamic.dart';
 import 'package:recipe_search/models/enums/diet_label.dart';
 import 'package:recipe_search/models/enums/health_label.dart';

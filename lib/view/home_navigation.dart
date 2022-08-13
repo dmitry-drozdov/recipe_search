@@ -4,7 +4,7 @@ import 'package:recipe_search/helpers/app_colors.dart';
 import 'package:recipe_search/view/recipe/favorite_recipes.dart';
 import 'package:recipe_search/view/search/search_page.dart';
 
-import '../helpers/screen_data.dart';
+import '../helpers/widgets/screen_data.dart';
 
 class HomeNavigation extends StatefulWidget {
   final User? user;

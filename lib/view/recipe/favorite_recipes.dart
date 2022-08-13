@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:recipe_search/view/recipe/recipe_card.dart';
 
-import '../../helpers/linear_loading.dart';
+import '../../helpers/widgets/linear_loading.dart';
 import '../../viewmodels/recipe_viewmodel.dart';
 import '../../viewmodels/viewmodel_provider.dart';
 import 'recipe_full.dart';

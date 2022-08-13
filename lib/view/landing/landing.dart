@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:recipe_search/helpers/app_colors.dart';
 import 'package:recipe_search/helpers/extensions/edge_extension.dart';
 
-import '../../helpers/circular_indicator.dart';
+import '../../helpers/widgets/circular_indicator.dart';
 import '../../utils/auth.dart';
 import '../home_navigation.dart';
 import 'google_sign_in_button.dart';

@@ -1,4 +1,4 @@
-import 'package:recipe_search/helpers/string_capitalize.dart';
+import 'package:recipe_search/helpers/extensions/string_capitalize.dart';
 
 enum HealthLabel {
   alcoholCocktail,

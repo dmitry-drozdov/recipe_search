@@ -40,14 +40,17 @@ class _LikeButtonState extends State<LikeButton> {
             iconColor: AppColors.redLetter,
             iconDisabledColor: AppColors.greyLike,
             valueChanged: (_isFavorite) async {
-              if (widget.removingConfirmation) {
+              if (widget.removingConfirmation && viewModel.askBeforeRemoving) {
                 final result = await onRemoveLike(context);
                 if (result == null || result == ExitType.cancel) {
                   setState(() => modifiedKey = DateTime.now());
                   return;
                 }
+                if (result == ExitType.removeAlways) {
+                  viewModel.updateUserSettings(askBeforeRemoving: false);
+                }
               }
-              // TODO handle removeAlways here (save to firestore flag)
+
               viewModel.addOrUpdateFavouriteRecipe(
                 recipeId: widget.recipeId,
                 timestamp: DateTime.now(),

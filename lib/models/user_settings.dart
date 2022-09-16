@@ -29,4 +29,6 @@ class UserSettings {
       lastSearch: update(old.lastSearch, lastSearch),
     );
   }
+
+  factory UserSettings.base() => UserSettings(askBeforeRemoving: true);
 }

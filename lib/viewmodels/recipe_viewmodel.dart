@@ -57,6 +57,13 @@ abstract class RecipeViewModel extends BaseViewModel<Recipe, RecipeEvent> {
   Set<String> get favoriteIds;
 
   List<Recipe> get favoriteRecipes;
+
+  void updateUserSettings({
+    bool? askBeforeRemoving,
+    SearchSettings? lastSearch,
+  });
+
+  bool get askBeforeRemoving;
 }
 
 class RecipeViewModelImpl extends RecipeViewModel {
@@ -297,12 +304,16 @@ class RecipeViewModelImpl extends RecipeViewModel {
 
   //----------------------------------------- user settings -----------------------------------------
 
+  @override
+  bool get askBeforeRemoving => userSettings.askBeforeRemoving;
+
   Future<void> loadUserSettings() async {
-    userSettings = await Storage.getUserSettings(userId: _userId) ?? UserSettings(askBeforeRemoving: true);
+    userSettings = await Storage.getUserSettings(userId: _userId) ?? UserSettings.base();
     log('load user settings: $userSettings');
     notifyListeners();
   }
 
+  @override
   Future<void> updateUserSettings({
     bool? askBeforeRemoving,
     SearchSettings? lastSearch,

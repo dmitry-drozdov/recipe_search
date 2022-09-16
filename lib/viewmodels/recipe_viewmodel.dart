@@ -10,6 +10,7 @@ import 'package:recipe_search/utils/firestore.dart';
 import 'package:sorted_list/sorted_list.dart';
 
 import '../helpers/models/request_result_model.dart';
+import '../models/user_settings.dart';
 import 'base_view_model.dart';
 
 enum RecipeEvent {
@@ -61,9 +62,11 @@ abstract class RecipeViewModel extends BaseViewModel<Recipe, RecipeEvent> {
 class RecipeViewModelImpl extends RecipeViewModel {
   RecipeRepository recipeRepository = RecipeRepository.create();
   late String _userId;
+  late UserSettings userSettings;
 
   RecipeViewModelImpl(String userId) : super() {
     _userId = userId;
+    loadUserSettings();
     loadFavoriteIds();
   }
 
@@ -217,6 +220,7 @@ class RecipeViewModelImpl extends RecipeViewModel {
       return;
     }
     searchSettings = newSearchSettings;
+    updateUserSettings(lastSearch: searchSettings);
     notifyListeners();
   }
 
@@ -289,5 +293,28 @@ class RecipeViewModelImpl extends RecipeViewModel {
       _favoriteRecipes.remove(recipe);
     }
     notifyListeners();
+  }
+
+  //----------------------------------------- user settings -----------------------------------------
+
+  Future<void> loadUserSettings() async {
+    userSettings = await Storage.getUserSettings(userId: _userId) ?? UserSettings(askBeforeRemoving: true);
+    log('load user settings: $userSettings');
+    notifyListeners();
+  }
+
+  Future<void> updateUserSettings({
+    bool? askBeforeRemoving,
+    SearchSettings? lastSearch,
+  }) async {
+    userSettings = UserSettings.copyWith(
+      userSettings,
+      lastSearch: lastSearch,
+      askBeforeRemoving: askBeforeRemoving,
+    );
+    Storage.addOrUpdateUserSettings(
+      userId: _userId,
+      userSettings: userSettings,
+    );
   }
 }

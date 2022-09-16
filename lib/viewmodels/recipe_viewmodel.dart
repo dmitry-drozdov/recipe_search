@@ -309,8 +309,8 @@ class RecipeViewModelImpl extends RecipeViewModel {
 
   Future<void> loadUserSettings() async {
     userSettings = await Storage.getUserSettings(userId: _userId) ?? UserSettings.base();
-    log('load user settings: $userSettings');
-    notifyListeners();
+    searchSettings = userSettings.lastSearch ?? SearchSettings.noSettings();
+    loadRecipesFirstPage();
   }
 
   @override

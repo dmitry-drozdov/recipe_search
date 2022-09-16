@@ -42,6 +42,11 @@ class _SearchPageState extends State<SearchPage> {
     focusNode.unfocus();
   }
 
+  void updateTextController() {
+    searchText = recipeViewModel.searchSettings.search;
+    controller.text = searchText;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -49,13 +54,13 @@ class _SearchPageState extends State<SearchPage> {
       key: recipeKey,
       create: () => RecipeViewModel.create(widget.user?.uid ?? 'unknownUser'),
     );
-    searchText = recipeViewModel.searchSettings.search;
-    controller.text = searchText;
+    updateTextController();
     subscription = recipeViewModel.startUIListening((event) {
       switch (event) {
         case RecipeEvent.openRecipe:
           break;
         case RecipeEvent.hideParams:
+          updateTextController();
           if (expandableController.expanded) {
             expandableController.expanded = false;
           }

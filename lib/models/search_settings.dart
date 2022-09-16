@@ -1,11 +1,15 @@
 import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:recipe_search/helpers/models/range.dart';
 import 'package:recipe_search/helpers/update_dynamic.dart';
 import 'package:recipe_search/models/enums/diet_label.dart';
 import 'package:recipe_search/models/enums/health_label.dart';
 
+part 'search_settings.g.dart';
+
 const delimiter = '&';
 
+@JsonSerializable(createToJson: true)
 class SearchSettings extends Equatable {
   final String search;
   final List<DietLabel> dietLabels;
@@ -18,6 +22,10 @@ class SearchSettings extends Equatable {
     required this.healthLabels,
     required this.caloriesRange,
   });
+
+  factory SearchSettings.fromJson(Map<String, dynamic> json) => _$SearchSettingsFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SearchSettingsToJson(this);
 
   factory SearchSettings.copyWith(
     SearchSettings old, {

@@ -97,7 +97,11 @@ class _RecipeFullState extends State<RecipeFull> {
               overflow: TextOverflow.ellipsis,
             ).padding8888,
           ),
-          LikeButton(viewModel: recipeViewModel, recipeId: widget.id),
+          LikeButton(
+            viewModel: recipeViewModel,
+            recipeId: widget.id,
+            removingConfirmation: false,
+          ),
         ],
       ),
       Row(

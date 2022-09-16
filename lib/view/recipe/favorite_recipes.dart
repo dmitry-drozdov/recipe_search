@@ -78,7 +78,7 @@ class _FavoriteRecipesState extends State<FavoriteRecipes> {
                       recipe: element,
                       onTap: viewModel.processingIds.contains(id) ? null : () => viewModel.onRecipeTap(id: id),
                       viewModel: viewModel,
-                      showSaveTime: true,
+                      pageType: PageType.favoritePage,
                     );
                   },
                   itemCount: viewModel.favoriteRecipes.length,

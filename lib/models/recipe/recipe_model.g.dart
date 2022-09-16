@@ -37,4 +37,7 @@ Recipe _$RecipeFromJson(Map<String, dynamic> json) => Recipe(
       dishType: (json['dishType'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
+      likeTime: json['likeTime'] == null
+          ? null
+          : DateTime.parse(json['likeTime'] as String),
     );

@@ -6,6 +6,7 @@ import 'package:recipe_search/view/search/search_page.dart';
 import 'package:recipe_search/viewmodels/viewmodel_provider.dart';
 
 import '../helpers/widgets/screen_data.dart';
+import 'common/confirm_dialog.dart';
 import 'landing/landing.dart';
 
 class HomeNavigation extends StatefulWidget {
@@ -84,7 +85,12 @@ class _HomeNavigationState extends State<HomeNavigation> {
       title: Text(_screens[_selectedScreenIndex].title),
       actions: [
         RawMaterialButton(
-          onPressed: () {
+          onPressed: () async {
+            final exit = await onExit();
+            if (exit == ExitType.cancel || !mounted) {
+              return;
+            }
+
             ViewModelProvider.delete(recipeKey);
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
@@ -96,6 +102,17 @@ class _HomeNavigationState extends State<HomeNavigation> {
           shape: const CircleBorder(),
         ),
       ],
+    );
+  }
+
+  Future<ExitType?> onExit() async {
+    return await showDialog<ExitType>(
+      context: context,
+      builder: (BuildContext context) => const ConfirmDialog(
+        title: 'Confirm log out',
+        content: 'Are you sure you want to log out?',
+        cancelText: 'No',
+      ),
     );
   }
 }

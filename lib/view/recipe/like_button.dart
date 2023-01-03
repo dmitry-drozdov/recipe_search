@@ -67,7 +67,6 @@ class _LikeButtonState extends State<LikeButton> {
       builder: (BuildContext context) => const ConfirmDialog(
         title: 'Confirm removing',
         content: 'Are you sure you want to remove this recipe from favorite list?',
-        yesNowText: 'Yes',
         yesAlwaysText: 'Yes, don\'t ask again',
       ),
     );

@@ -10,8 +10,8 @@ class ConfirmDialog extends StatelessWidget {
     Key? key,
     required this.title,
     required this.content,
-    required this.yesNowText,
     this.yesAlwaysText,
+    this.yesNowText = 'Yes',
     this.cancelText = 'Cancel',
   }) : super(key: key);
 

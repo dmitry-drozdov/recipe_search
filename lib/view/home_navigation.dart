@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:recipe_search/helpers/app_colors.dart';
 import 'package:recipe_search/view/recipe/favorite_recipes.dart';
 import 'package:recipe_search/view/search/search_page.dart';
+import 'package:recipe_search/viewmodels/viewmodel_provider.dart';
 
 import '../helpers/widgets/screen_data.dart';
+import 'landing/landing.dart';
 
 class HomeNavigation extends StatefulWidget {
   final User? user;
@@ -55,9 +57,7 @@ class _HomeNavigationState extends State<HomeNavigation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(_screens[_selectedScreenIndex].title),
-      ),
+      appBar: buildAppBar(),
       body: _screens[_selectedScreenIndex].widget,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedScreenIndex,
@@ -76,6 +76,26 @@ class _HomeNavigationState extends State<HomeNavigation> {
           )
         ],
       ),
+    );
+  }
+
+  AppBar buildAppBar() {
+    return AppBar(
+      title: Text(_screens[_selectedScreenIndex].title),
+      actions: [
+        RawMaterialButton(
+          onPressed: () {
+            ViewModelProvider.delete(recipeKey);
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (_) => const Landing(title: 'Recipe Search Landing'),
+              ),
+            );
+          },
+          child: const Icon(Icons.logout),
+          shape: const CircleBorder(),
+        ),
+      ],
     );
   }
 }

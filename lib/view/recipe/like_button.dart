@@ -3,10 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../helpers/app_colors.dart';
-import '../../helpers/consts.dart';
 import '../../viewmodels/recipe_viewmodel.dart';
-
-enum ExitType { cancel, removeNow, removeAlways }
+import '../common/confirm_dialog.dart';
 
 class LikeButton extends StatefulWidget {
   final RecipeViewModel viewModel;
@@ -46,7 +44,7 @@ class _LikeButtonState extends State<LikeButton> {
                   setState(() => modifiedKey = DateTime.now());
                   return;
                 }
-                if (result == ExitType.removeAlways) {
+                if (result == ExitType.yesAlways) {
                   viewModel.updateUserSettings(askBeforeRemoving: false);
                 }
               }
@@ -66,23 +64,11 @@ class _LikeButtonState extends State<LikeButton> {
   Future<ExitType?> onRemoveLike(BuildContext ctx) async {
     return await showDialog<ExitType>(
       context: ctx,
-      builder: (BuildContext context) => AlertDialog(
-        title: Text('Confirm removing', style: alertTextStyle),
-        content: Text('Are you sure you want to remove this recipe from favorite list?', style: alertTextStyle),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.pop(context, ExitType.removeAlways),
-            child: Text('Yes, don\'t ask again', style: TextStyle(color: AppColors.redText)),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, ExitType.removeNow),
-            child: Text('Yes', style: TextStyle(color: AppColors.redLetter)),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, ExitType.cancel),
-            child: Text('Cancel', style: alertTextStyle),
-          ),
-        ],
+      builder: (BuildContext context) => const ConfirmDialog(
+        title: 'Confirm removing',
+        content: 'Are you sure you want to remove this recipe from favorite list?',
+        yesNowText: 'Yes',
+        yesAlwaysText: 'Yes, don\'t ask again',
       ),
     );
   }

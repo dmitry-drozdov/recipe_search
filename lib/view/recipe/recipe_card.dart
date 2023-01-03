@@ -8,7 +8,7 @@ import 'package:recipe_search/view/recipe/like_button.dart';
 
 import '../../helpers/app_colors.dart';
 import '../../viewmodels/recipe_viewmodel.dart';
-import '../common.dart';
+import '../common/title_value.dart';
 
 enum PageType { searchPage, favoritePage }
 

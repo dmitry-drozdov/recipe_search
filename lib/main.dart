@@ -14,6 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return KeyboardDismisser(
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Recipe Search',
         theme: ThemeData(
           primarySwatch: Colors.blue,

@@ -8,11 +8,14 @@ import '../helpers/widgets/screen_data.dart';
 
 class HomeNavigation extends StatefulWidget {
   final User? user;
+  final String? deviceId;
 
   const HomeNavigation({
     Key? key,
     this.user,
-  }) : super(key: key);
+    this.deviceId,
+  })  : assert(user != null || deviceId != null),
+        super(key: key);
 
   @override
   State<HomeNavigation> createState() => _HomeNavigationState();
@@ -35,8 +38,14 @@ class _HomeNavigationState extends State<HomeNavigation> {
     final suffix = user?.displayName?.isNotEmpty == true ? " — ${user?.displayName ?? 'Unknown'}" : "";
 
     _screens = [
-      ScreenData(widget: SearchPage(user: widget.user), title: "Recipe search$suffix"),
-      ScreenData(widget: FavoriteRecipes(), title: "Favorite recipes$suffix"),
+      ScreenData(
+        widget: SearchPage(user: widget.user, deviceId: widget.deviceId),
+        title: "Recipe search$suffix",
+      ),
+      ScreenData(
+        widget: const FavoriteRecipes(),
+        title: "Favorite recipes$suffix",
+      ),
     ];
   }
 

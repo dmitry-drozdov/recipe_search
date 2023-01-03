@@ -59,6 +59,7 @@ dependencies:
   intl: ^0.17.0
   favorite_button: ^0.0.4
   sorted_list: ^1.0.0
+  platform_device_id: ^1.0.1
 
 dev_dependencies:
   flutter_test:

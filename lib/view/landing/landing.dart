@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:platform_device_id/platform_device_id.dart';
 import 'package:recipe_search/helpers/app_colors.dart';
 import 'package:recipe_search/helpers/extensions/edge_extension.dart';
 
@@ -83,23 +84,26 @@ class Landing extends StatelessWidget {
             if (snapshot.hasError) {
               return const Text('Error initializing Firebase');
             } else if (snapshot.connectionState == ConnectionState.done) {
-              return GoogleSignInButton(onSignIn: (user) => navigateToMain(ctx, user));
+              return GoogleSignInButton(onSignIn: (user) => navigateToMain(ctx, user: user));
             }
             return CircularLoading(Theme.of(context).primaryColor).paddingV8;
           },
         ),
         TextButton(
           child: const Text('Continue without sign in'),
-          onPressed: () => navigateToMain(ctx),
+          onPressed: () async {
+            String? deviceId = await PlatformDeviceId.getDeviceId;
+            navigateToMain(ctx, deviceId: deviceId);
+          },
         ),
       ],
     );
   }
 
-  void navigateToMain(BuildContext ctx, [User? user]) {
+  void navigateToMain(BuildContext ctx, {User? user, String? deviceId}) {
     Navigator.of(ctx).pushReplacement(
       MaterialPageRoute(
-        builder: (_) => HomeNavigation(user: user),
+        builder: (_) => HomeNavigation(user: user, deviceId: deviceId),
       ),
     );
   }

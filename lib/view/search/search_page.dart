@@ -15,9 +15,12 @@ class SearchPage extends StatefulWidget {
   const SearchPage({
     Key? key,
     this.user,
-  }) : super(key: key);
+    this.deviceId,
+  })  : assert(user != null || deviceId != null),
+        super(key: key);
 
   final User? user;
+  final String? deviceId;
 
   @override
   State<SearchPage> createState() => _SearchPageState();
@@ -52,7 +55,7 @@ class _SearchPageState extends State<SearchPage> {
     super.initState();
     recipeViewModel = ViewModelProvider.getOrCreate(
       key: recipeKey,
-      create: () => RecipeViewModel.create(widget.user?.uid ?? 'unknownUser'),
+      create: () => RecipeViewModel.create(widget.user?.uid ?? widget.deviceId ?? 'unknown'),
     );
     updateTextController();
     subscription = recipeViewModel.startUIListening((event) {

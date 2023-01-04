@@ -8,6 +8,11 @@ import 'package:recipe_search/models/recipe/recipe_model.dart';
 import 'package:recipe_search/viewmodels/recipe_viewmodel.dart';
 import 'package:recipe_search/viewmodels/viewmodel_provider.dart';
 
+const toggleTitle = Text(
+  "Show per serving",
+  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.indigo),
+);
+
 class RecipeDigest extends StatefulWidget {
   final String id;
 
@@ -24,6 +29,8 @@ class _RecipeDigestState extends State<RecipeDigest> {
   final recipeViewModel = ViewModelProvider.get<RecipeViewModel>(recipeKey);
   late final Recipe recipe;
   late final List<Digest> digest;
+
+  bool perServ = false;
 
   @override
   void initState() {
@@ -89,16 +96,30 @@ class _RecipeDigestState extends State<RecipeDigest> {
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: Colors.indigo),
               overflow: TextOverflow.ellipsis,
               maxLines: 2,
-            ).padding8888,
+            ).padding8880,
           ),
         ],
       ),
+      Row(
+        children: [
+          toggleTitle,
+          Switch(
+            inactiveTrackColor: AppColors.lightBlueChip,
+            value: perServ,
+            onChanged: (val) {
+              if (mounted) setState(() => perServ = val);
+            },
+          ),
+        ],
+      ).paddingH8,
     ];
 
+    final services = perServ ? recipe.servings : null;
+
     for (final d in digest) {
-      result.add(d.rowMain);
+      result.add(d.row(services: services));
       for (final s in d.sub) {
-        result.add(s.rowSecond);
+        result.add(s.row(services: services, indent: true));
       }
     }
 

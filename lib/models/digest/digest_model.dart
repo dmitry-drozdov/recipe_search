@@ -31,22 +31,23 @@ class Digest {
 
   factory Digest.fromJson(Map<String, dynamic> json) => _$DigestFromJson(json);
 
-  Widget get rowMain {
-    return row();
-  }
-
-  Widget get rowSecond {
-    return row(indent: true);
-  }
-
-  Widget row({bool indent = false}) {
+  Widget row({bool indent = false, int? services}) {
+    final _total = convertToInt(total, services);
+    final _daily = convertToInt(daily, services);
     return RichRow(
       color: indent ? null : AppColors.white,
       padding: indent ? const EdgeInsets.fromLTRB(24, 4, 8, 4) : null,
       left: label,
-      right: "${total.round()} $unit",
-      rightTooltip: daily > 0 ? "${daily.round()}% Daily Value" : null,
+      right: "$_total $unit",
+      rightTooltip: _daily > 0 ? "$_daily% Daily Value" : null,
     );
+  }
+
+  int convertToInt(double value, int? services) {
+    if (services != null && services != 0) {
+      return (value / services).round();
+    }
+    return value.round();
   }
 }
 

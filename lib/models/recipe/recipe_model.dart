@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:recipe_search/helpers/images/images_model.dart';
+import 'package:recipe_search/models/digest/digest_model.dart';
 import 'package:recipe_search/models/enums/diet_label.dart';
 import 'package:recipe_search/models/enums/health_label.dart';
 import 'package:recipe_search/models/ingredient/ingredient_model.dart';
@@ -31,6 +32,7 @@ class Recipe extends Equatable {
   final List<String> cuisineType;
   final List<String> mealType;
   final List<String>? dishType;
+  final List<Digest> digest;
   DateTime? likeTime;
 
   DateTime get likeTimeOrNow => likeTime ?? DateTime.now();
@@ -56,6 +58,7 @@ class Recipe extends Equatable {
     required this.cuisineType,
     required this.mealType,
     this.dishType,
+    required this.digest,
     this.likeTime,
   });
 

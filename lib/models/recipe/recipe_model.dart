@@ -106,7 +106,7 @@ class Recipe extends Equatable {
     if (servings <= 1) {
       return base;
     }
-    final caloriesPerServ = (iVal / servings).round().toString();
-    return "$base ($caloriesPerServ/serv)";
+    final perServ = (iVal / servings).round().toString();
+    return "$base ($perServ/serv)";
   }
 }

@@ -118,6 +118,11 @@ class _RecipeFullState extends State<RecipeFull> {
   List<Widget> getContentWidgets() {
     final theme = Theme.of(context);
     final blueColor = theme.primaryColor.withOpacity(0.1);
+    String? weightPerServ, calPerServ;
+    if (recipe.servings > 1) {
+      weightPerServ = (recipe.totalWeight.round() / recipe.servings).toStringAsFixed(0) + "/serv";
+      calPerServ = (recipe.calories.round() / recipe.servings).toStringAsFixed(0) + "/serv";
+    }
     return [
       Row(
         children: [
@@ -141,18 +146,25 @@ class _RecipeFullState extends State<RecipeFull> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           CircleInfo(
-            title: 'Grams',
-            value: recipe.totalWeight.toStringAsFixed(0),
-            borderColor: theme.primaryColor,
-          ),
-          CircleInfo(
-            title: 'Calories',
-            value: recipe.calories.toStringAsFixed(0),
-            borderColor: theme.primaryColor,
-          ),
-          CircleInfo(
             title: Intl.plural(recipe.ingredients.length, one: 'Ingr', other: 'Ingrs'),
             value: recipe.ingredients.length.toString(),
+            borderColor: theme.primaryColor,
+          ),
+          CircleInfo(
+            title: 'Kcal',
+            value: recipe.calories.toStringAsFixed(0),
+            subValue: calPerServ,
+            borderColor: theme.primaryColor,
+          ),
+          CircleInfo(
+            title: 'Grams',
+            value: recipe.totalWeight.toStringAsFixed(0),
+            subValue: weightPerServ,
+            borderColor: theme.primaryColor,
+          ),
+          CircleInfo(
+            title: Intl.plural(recipe.servings, one: 'Serving', other: 'Servings'),
+            value: recipe.servingsStr,
             borderColor: theme.primaryColor,
           ),
         ],
@@ -219,7 +231,7 @@ class _RecipeFullState extends State<RecipeFull> {
       TextButton(
         child: const Text('View fats, carbs, vitamins and minerals'),
         onPressed: recipeViewModel.onDigestTap,
-        style: buttonStyle,
+        style: buttonStyleLarge,
       ),
       //-----------------------------------------------
       const SizedBox(height: 2),

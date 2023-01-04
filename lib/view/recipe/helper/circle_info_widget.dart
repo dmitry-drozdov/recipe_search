@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
 
+const circleSize = 90.0;
+
 class CircleInfo extends StatelessWidget {
   final String title;
   final String value;
+  final String? subValue;
   final Color borderColor;
 
-  const CircleInfo({Key? key, required this.title, required this.value, required this.borderColor}) : super(key: key);
+  const CircleInfo({
+    Key? key,
+    required this.title,
+    required this.value,
+    this.subValue,
+    required this.borderColor,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,18 +24,23 @@ class CircleInfo extends StatelessWidget {
         border: Border.all(color: borderColor, width: 2),
         borderRadius: const BorderRadius.all(Radius.circular(100)),
       ),
-      height: 100,
-      width: 100,
+      height: circleSize,
+      width: circleSize,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             value,
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
+            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
           ),
+          if (subValue != null)
+            Text(
+              subValue!,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+            ),
           Text(
             title,
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+            style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w500),
           ),
         ],
       ),

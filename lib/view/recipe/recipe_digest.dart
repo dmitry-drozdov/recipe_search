@@ -98,7 +98,7 @@ class _RecipeDigestState extends State<RecipeDigest> {
     for (final d in digest) {
       result.add(d.rowMain);
       for (final s in d.sub) {
-        result.add(s.rowMain);
+        result.add(s.rowSecond);
       }
     }
 

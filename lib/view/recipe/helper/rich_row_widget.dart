@@ -8,6 +8,7 @@ class RichRow extends StatelessWidget {
   final String? rightTooltip;
   final Color? color;
   final FontWeight? fontWeight;
+  final EdgeInsets? padding;
 
   const RichRow({
     Key? key,
@@ -16,13 +17,14 @@ class RichRow extends StatelessWidget {
     this.rightTooltip,
     this.color,
     this.fontWeight = FontWeight.w500,
+    this.padding,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final textStyle = TextStyle(fontSize: 20, fontWeight: fontWeight);
     return Container(
-      padding: const EdgeInsets.all(8.0),
+      padding: padding ?? const EdgeInsets.all(8.0),
       color: color ?? AppColors.indigoTitle,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

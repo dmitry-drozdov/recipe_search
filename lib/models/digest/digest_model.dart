@@ -36,20 +36,16 @@ class Digest {
   }
 
   Widget get rowSecond {
-    return row();
+    return row(indent: true);
   }
 
   Widget row({bool indent = false}) {
-    String? rightTooltip;
-    if (daily > 0) {
-      rightTooltip = "${daily.round()}% Daily Value";
-    }
-
     return RichRow(
-      color: indent ? AppColors.white : null,
+      color: indent ? null : AppColors.white,
+      padding: indent ? const EdgeInsets.fromLTRB(24, 4, 8, 4) : null,
       left: label,
       right: "${total.round()} $unit",
-      rightTooltip: rightTooltip,
+      rightTooltip: daily > 0 ? "${daily.round()}% Daily Value" : null,
     );
   }
 }

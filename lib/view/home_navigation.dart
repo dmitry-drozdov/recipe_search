@@ -107,12 +107,13 @@ class _HomeNavigationState extends State<HomeNavigation> {
 
   Future<ExitType?> onExit() async {
     return await showDialog<ExitType>(
-      context: context,
-      builder: (BuildContext context) => const ConfirmDialog(
-        title: 'Confirm log out',
-        content: 'Are you sure you want to log out?',
-        cancelText: 'No',
-      ),
-    );
+          context: context,
+          builder: (BuildContext context) => const ConfirmDialog(
+            title: 'Confirm log out',
+            content: 'Are you sure you want to log out?',
+            cancelText: 'No',
+          ),
+        ) ??
+        ExitType.cancel;
   }
 }

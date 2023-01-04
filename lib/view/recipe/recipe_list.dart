@@ -25,7 +25,9 @@ class _RecipeListState extends State<RecipeList> {
     subscription = recipeViewModel.startUIListening((event) {
       switch (event) {
         case RecipeEvent.openRecipe:
-          if (!mounted) return;
+          if (!mounted) {
+            return;
+          }
           final id = recipeViewModel.currentRecipeId;
           if (id == null) {
             throw Exception('Cannot open recipe full page. It was null');
@@ -36,6 +38,7 @@ class _RecipeListState extends State<RecipeList> {
           break;
         case RecipeEvent.hideParams:
         case RecipeEvent.openAllParams:
+        case RecipeEvent.openDigest:
           break;
       }
     });

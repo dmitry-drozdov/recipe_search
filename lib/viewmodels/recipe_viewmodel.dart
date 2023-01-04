@@ -17,6 +17,7 @@ enum RecipeEvent {
   openRecipe,
   hideParams,
   openAllParams,
+  openDigest,
 }
 
 abstract class RecipeViewModel extends BaseViewModel<Recipe, RecipeEvent> {
@@ -47,6 +48,8 @@ abstract class RecipeViewModel extends BaseViewModel<Recipe, RecipeEvent> {
   });
 
   void onAllParamsTap();
+
+  void onDigestTap();
 
   void addOrUpdateFavouriteRecipe({
     required String recipeId,
@@ -234,6 +237,11 @@ class RecipeViewModelImpl extends RecipeViewModel {
   @override
   void onAllParamsTap() {
     uiEventSubject.add(RecipeEvent.openAllParams);
+  }
+
+  @override
+  void onDigestTap() {
+    uiEventSubject.add(RecipeEvent.openDigest);
   }
 
   //----------------------------------------- favourite recipes  -----------------------------------------

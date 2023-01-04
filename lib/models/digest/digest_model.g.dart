@@ -14,7 +14,5 @@ Digest _$DigestFromJson(Map<String, dynamic> json) => Digest(
       hasRDI: json['hasRDI'] as bool,
       daily: (json['daily'] as num).toDouble(),
       unit: json['unit'] as String,
-      sub: (json['sub'] as List<dynamic>?)
-          ?.map((e) => Digest.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      sub: digestFromJson(json['sub'] as List?),
     );

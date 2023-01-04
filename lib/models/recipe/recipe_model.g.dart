@@ -40,6 +40,7 @@ Recipe _$RecipeFromJson(Map<String, dynamic> json) => Recipe(
       digest: (json['digest'] as List<dynamic>)
           .map((e) => Digest.fromJson(e as Map<String, dynamic>))
           .toList(),
+      yield: (json['yield'] as num).toDouble(),
       likeTime: json['likeTime'] == null
           ? null
           : DateTime.parse(json['likeTime'] as String),

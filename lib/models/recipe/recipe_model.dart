@@ -33,6 +33,7 @@ class Recipe extends Equatable {
   final List<String> mealType;
   final List<String>? dishType;
   final List<Digest> digest;
+  final double yield;
   DateTime? likeTime;
 
   DateTime get likeTimeOrNow => likeTime ?? DateTime.now();
@@ -59,6 +60,7 @@ class Recipe extends Equatable {
     required this.mealType,
     this.dishType,
     required this.digest,
+    required this.yield,
     this.likeTime,
   });
 
@@ -71,6 +73,8 @@ class Recipe extends Equatable {
     }
     return uri.substring(index);
   }
+
+  int get servings => yield.round();
 
   // Getters for image
 
@@ -87,10 +91,22 @@ class Recipe extends Equatable {
   // String getters for fields
   String get ingredientsStr => ingredients.map((e) => e.food).join(', ');
 
-  String get caloriesStr => calories.toStringAsFixed(2);
+  String get caloriesStr => _formatPerServ(calories);
 
-  String get totalWeightStr => totalWeight.toStringAsFixed(2);
+  String get totalWeightStr => _formatPerServ(totalWeight);
+
+  String get servingsStr => servings.toString();
 
   @override
   List<Object?> get props => [id];
+
+  String _formatPerServ(double val) {
+    final iVal = val.round();
+    final base = iVal.toString();
+    if (servings <= 1) {
+      return base;
+    }
+    final caloriesPerServ = (iVal / servings).round().toString();
+    return "$base ($caloriesPerServ/serv)";
+  }
 }

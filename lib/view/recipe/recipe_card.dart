@@ -53,7 +53,7 @@ class RecipeCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(5),
-        constraints: BoxConstraints(maxHeight: 125 + (showSaveTime ? 15 : 0)),
+        constraints: BoxConstraints(maxHeight: 144 + (showSaveTime ? 16 : 0)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
@@ -77,8 +77,9 @@ class RecipeCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ).paddingV1,
                       titleValue(title: 'Ingredients: ', value: recipe.ingredientsStr).paddingV1,
-                      titleValue(title: 'Calories: ', value: recipe.caloriesStr).paddingV1,
-                      titleValue(title: 'Weight: ', value: recipe.totalWeightStr).paddingV1,
+                      titleValue(title: 'Calories (kcal): ', value: recipe.caloriesStr).paddingV1,
+                      titleValue(title: 'Weight (g): ', value: recipe.totalWeightStr).paddingV1,
+                      titleValue(title: 'Servings: ', value: recipe.servingsStr).paddingV1,
                     ],
                   ),
                 ),

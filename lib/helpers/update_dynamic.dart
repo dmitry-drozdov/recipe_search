@@ -1,9 +1,9 @@
 dynamic update(dynamic oldValue, dynamic newValue) {
-  dynamic _value;
+  dynamic val;
   if (newValue != null) {
-    _value = newValue;
+    val = newValue;
   } else if (oldValue != null) {
-    _value = oldValue;
+    val = oldValue;
   }
-  return _value;
+  return val;
 }

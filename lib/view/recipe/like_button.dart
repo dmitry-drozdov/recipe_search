@@ -37,7 +37,7 @@ class _LikeButtonState extends State<LikeButton> {
             isFavorite: isFavorite,
             iconColor: AppColors.redLetter,
             iconDisabledColor: AppColors.greyLike,
-            valueChanged: (_isFavorite) async {
+            valueChanged: (val) async {
               if (widget.removingConfirmation && viewModel.askBeforeRemoving) {
                 final result = await onRemoveLike(context);
                 if (result == null || result == ExitType.cancel) {
@@ -52,7 +52,7 @@ class _LikeButtonState extends State<LikeButton> {
               viewModel.addOrUpdateFavouriteRecipe(
                 recipeId: widget.recipeId,
                 timestamp: DateTime.now(),
-                active: _isFavorite,
+                active: val,
               );
             },
           );

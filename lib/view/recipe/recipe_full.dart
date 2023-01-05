@@ -89,8 +89,8 @@ class _RecipeFullState extends State<RecipeFull> {
                         onPressed: () => Navigator.of(context).pop(),
                         elevation: 2.0,
                         fillColor: AppColors.indigoButton,
-                        child: const Icon(Icons.arrow_back_rounded, size: 35.0),
                         shape: const CircleBorder(),
+                        child: const Icon(Icons.arrow_back_rounded, size: 35.0),
                       ),
                     ),
                     backgroundColor: Colors.white,
@@ -120,8 +120,8 @@ class _RecipeFullState extends State<RecipeFull> {
     final blueColor = theme.primaryColor.withOpacity(0.1);
     String? weightPerServ, calPerServ;
     if (recipe.servings > 1) {
-      weightPerServ = (recipe.totalWeight.round() / recipe.servings).toStringAsFixed(0) + "/serv";
-      calPerServ = (recipe.calories.round() / recipe.servings).toStringAsFixed(0) + "/serv";
+      weightPerServ = "${(recipe.totalWeight.round() / recipe.servings).toStringAsFixed(0)}/serv";
+      calPerServ = "${(recipe.calories.round() / recipe.servings).toStringAsFixed(0)}/serv";
     }
     return [
       Row(
@@ -229,9 +229,9 @@ class _RecipeFullState extends State<RecipeFull> {
       //-----------------------------------------------
       const TitleWidget(title: 'Digest'),
       TextButton(
-        child: const Text('View fats, carbs, vitamins and minerals'),
         onPressed: recipeViewModel.onDigestTap,
         style: buttonStyleLarge,
+        child: const Text('View fats, carbs, vitamins and minerals'),
       ),
       //-----------------------------------------------
       const SizedBox(height: 2),

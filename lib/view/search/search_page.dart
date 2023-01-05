@@ -60,8 +60,6 @@ class _SearchPageState extends State<SearchPage> {
     updateTextController();
     subscription = recipeViewModel.startUIListening((event) {
       switch (event) {
-        case RecipeEvent.openRecipe:
-          break;
         case RecipeEvent.hideParams:
           updateTextController();
           if (expandableController.expanded) {
@@ -80,6 +78,10 @@ class _SearchPageState extends State<SearchPage> {
               ),
             ),
           );
+          break;
+        case RecipeEvent.openRecipe:
+          break;
+        case RecipeEvent.openDigest:
           break;
       }
     });
@@ -129,8 +131,8 @@ class _SearchPageState extends State<SearchPage> {
             Padding(
               padding: const EdgeInsets.fromLTRB(8, 0, 8, 4),
               child: TextButton(
-                child: const Text('Search'),
                 onPressed: _loadRecipes,
+                child: const Text('Search'),
               ),
             ),
           ],

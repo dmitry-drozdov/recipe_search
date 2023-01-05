@@ -1,7 +1,6 @@
 import 'dart:convert';
+import 'dart:io';
 
-import 'package:http/http.dart' as http;
-import 'package:recipe_search/helpers/logger.dart';
 import 'package:recipe_search/models/recipe/recipe_model.dart';
 import 'package:recipe_search/repositories/recipe_result.dart';
 
@@ -18,19 +17,34 @@ abstract class RecipeRepository {
   Future<RequestResultModel> getRecipes({String? text, String? nextUrl, String params = ''});
 
   Future<RequestResultModel> getRecipeById(String recipeId);
+
+  void onRemove();
 }
 
 class RecipeRepositoryImpl extends RecipeRepository {
-  RecipeRepositoryImpl();
+  late HttpClient client;
+
+  RecipeRepositoryImpl() {
+    client = HttpClient();
+    client.idleTimeout = const Duration(seconds: 90);
+    client.maxConnectionsPerHost = 10;
+  }
+
+  @override
+  void onRemove() {
+    client.close();
+  }
 
   @override
   Future<RequestResultModel> getRecipes({String? text, String? nextUrl, String params = ''}) async {
     assert(text != null || nextUrl != null);
     final query = nextUrl ??
         'https://api.edamam.com/api/recipes/v2?type=public&q=$text&app_id=$applicationId&app_key=$applicationKey&$params';
-    final response = await http.get(Uri.parse(query));
-    logRequest(query, response);
-    final body = utf8.decode(response.bodyBytes);
+
+    final request = await client.getUrl(Uri.parse(query));
+    final response = await request.close();
+    final body = await response.transform(utf8.decoder).join();
+
     final recipes = <Recipe>[];
     final jsonData = jsonDecode(body);
     if (jsonData['hits'] == null || jsonData['hits'].length == 0 || jsonData['hits'][0] == null) {
@@ -47,9 +61,11 @@ class RecipeRepositoryImpl extends RecipeRepository {
     assert(recipeId != "");
     final query =
         'https://api.edamam.com/api/recipes/v2/$recipeId?type=public&app_id=$applicationId&app_key=$applicationKey';
-    final response = await http.get(Uri.parse(query));
-    logRequest(query, response);
-    final body = utf8.decode(response.bodyBytes);
+
+    final request = await client.getUrl(Uri.parse(query));
+    final response = await request.close();
+    final body = await response.transform(utf8.decoder).join();
+
     final jsonData = jsonDecode(body);
     if (jsonData['recipe'] == null) {
       return RequestResultModel(result: false, value: response.statusCode);

@@ -24,3 +24,8 @@ final signButtonStyle = ButtonStyle(
 );
 
 final alertTextStyle = TextStyle(color: AppColors.blueBorder, fontWeight: FontWeight.w500, height: 1.5);
+
+final tooltipDecoration = BoxDecoration(
+  color: AppColors.blueBorder,
+  borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+);

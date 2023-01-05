@@ -1,6 +1,8 @@
 import 'package:equatable/equatable.dart';
+import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:recipe_search/helpers/images/images_model.dart';
+import 'package:recipe_search/models/digest/digest_model.dart';
 import 'package:recipe_search/models/enums/diet_label.dart';
 import 'package:recipe_search/models/enums/health_label.dart';
 import 'package:recipe_search/models/ingredient/ingredient_model.dart';
@@ -31,6 +33,8 @@ class Recipe extends Equatable {
   final List<String> cuisineType;
   final List<String> mealType;
   final List<String>? dishType;
+  final List<Digest> digest;
+  final double yield;
   DateTime? likeTime;
 
   DateTime get likeTimeOrNow => likeTime ?? DateTime.now();
@@ -56,6 +60,8 @@ class Recipe extends Equatable {
     required this.cuisineType,
     required this.mealType,
     this.dishType,
+    required this.digest,
+    required this.yield,
     this.likeTime,
   });
 
@@ -68,6 +74,8 @@ class Recipe extends Equatable {
     }
     return uri.substring(index);
   }
+
+  int get servings => yield.round();
 
   // Getters for image
 
@@ -84,10 +92,24 @@ class Recipe extends Equatable {
   // String getters for fields
   String get ingredientsStr => ingredients.map((e) => e.food).join(', ');
 
-  String get caloriesStr => calories.toStringAsFixed(2);
+  String get caloriesStr => _formatPerServ(calories);
 
-  String get totalWeightStr => totalWeight.toStringAsFixed(2);
+  String get totalWeightStr => _formatPerServ(totalWeight);
+
+  String get servingsStr => servings.toString();
+
+  String get servingsDescription => Intl.plural(servings, one: 'Serving', other: 'Servings');
 
   @override
   List<Object?> get props => [id];
+
+  String _formatPerServ(double val) {
+    final iVal = val.round();
+    final base = iVal.toString();
+    if (servings <= 1) {
+      return base;
+    }
+    final perServ = (iVal / servings).round().toString();
+    return "$base ($perServ/serv)";
+  }
 }

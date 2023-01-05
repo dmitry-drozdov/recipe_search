@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -7,9 +9,11 @@ import 'package:recipe_search/helpers/extensions/edge_extension.dart';
 import 'package:recipe_search/helpers/extensions/list_extension.dart';
 import 'package:recipe_search/models/recipe/recipe_model.dart';
 import 'package:recipe_search/view/recipe/like_button.dart';
+import 'package:recipe_search/view/recipe/recipe_digest.dart';
 import 'package:recipe_search/viewmodels/recipe_viewmodel.dart';
 import 'package:recipe_search/viewmodels/viewmodel_provider.dart';
 
+import '../search/params.dart';
 import 'helper/circle_info_widget.dart';
 import 'helper/link_value_widget.dart';
 import 'helper/title_value_widget.dart';
@@ -31,6 +35,7 @@ class RecipeFull extends StatefulWidget {
 class _RecipeFullState extends State<RecipeFull> {
   final recipeViewModel = ViewModelProvider.get<RecipeViewModel>(recipeKey);
   late final Recipe recipe;
+  late final StreamSubscription subscription;
 
   @override
   void initState() {
@@ -38,6 +43,33 @@ class _RecipeFullState extends State<RecipeFull> {
     final items = recipeViewModel.items.toSet();
     items.addAll(recipeViewModel.favoriteRecipes);
     recipe = items.firstWhere((element) => element.id == widget.id);
+
+    subscription = recipeViewModel.startUIListening((event) {
+      switch (event) {
+        case RecipeEvent.openDigest:
+          if (!mounted) {
+            return;
+          }
+          final id = recipeViewModel.currentRecipeId;
+          if (id == null) {
+            throw Exception('Cannot open recipe full page. It was null');
+          }
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (_) => RecipeDigest(key: Key('recipeDigest$id'), id: id)),
+          );
+          break;
+        case RecipeEvent.hideParams:
+        case RecipeEvent.openAllParams:
+        case RecipeEvent.openRecipe:
+          break;
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    recipeViewModel.removeUIListeners(subscription);
+    super.dispose();
   }
 
   @override
@@ -86,6 +118,11 @@ class _RecipeFullState extends State<RecipeFull> {
   List<Widget> getContentWidgets() {
     final theme = Theme.of(context);
     final blueColor = theme.primaryColor.withOpacity(0.1);
+    String? weightPerServ, calPerServ;
+    if (recipe.servings > 1) {
+      weightPerServ = (recipe.totalWeight.round() / recipe.servings).toStringAsFixed(0) + "/serv";
+      calPerServ = (recipe.calories.round() / recipe.servings).toStringAsFixed(0) + "/serv";
+    }
     return [
       Row(
         children: [
@@ -95,6 +132,7 @@ class _RecipeFullState extends State<RecipeFull> {
               recipe.label,
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: Colors.indigo),
               overflow: TextOverflow.ellipsis,
+              maxLines: 2,
             ).padding8888,
           ),
           LikeButton(
@@ -108,18 +146,25 @@ class _RecipeFullState extends State<RecipeFull> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           CircleInfo(
-            title: 'Grams',
-            value: recipe.totalWeight.toStringAsFixed(0),
-            borderColor: theme.primaryColor,
-          ),
-          CircleInfo(
-            title: 'Calories',
-            value: recipe.calories.toStringAsFixed(0),
-            borderColor: theme.primaryColor,
-          ),
-          CircleInfo(
             title: Intl.plural(recipe.ingredients.length, one: 'Ingr', other: 'Ingrs'),
             value: recipe.ingredients.length.toString(),
+            borderColor: theme.primaryColor,
+          ),
+          CircleInfo(
+            title: 'Kcal',
+            value: recipe.calories.toStringAsFixed(0),
+            subValue: calPerServ,
+            borderColor: theme.primaryColor,
+          ),
+          CircleInfo(
+            title: 'Grams',
+            value: recipe.totalWeight.toStringAsFixed(0),
+            subValue: weightPerServ,
+            borderColor: theme.primaryColor,
+          ),
+          CircleInfo(
+            title: recipe.servingsDescription,
+            value: recipe.servingsStr,
             borderColor: theme.primaryColor,
           ),
         ],
@@ -181,6 +226,15 @@ class _RecipeFullState extends State<RecipeFull> {
       //-----------------------------------------------
       const TitleWidget(title: 'Link'),
       LinkValue(value: recipe.shareAs, color: theme.primaryColor),
+      //-----------------------------------------------
+      const TitleWidget(title: 'Digest'),
+      TextButton(
+        child: const Text('View fats, carbs, vitamins and minerals'),
+        onPressed: recipeViewModel.onDigestTap,
+        style: buttonStyleLarge,
+      ),
+      //-----------------------------------------------
+      const SizedBox(height: 2),
     ];
   }
 }

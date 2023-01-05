@@ -30,8 +30,9 @@ class RecipeRepositoryImpl extends RecipeRepository {
         'https://api.edamam.com/api/recipes/v2?type=public&q=$text&app_id=$applicationId&app_key=$applicationKey&$params';
     final response = await http.get(Uri.parse(query));
     logRequest(query, response);
+    final body = utf8.decode(response.bodyBytes);
     final recipes = <Recipe>[];
-    final jsonData = jsonDecode(response.body);
+    final jsonData = jsonDecode(body);
     if (jsonData['hits'] == null || jsonData['hits'].length == 0 || jsonData['hits'][0] == null) {
       return RequestResultModel(result: false, value: response.statusCode);
     }
@@ -48,8 +49,8 @@ class RecipeRepositoryImpl extends RecipeRepository {
         'https://api.edamam.com/api/recipes/v2/$recipeId?type=public&app_id=$applicationId&app_key=$applicationKey';
     final response = await http.get(Uri.parse(query));
     logRequest(query, response);
-    final jsonData = jsonDecode(response.body);
-    print(jsonData);
+    final body = utf8.decode(response.bodyBytes);
+    final jsonData = jsonDecode(body);
     if (jsonData['recipe'] == null) {
       return RequestResultModel(result: false, value: response.statusCode);
     }

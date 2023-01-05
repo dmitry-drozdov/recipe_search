@@ -11,6 +11,10 @@ import 'multi_select_field.dart';
 
 const divider = SizedBox(height: 5);
 final buttonStyle = TextButton.styleFrom(padding: const EdgeInsets.all(0.0));
+final buttonStyleLarge = TextButton.styleFrom(
+  textStyle: const TextStyle(fontSize: 16),
+  padding: const EdgeInsets.all(0.0),
+);
 
 enum ScreenMode { part, full }
 

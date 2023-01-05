@@ -163,7 +163,7 @@ class _RecipeFullState extends State<RecipeFull> {
             borderColor: theme.primaryColor,
           ),
           CircleInfo(
-            title: Intl.plural(recipe.servings, one: 'Serving', other: 'Servings'),
+            title: recipe.servingsDescription,
             value: recipe.servingsStr,
             borderColor: theme.primaryColor,
           ),

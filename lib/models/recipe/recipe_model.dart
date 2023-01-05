@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:recipe_search/helpers/images/images_model.dart';
 import 'package:recipe_search/models/digest/digest_model.dart';
@@ -96,6 +97,8 @@ class Recipe extends Equatable {
   String get totalWeightStr => _formatPerServ(totalWeight);
 
   String get servingsStr => servings.toString();
+
+  String get servingsDescription => Intl.plural(servings, one: 'Serving', other: 'Servings');
 
   @override
   List<Object?> get props => [id];

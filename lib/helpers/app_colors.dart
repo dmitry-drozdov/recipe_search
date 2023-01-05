@@ -15,6 +15,7 @@ class AppColors {
 
   static final indigoTitle = Colors.indigo.withOpacity(0.1);
   static final indigoButton = Colors.indigo.withOpacity(0.3);
+  static final indigoHint = Colors.indigo.withOpacity(0.5);
 
   static final redLetter = Colors.red.shade900;
   static final redText = Colors.red.shade300;

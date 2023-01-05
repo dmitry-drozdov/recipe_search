@@ -101,14 +101,23 @@ class _RecipeDigestState extends State<RecipeDigest> {
         ],
       ),
       Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          toggleTitle,
-          Switch(
-            inactiveTrackColor: AppColors.lightBlueChip,
-            value: perServ,
-            onChanged: (val) {
-              if (mounted) setState(() => perServ = val);
-            },
+          Row(
+            children: [
+              toggleTitle,
+              Switch(
+                inactiveTrackColor: AppColors.lightBlueChip,
+                value: perServ,
+                onChanged: (val) {
+                  if (mounted) setState(() => perServ = val);
+                },
+              ),
+            ],
+          ),
+          Text(
+            "${recipe.servingsDescription}: ${recipe.servings}",
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400, color: AppColors.indigoHint),
           ),
         ],
       ).paddingH8,

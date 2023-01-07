@@ -33,14 +33,14 @@ class Digest {
   factory Digest.fromJson(Map<String, dynamic> json) => _$DigestFromJson(json);
 
   Widget row({bool indent = false, int? services}) {
-    final _total = convert(total, services);
-    final _daily = convert(daily, services);
+    final dTotal = convert(total, services);
+    final dDaily = convert(daily, services);
     return RichRow(
       color: indent ? null : AppColors.white,
       padding: indent ? const EdgeInsets.fromLTRB(24, 4, 8, 4) : null,
       left: label,
-      right: "${_total.trimZero()} $unit",
-      rightTooltip: _daily > 0 ? "${_daily.trimZero()}% Daily Value" : null,
+      right: "${dTotal.trimZero()} $unit",
+      rightTooltip: dDaily > 0 ? "${dDaily.trimZero()}% Daily Value" : null,
     );
   }
 

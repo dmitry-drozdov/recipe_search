@@ -36,7 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   json_serializable: ^6.1.4
   json_annotation: ^4.6.0
-  analyzer: ^3.3.1
+  analyzer: ^5.2.0
   build_runner: ^2.1.7
   http: ^0.13.4
   rxdart: ^0.27.3
@@ -52,11 +52,11 @@ dependencies:
   expandable: ^5.0.1
   equatable: ^2.0.3
   flutter_number_picker: ^1.0.4
-  firebase_auth: ^3.4.2
+  firebase_auth: ^4.2.2
   google_sign_in: ^5.4.0
-  firebase_core: ^1.19.2
-  cloud_firestore: ^3.4.0
-  intl: ^0.17.0
+  firebase_core: ^2.4.1
+  cloud_firestore: ^4.3.1
+  intl: ^0.18.0
   favorite_button: ^0.0.4
   sorted_list: ^1.0.0
   platform_device_id: ^1.0.1
@@ -70,7 +70,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^1.0.0
+  flutter_lints: ^2.0.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

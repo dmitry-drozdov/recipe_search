@@ -98,8 +98,8 @@ class _HomeNavigationState extends State<HomeNavigation> {
               ),
             );
           },
-          child: const Icon(Icons.logout),
           shape: const CircleBorder(),
+          child: const Icon(Icons.logout),
         ),
       ],
     );

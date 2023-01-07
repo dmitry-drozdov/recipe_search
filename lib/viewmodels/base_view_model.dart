@@ -25,6 +25,12 @@ abstract class BaseViewModel<T, E> extends ChangeNotifier {
     _uiEventSubscription.remove(subscription);
   }
 
+  void onRemove() {
+    _uiEventSubscription.clear();
+    _uiEventSubscription.cancel();
+    uiEventSubject.close();
+  }
+
   // Loading
   bool loading = false;
 

@@ -60,8 +60,8 @@ class _RecipeDigestState extends State<RecipeDigest> {
                         onPressed: () => Navigator.of(context).pop(),
                         elevation: 2.0,
                         fillColor: AppColors.indigoButton,
-                        child: const Icon(Icons.arrow_back_rounded, size: 35.0),
                         shape: const CircleBorder(),
+                        child: const Icon(Icons.arrow_back_rounded, size: 35.0),
                       ),
                     ),
                     backgroundColor: Colors.white,
@@ -100,27 +100,28 @@ class _RecipeDigestState extends State<RecipeDigest> {
           ),
         ],
       ),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              toggleTitle,
-              Switch(
-                inactiveTrackColor: AppColors.lightBlueChip,
-                value: perServ,
-                onChanged: (val) {
-                  if (mounted) setState(() => perServ = val);
-                },
-              ),
-            ],
-          ),
-          Text(
-            "${recipe.servingsDescription}: ${recipe.servings}",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400, color: AppColors.indigoHint),
-          ),
-        ],
-      ).paddingH8,
+      if (recipe.servings > 1)
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                toggleTitle,
+                Switch(
+                  inactiveTrackColor: AppColors.lightBlueChip,
+                  value: perServ,
+                  onChanged: (val) {
+                    if (mounted) setState(() => perServ = val);
+                  },
+                ),
+              ],
+            ),
+            Text(
+              "${recipe.servingsDescription}: ${recipe.servings}",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400, color: AppColors.indigoHint),
+            ),
+          ],
+        ).paddingH8,
     ];
 
     final services = perServ ? recipe.servings : null;

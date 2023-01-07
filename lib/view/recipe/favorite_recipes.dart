@@ -37,6 +37,7 @@ class _FavoriteRecipesState extends State<FavoriteRecipes> {
           break;
         case RecipeEvent.hideParams:
         case RecipeEvent.openAllParams:
+        case RecipeEvent.openDigest:
           break;
       }
     });

@@ -92,8 +92,7 @@ class Landing extends StatelessWidget {
         TextButton(
           child: const Text('Continue without sign in'),
           onPressed: () async {
-            String? deviceId = await PlatformDeviceId.getDeviceId;
-            navigateToMain(ctx, deviceId: deviceId);
+            navigateToMain(ctx, deviceId: await PlatformDeviceId.getDeviceId);
           },
         ),
       ],

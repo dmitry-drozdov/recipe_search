@@ -85,10 +85,6 @@ class Params extends StatelessWidget {
       children: [
         if (partScreen) const SizedBox(width: 15),
         TextButton(
-          child: Text(
-            'Apply',
-            style: TextStyle(color: recipeViewModel.searchSettingsUpdated ? null : Colors.grey),
-          ),
           onPressed: recipeViewModel.searchSettingsUpdated
               ? () {
                   if (fullScreen) Navigator.of(ctx).pop();
@@ -96,12 +92,16 @@ class Params extends StatelessWidget {
                 }
               : null,
           style: buttonStyle,
+          child: Text(
+            'Apply',
+            style: TextStyle(color: recipeViewModel.searchSettingsUpdated ? null : Colors.grey),
+          ),
         ),
         if (partScreen)
           TextButton(
-            child: const Text('All params'),
             onPressed: recipeViewModel.onAllParamsTap,
             style: buttonStyle,
+            child: const Text('All params'),
           ),
       ],
     );

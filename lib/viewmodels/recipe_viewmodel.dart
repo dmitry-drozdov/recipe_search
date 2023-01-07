@@ -70,7 +70,7 @@ abstract class RecipeViewModel extends BaseViewModel<Recipe, RecipeEvent> {
 }
 
 class RecipeViewModelImpl extends RecipeViewModel {
-  RecipeRepository recipeRepository = RecipeRepository.create();
+  final recipeRepository = RecipeRepository.create();
   late String _userId;
   late UserSettings userSettings;
 
@@ -78,6 +78,12 @@ class RecipeViewModelImpl extends RecipeViewModel {
     _userId = userId;
     loadUserSettings();
     loadFavoriteIds();
+  }
+
+  @override
+  void onRemove() {
+    recipeRepository.onRemove();
+    super.onRemove();
   }
 
   //----------------------------------------- Search requests -----------------------------------------

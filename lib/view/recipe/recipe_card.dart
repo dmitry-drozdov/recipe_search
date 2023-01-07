@@ -1,12 +1,11 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:recipe_search/helpers/consts.dart';
 import 'package:recipe_search/helpers/extensions/date_extension.dart';
 import 'package:recipe_search/helpers/extensions/edge_extension.dart';
 import 'package:recipe_search/models/recipe/recipe_model.dart';
 import 'package:recipe_search/view/recipe/like_button.dart';
 
 import '../../helpers/app_colors.dart';
+import '../../helpers/widgets/cached_network_image.dart';
 import '../../viewmodels/recipe_viewmodel.dart';
 import '../common/title_value.dart';
 
@@ -59,11 +58,9 @@ class RecipeCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                CachedNetworkImage(
-                  imageUrl: recipe.image,
-                  fit: BoxFit.contain,
-                  placeholder: (_, __) => placeholder,
-                  width: 90,
+                CustomCachedNetworkImage(
+                  key: Key("${recipe.id}${recipe.image}"),
+                  url: recipe.image,
                 ),
                 Container(
                   width: 270,

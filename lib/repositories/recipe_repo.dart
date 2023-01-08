@@ -67,27 +67,30 @@ class RecipeRepositoryImpl extends RecipeRepository {
   Future<RequestResultModel> getRecipeById(String recipeId) async {
     assert(recipeId != "");
 
+    // if has connection get recipe by id and update cache
     if (await InternetConnectionChecker().hasConnection) {
       final result = await getRecipeByIdApi(recipeId);
       if (!result.result) {
         return result;
       }
 
-      await m.protect(() async {
+      m.protect(() async {
         await storage.setItem(recipeId, result.value);
       });
-
-      final json = await m.protect<Map<String, dynamic>>(() async {
-        return await storage.getItem(recipeId);
-      });
-
-      final recipe = Recipe.fromJson(json);
-      result.value = recipe;
 
       return result;
     }
 
-    return RequestResultModel(result: false);
+    // otherwise try to get item from cache
+    final json = await m.protect<Map<String, dynamic>?>(() async {
+      return await storage.getItem(recipeId);
+    });
+
+    if (json?.isNotEmpty != true) {
+      return RequestResultModel(result: false);
+    }
+
+    return RequestResultModel(result: true, value: Recipe.fromJson(json!));
   }
 
   Future<RequestResultModel> getRecipeByIdApi(String recipeId) async {

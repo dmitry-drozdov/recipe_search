@@ -1,12 +1,12 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:recipe_search/helpers/app_colors.dart';
-import 'package:recipe_search/helpers/consts.dart';
 import 'package:recipe_search/helpers/extensions/edge_extension.dart';
 import 'package:recipe_search/models/digest/digest_model.dart';
 import 'package:recipe_search/models/recipe/recipe_model.dart';
 import 'package:recipe_search/viewmodels/recipe_viewmodel.dart';
 import 'package:recipe_search/viewmodels/viewmodel_provider.dart';
+
+import 'helper/recipe_app_bar.dart';
 
 const toggleTitle = Text(
   "Show per serving",
@@ -40,7 +40,7 @@ class _RecipeDigestState extends State<RecipeDigest> {
     recipe = items.firstWhere((element) => element.id == widget.id);
 
     digest = recipe.digest;
-    digest.sort((a, b) => b.sub.length.compareTo(a.sub.length));
+    digest.sort((a, b) => b.subOrEmpty.length.compareTo(a.subOrEmpty.length));
   }
 
   @override
@@ -52,28 +52,7 @@ class _RecipeDigestState extends State<RecipeDigest> {
             child: Scrollbar(
               child: CustomScrollView(
                 slivers: <Widget>[
-                  SliverAppBar(
-                    leadingWidth: 40,
-                    leading: Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: RawMaterialButton(
-                        onPressed: () => Navigator.of(context).pop(),
-                        elevation: 2.0,
-                        fillColor: AppColors.indigoButton,
-                        shape: const CircleBorder(),
-                        child: const Icon(Icons.arrow_back_rounded, size: 35.0),
-                      ),
-                    ),
-                    backgroundColor: Colors.white,
-                    pinned: true,
-                    stretch: true,
-                    expandedHeight: 260,
-                    flexibleSpace: CachedNetworkImage(
-                      imageUrl: recipe.bestImg!.url,
-                      placeholder: (_, __) => placeholderLarge,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+                  RecipeAppBar(image: recipe.bestImg),
                   SliverList(
                     delegate: SliverChildListDelegate(getContentWidgets()),
                   ),
@@ -128,7 +107,7 @@ class _RecipeDigestState extends State<RecipeDigest> {
 
     for (final d in digest) {
       result.add(d.row(services: services));
-      for (final s in d.sub) {
+      for (final s in d.subOrEmpty) {
         result.add(s.row(services: services, indent: true));
       }
     }

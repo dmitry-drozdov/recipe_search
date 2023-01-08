@@ -1,6 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:localstorage/localstorage.dart';
+import 'package:mutex/mutex.dart';
 import 'package:recipe_search/models/recipe/recipe_model.dart';
 import 'package:recipe_search/repositories/recipe_result.dart';
 
@@ -23,11 +26,15 @@ abstract class RecipeRepository {
 
 class RecipeRepositoryImpl extends RecipeRepository {
   late HttpClient client;
+  late LocalStorage storage;
+  final m = Mutex();
 
   RecipeRepositoryImpl() {
     client = HttpClient();
     client.idleTimeout = const Duration(seconds: 90);
     client.maxConnectionsPerHost = 10;
+
+    storage = LocalStorage('recipe_repo');
   }
 
   @override
@@ -59,6 +66,31 @@ class RecipeRepositoryImpl extends RecipeRepository {
   @override
   Future<RequestResultModel> getRecipeById(String recipeId) async {
     assert(recipeId != "");
+
+    if (await InternetConnectionChecker().hasConnection) {
+      final result = await getRecipeByIdApi(recipeId);
+      if (!result.result) {
+        return result;
+      }
+
+      await m.protect(() async {
+        await storage.setItem(recipeId, result.value);
+      });
+
+      final json = await m.protect<Map<String, dynamic>>(() async {
+        return await storage.getItem(recipeId);
+      });
+
+      final recipe = Recipe.fromJson(json);
+      result.value = recipe;
+
+      return result;
+    }
+
+    return RequestResultModel(result: false);
+  }
+
+  Future<RequestResultModel> getRecipeByIdApi(String recipeId) async {
     final query =
         'https://api.edamam.com/api/recipes/v2/$recipeId?type=public&app_id=$applicationId&app_key=$applicationKey';
 

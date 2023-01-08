@@ -7,8 +7,7 @@ import '../../view/recipe/helper/rich_row_widget.dart';
 
 part 'digest_model.g.dart';
 
-@JsonSerializable(explicitToJson: true)
-@JsonSerializable(createToJson: true)
+@JsonSerializable(explicitToJson: true, createToJson: true)
 class Digest {
   final String label;
   final String tag;

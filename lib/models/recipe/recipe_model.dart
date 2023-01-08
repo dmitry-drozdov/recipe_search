@@ -9,8 +9,7 @@ import 'package:recipe_search/models/ingredient/ingredient_model.dart';
 
 part 'recipe_model.g.dart';
 
-@JsonSerializable(explicitToJson: true)
-@JsonSerializable(createToJson: true)
+@JsonSerializable(explicitToJson: true, createToJson: true)
 class Recipe extends Equatable {
   final String uri;
   final String label;

@@ -10,6 +10,7 @@ import 'package:recipe_search/utils/firestore.dart';
 import 'package:sorted_list/sorted_list.dart';
 
 import '../helpers/models/request_result_model.dart';
+import '../main.dart';
 import '../models/user_settings.dart';
 import 'base_view_model.dart';
 
@@ -70,6 +71,7 @@ abstract class RecipeViewModel extends BaseViewModel<Recipe, RecipeEvent> {
 }
 
 class RecipeViewModelImpl extends RecipeViewModel {
+  final storage = locator<Storage>();
   final recipeRepository = RecipeRepository.create();
   late String _userId;
   late UserSettings userSettings;
@@ -176,7 +178,7 @@ class RecipeViewModelImpl extends RecipeViewModel {
         await Future.delayed(const Duration(seconds: 10));
       }
     }
-    Storage.logSearch(
+    storage.logSearch(
       searchSettings: searchSettings,
       firstPage: firstPage,
       timestamp: DateTime.now(),
@@ -263,7 +265,7 @@ class RecipeViewModelImpl extends RecipeViewModel {
   List<Recipe> get favoriteRecipes => _favoriteRecipes;
 
   Future<void> loadFavoriteIds() async {
-    final data = await Storage.getFavouriteRecipes(userId: _userId);
+    final data = await storage.getFavouriteRecipes(userId: _userId);
     _favoriteData.addAll(data);
     notifyListeners();
   }
@@ -299,7 +301,7 @@ class RecipeViewModelImpl extends RecipeViewModel {
     final recipe = active
         ? items.firstWhere((element) => element.id == recipeId)
         : _favoriteRecipes.firstWhere((element) => element.id == recipeId);
-    Storage.addOrUpdateFavouriteRecipe(
+    storage.addOrUpdateFavouriteRecipe(
       userId: _userId,
       recipeId: recipe.id,
       timestamp: timestamp,
@@ -322,7 +324,7 @@ class RecipeViewModelImpl extends RecipeViewModel {
   bool get askBeforeRemoving => userSettings.askBeforeRemoving;
 
   Future<void> loadUserSettings() async {
-    userSettings = await Storage.getUserSettings(userId: _userId) ?? UserSettings.base();
+    userSettings = await storage.getUserSettings(userId: _userId) ?? UserSettings.base();
     searchSettings = userSettings.lastSearch ?? SearchSettings.noSettings();
     loadRecipesFirstPage();
   }
@@ -337,7 +339,7 @@ class RecipeViewModelImpl extends RecipeViewModel {
       lastSearch: lastSearch,
       askBeforeRemoving: askBeforeRemoving,
     );
-    Storage.addOrUpdateUserSettings(
+    storage.addOrUpdateUserSettings(
       userId: _userId,
       userSettings: userSettings,
     );

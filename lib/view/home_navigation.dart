@@ -94,7 +94,7 @@ class _HomeNavigationState extends State<HomeNavigation> {
             ViewModelProvider.delete(recipeKey);
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
-                builder: (_) => const Landing(title: 'Recipe Search Landing'),
+                builder: (_) => Landing(title: 'Recipe Search Landing'),
               ),
             );
           },

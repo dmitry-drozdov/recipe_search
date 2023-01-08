@@ -62,22 +62,24 @@ class RecipeCard extends StatelessWidget {
                   key: Key("${recipe.id}${recipe.image}"),
                   url: recipe.image,
                 ),
-                Container(
-                  width: 270,
-                  padding: const EdgeInsets.all(5),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        recipe.label,
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                        overflow: TextOverflow.ellipsis,
-                      ).paddingV1,
-                      titleValue(title: 'Ingredients: ', value: recipe.ingredientsStr).paddingV1,
-                      titleValue(title: 'Calories (kcal): ', value: recipe.caloriesStr).paddingV1,
-                      titleValue(title: 'Weight (g): ', value: recipe.totalWeightStr).paddingV1,
-                      titleValue(title: 'Servings: ', value: recipe.servingsStr).paddingV1,
-                    ],
+                Flexible(
+                  child: Container(
+                    //    width: 270,
+                    padding: const EdgeInsets.all(5),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          recipe.label,
+                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          overflow: TextOverflow.ellipsis,
+                        ).paddingV1,
+                        titleValue(title: 'Ingredients: ', value: recipe.ingredientsStr).paddingV1,
+                        titleValue(title: 'Calories (kcal): ', value: recipe.caloriesStr).paddingV1,
+                        titleValue(title: 'Weight (g): ', value: recipe.totalWeightStr).paddingV1,
+                        titleValue(title: 'Servings: ', value: recipe.servingsStr).paddingV1,
+                      ],
+                    ),
                   ),
                 ),
               ],

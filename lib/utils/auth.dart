@@ -4,16 +4,15 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:recipe_search/utils/firestore.dart';
 
+import '../main.dart';
+
 class Authentication {
-  static Future<FirebaseApp> initializeFirebase() async {
-    FirebaseApp firebaseApp = await Firebase.initializeApp();
+  final storage = locator<Storage>();
+  final FirebaseApp? firebaseApp;
 
-    // TODO: Add auto login logic
+  Authentication(this.firebaseApp);
 
-    return firebaseApp;
-  }
-
-  static Future<User?> signInWithGoogle() async {
+  Future<User?> signInWithGoogle() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
 
@@ -45,13 +44,13 @@ class Authentication {
     }
 
     if (user != null) {
-      Storage.logUserSession(user, DateTime.now());
+      storage.logUserSession(user, DateTime.now());
     }
 
     return user;
   }
 
-  static Future<void> signOut() async {
+  Future<void> signOut() async {
     final GoogleSignIn googleSignIn = GoogleSignIn();
 
     try {

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -75,6 +76,7 @@ class RecipeRepositoryImpl extends RecipeRepository {
       }
 
       m.protect(() async {
+        log('cache recipe $recipeId');
         await storage.setItem(recipeId, result.value);
       });
 
@@ -86,7 +88,11 @@ class RecipeRepositoryImpl extends RecipeRepository {
       return await storage.getItem(recipeId);
     });
 
-    if (json?.isNotEmpty != true) {
+    final found = json?.isNotEmpty == true;
+
+    log('got recipes from cache: $recipeId $found');
+
+    if (!found) {
       return RequestResultModel(result: false);
     }
 

@@ -9,14 +9,23 @@ import 'package:recipe_search/models/user_settings.dart';
 
 typedef FavouriteData = Map<String, DateTime>;
 
+const cacheSize = 50 * 1024 * 1024; // 50 MB
+
 class Storage {
-  static final _userSessions = FirebaseFirestore.instance.collection('userSessions');
-  static final _userSettings = FirebaseFirestore.instance.collection('userSettings');
-  static final _searches = FirebaseFirestore.instance.collection('searches');
-  static final _favouriteRecipes = FirebaseFirestore.instance.collection('favouriteRecipes');
+  final _userSessions = FirebaseFirestore.instance.collection('userSessions');
+  final _userSettings = FirebaseFirestore.instance.collection('userSettings');
+  final _searches = FirebaseFirestore.instance.collection('searches');
+  final _favouriteRecipes = FirebaseFirestore.instance.collection('favouriteRecipes');
+
+  Storage() {
+    FirebaseFirestore.instance.settings = const Settings(
+      persistenceEnabled: true,
+      cacheSizeBytes: cacheSize,
+    );
+  }
 
   // ------------------- logs -------------------
-  static void logUserSession(User user, DateTime timestamp) async {
+  void logUserSession(User user, DateTime timestamp) async {
     final id = 'U${timestamp.customIso861}|${user.email}';
     _userSessions.doc(id).set({
       'user': user.marshal,
@@ -24,7 +33,7 @@ class Storage {
     });
   }
 
-  static void logSearch({
+  void logSearch({
     required SearchSettings searchSettings,
     required bool firstPage,
     required DateTime timestamp,
@@ -41,7 +50,7 @@ class Storage {
 
   // ------------------- favourite recipes -------------------
 
-  static Future<void> addOrUpdateFavouriteRecipe({
+  Future<void> addOrUpdateFavouriteRecipe({
     required String userId,
     required String recipeId,
     required DateTime timestamp,
@@ -58,7 +67,7 @@ class Storage {
     log('addOrUpdateFavouriteRecipe: $id $map');
   }
 
-  static Future<FavouriteData> getFavouriteRecipes({
+  Future<FavouriteData> getFavouriteRecipes({
     required String userId,
   }) async {
     final id = 'F$userId';
@@ -76,7 +85,7 @@ class Storage {
 
   // ------------------- user settings -------------------
 
-  static Future<void> addOrUpdateUserSettings({
+  Future<void> addOrUpdateUserSettings({
     required String userId,
     required UserSettings userSettings,
   }) async {
@@ -86,7 +95,7 @@ class Storage {
     log('addOrUpdateUserSettings: $id $map');
   }
 
-  static Future<UserSettings?> getUserSettings({
+  Future<UserSettings?> getUserSettings({
     required String userId,
   }) async {
     final id = 'P$userId';

@@ -4,6 +4,7 @@ import 'package:recipe_search/helpers/consts.dart';
 import 'package:recipe_search/helpers/extensions/edge_extension.dart';
 
 import '../../helpers/widgets/circular_indicator.dart';
+import '../../main.dart';
 import '../../utils/auth.dart';
 
 class GoogleSignInButton extends StatefulWidget {
@@ -18,6 +19,8 @@ class GoogleSignInButton extends StatefulWidget {
 }
 
 class _GoogleSignInButtonState extends State<GoogleSignInButton> {
+  final auth = locator<Authentication>();
+
   bool _isSigningIn = false;
 
   @override
@@ -27,7 +30,7 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
       onPressed: () async {
         setState(() => _isSigningIn = true);
 
-        final user = await Authentication.signInWithGoogle();
+        final user = await auth.signInWithGoogle();
         if (!mounted) return;
 
         setState(() => _isSigningIn = false);

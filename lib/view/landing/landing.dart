@@ -2,17 +2,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:platform_device_id/platform_device_id.dart';
 import 'package:recipe_search/helpers/app_colors.dart';
-import 'package:recipe_search/helpers/extensions/edge_extension.dart';
 
-import '../../helpers/widgets/circular_indicator.dart';
+import '../../main.dart';
 import '../../utils/auth.dart';
 import '../home_navigation.dart';
 import 'google_sign_in_button.dart';
 
 class Landing extends StatelessWidget {
   final String title;
+  final auth = locator<Authentication>();
 
-  const Landing({
+  Landing({
     Key? key,
     required this.title,
   }) : super(key: key);
@@ -78,17 +78,9 @@ class Landing extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        FutureBuilder(
-          future: Authentication.initializeFirebase(),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return const Text('Error initializing Firebase');
-            } else if (snapshot.connectionState == ConnectionState.done) {
-              return GoogleSignInButton(onSignIn: (user) => navigateToMain(ctx, user: user));
-            }
-            return CircularLoading(Theme.of(context).primaryColor).paddingV8;
-          },
-        ),
+        auth.firebaseApp == null
+            ? const Text('Error initializing Firebase')
+            : GoogleSignInButton(onSignIn: (user) => navigateToMain(ctx, user: user)),
         TextButton(
           child: const Text('Continue without sign in'),
           onPressed: () async {

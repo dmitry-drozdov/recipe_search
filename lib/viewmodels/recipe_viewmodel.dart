@@ -71,7 +71,7 @@ abstract class RecipeViewModel extends BaseViewModel<Recipe, RecipeEvent> {
 }
 
 class RecipeViewModelImpl extends RecipeViewModel {
-  final storage = locator<Storage>();
+  final storage = locator<FirebaseStorage>();
   final recipeRepository = RecipeRepository.create();
   late String _userId;
   late UserSettings userSettings;

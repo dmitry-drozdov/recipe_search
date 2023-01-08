@@ -7,7 +7,7 @@ import 'package:recipe_search/utils/firestore.dart';
 import '../main.dart';
 
 class Authentication {
-  final storage = locator<Storage>();
+  final storage = locator<FirebaseStorage>();
   final FirebaseApp? firebaseApp;
 
   Authentication(this.firebaseApp);

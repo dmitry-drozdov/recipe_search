@@ -11,7 +11,7 @@ GetIt locator = GetIt.instance;
 Future<void> init() async {
   WidgetsFlutterBinding.ensureInitialized();
   final firebaseApp = await Firebase.initializeApp();
-  locator.registerSingleton(Storage());
+  locator.registerSingleton(FirebaseStorage());
   locator.registerSingleton(Authentication(firebaseApp));
 }
 

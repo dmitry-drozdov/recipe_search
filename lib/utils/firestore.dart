@@ -11,13 +11,13 @@ typedef FavouriteData = Map<String, DateTime>;
 
 const cacheSize = 50 * 1024 * 1024; // 50 MB
 
-class Storage {
+class FirebaseStorage {
   final _userSessions = FirebaseFirestore.instance.collection('userSessions');
   final _userSettings = FirebaseFirestore.instance.collection('userSettings');
   final _searches = FirebaseFirestore.instance.collection('searches');
   final _favouriteRecipes = FirebaseFirestore.instance.collection('favouriteRecipes');
 
-  Storage() {
+  FirebaseStorage() {
     FirebaseFirestore.instance.settings = const Settings(
       persistenceEnabled: true,
       cacheSizeBytes: cacheSize,

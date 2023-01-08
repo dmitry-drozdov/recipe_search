@@ -1,11 +1,10 @@
 import 'dart:developer';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 import 'image_type.dart';
-
-import 'package:json_annotation/json_annotation.dart';
-import 'package:collection/collection.dart';
 
 part 'images_model.g.dart';
 
@@ -55,4 +54,9 @@ class Images {
   Image? get regular => images.firstWhereOrNull((element) => element?.imageType == ImageType.regular);
 
   Image? get large => images.firstWhereOrNull((element) => element?.imageType == ImageType.large);
+}
+
+Map<String, dynamic> imagesToJson(Images im) {
+  // just placeholder
+  return <String, dynamic>{};
 }

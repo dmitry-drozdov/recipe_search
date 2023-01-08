@@ -45,3 +45,29 @@ Recipe _$RecipeFromJson(Map<String, dynamic> json) => Recipe(
           ? null
           : DateTime.parse(json['likeTime'] as String),
     );
+
+Map<String, dynamic> _$RecipeToJson(Recipe instance) => <String, dynamic>{
+      'uri': instance.uri,
+      'label': instance.label,
+      'image': instance.image,
+      'images': imagesToJson(instance.images),
+      'source': instance.source,
+      'url': instance.url,
+      'shareAs': instance.shareAs,
+      'dietLabels': dietLabelToJson(instance.dietLabels),
+      'healthLabels': healthLabelToJson(instance.healthLabels),
+      'cautions': instance.cautions,
+      'ingredientLines': instance.ingredientLines,
+      'ingredients': instance.ingredients.map((e) => e.toJson()).toList(),
+      'calories': instance.calories,
+      'glycemicIndex': instance.glycemicIndex,
+      'totalCO2Emissions': instance.totalCO2Emissions,
+      'co2EmissionsClass': instance.co2EmissionsClass,
+      'totalWeight': instance.totalWeight,
+      'cuisineType': instance.cuisineType,
+      'mealType': instance.mealType,
+      'dishType': instance.dishType,
+      'digest': instance.digest.map((e) => e.toJson()).toList(),
+      'yield': instance.yield,
+      'likeTime': instance.likeTime?.toIso8601String(),
+    };

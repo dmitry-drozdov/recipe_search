@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:provider/provider.dart';
+import 'package:recipe_search/utils/internet_checker.dart';
 import 'package:recipe_search/view/recipe/recipe_card.dart';
 import 'package:recipe_search/view/recipe/recipe_full.dart';
 import 'package:recipe_search/viewmodels/recipe_viewmodel.dart';
@@ -20,14 +21,17 @@ class RecipeList extends StatefulWidget {
 class _RecipeListState extends State<RecipeList> {
   final recipeViewModel = ViewModelProvider.get<RecipeViewModel>(recipeKey);
   final scrollController = ScrollController();
-  late final StreamSubscription subscription;
+  final checker = locator<InternetChecker>();
+
   late final StreamSubscription<InternetConnectionStatus> listener;
-  var internetStatus = InternetConnectionStatus.connected;
+  late final StreamSubscription subscription;
 
   @override
   void initState() {
     super.initState();
-    listener = internetChecker.onStatusChange.listen(onInternetStatusChanged);
+    listener = checker.onStatusChange.listen((_) {
+      if (mounted) setState(() {});
+    });
     subscription = recipeViewModel.startUIListening((event) {
       switch (event) {
         case RecipeEvent.openRecipe:
@@ -66,7 +70,7 @@ class _RecipeListState extends State<RecipeList> {
       value: recipeViewModel,
       child: Consumer<RecipeViewModel>(
         builder: (_, viewModel, ___) {
-          if (internetStatus == InternetConnectionStatus.disconnected) {
+          if (checker.lastStatus == InternetConnectionStatus.disconnected) {
             return noInternet();
           }
           if (viewModel.count == 0 && !recipeViewModel.loading) {
@@ -136,11 +140,5 @@ class _RecipeListState extends State<RecipeList> {
         ],
       ),
     );
-  }
-
-  void onInternetStatusChanged(InternetConnectionStatus status) {
-    if (mounted) {
-      setState(() => internetStatus = status);
-    }
   }
 }

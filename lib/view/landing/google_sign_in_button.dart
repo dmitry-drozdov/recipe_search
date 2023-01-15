@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:recipe_search/helpers/consts.dart';
-import 'package:recipe_search/helpers/extensions/edge_extension.dart';
+import 'package:recipe_search/helpers/extensions/widget_extension.dart';
 
 import '../../helpers/widgets/circular_indicator.dart';
 import '../../main.dart';

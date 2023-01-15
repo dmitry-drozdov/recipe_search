@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:recipe_search/helpers/extensions/date_extension.dart';
-import 'package:recipe_search/helpers/extensions/edge_extension.dart';
+import 'package:recipe_search/helpers/extensions/widget_extension.dart';
 import 'package:recipe_search/models/recipe/recipe_model.dart';
 import 'package:recipe_search/view/recipe/like_button.dart';
 

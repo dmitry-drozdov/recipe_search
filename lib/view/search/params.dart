@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_number_picker/flutter_number_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:recipe_search/helpers/extensions/edge_extension.dart';
+import 'package:recipe_search/helpers/extensions/widget_extension.dart';
 import 'package:recipe_search/models/enums/diet_label.dart';
 import 'package:recipe_search/models/enums/health_label.dart';
 import 'package:recipe_search/viewmodels/recipe_viewmodel.dart';

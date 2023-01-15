@@ -3,13 +3,17 @@ import 'dart:async';
 import 'package:expandable/expandable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:provider/provider.dart';
-import 'package:recipe_search/helpers/extensions/edge_extension.dart';
+import 'package:recipe_search/helpers/extensions/widget_extension.dart';
 import 'package:recipe_search/helpers/widgets/linear_loading.dart';
 import 'package:recipe_search/view/recipe/recipe_list.dart';
 import 'package:recipe_search/view/search/params.dart';
 import 'package:recipe_search/viewmodels/recipe_viewmodel.dart';
 import 'package:recipe_search/viewmodels/viewmodel_provider.dart';
+
+import '../../main.dart';
+import '../../utils/internet_checker.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({
@@ -29,7 +33,9 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   late final RecipeViewModel recipeViewModel;
   late final StreamSubscription subscription;
+  late final StreamSubscription<InternetConnectionStatus> listener;
 
+  final checker = locator<InternetChecker>();
   final controller = TextEditingController();
   final expandableController = ExpandableController();
   final focusNode = FocusNode();
@@ -57,6 +63,12 @@ class _SearchPageState extends State<SearchPage> {
       key: recipeKey,
       create: () => RecipeViewModel.create(widget.user?.uid ?? widget.deviceId ?? 'unknown'),
     );
+    listener = checker.onStatusChange.listen((status) {
+      if (expandableController.expanded && status == InternetConnectionStatus.disconnected) {
+        expandableController.expanded = false;
+      }
+      if (mounted) setState(() {});
+    });
     updateTextController();
     subscription = recipeViewModel.startUIListening((event) {
       switch (event) {
@@ -89,6 +101,7 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   void dispose() {
+    listener.cancel();
     recipeViewModel.removeUIListeners(subscription);
     controller.dispose();
     expandableController.dispose();
@@ -136,7 +149,7 @@ class _SearchPageState extends State<SearchPage> {
               ),
             ),
           ],
-        ),
+        ).hide(checker.noInternet),
         ChangeNotifierProvider.value(
           value: recipeViewModel,
           child: Consumer<RecipeViewModel>(
@@ -144,7 +157,7 @@ class _SearchPageState extends State<SearchPage> {
               return buildParams();
             },
           ),
-        ),
+        ).hide(checker.noInternet),
         const Flexible(child: RecipeList()),
       ],
     );

@@ -19,6 +19,8 @@ class InternetChecker {
     return checker;
   }
 
+  bool get noInternet => lastStatus == InternetConnectionStatus.disconnected;
+
   Stream<InternetConnectionStatus> get onStatusChange => _internetChecker.onStatusChange;
 
   final _internetChecker = InternetConnectionChecker.createInstance(

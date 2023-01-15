@@ -8,3 +8,15 @@ extension EdgeInsetsExtension on Widget {
   Widget get paddingH8 => Padding(padding: const EdgeInsets.symmetric(horizontal: 8.0), child: this);
   Widget get paddingV1 => Padding(padding: const EdgeInsets.symmetric(vertical: 1.0), child: this);
 }
+
+extension IgnoringExtension on Widget {
+  Widget hide(bool ignoring) {
+    return Opacity(
+      opacity: ignoring ? 0.5 : 1,
+      child: IgnorePointer(
+        ignoring: ignoring,
+        child: this,
+      ),
+    );
+  }
+}

@@ -9,17 +9,17 @@ import '../helpers/consts.dart';
 import '../main.dart';
 
 class InternetChecker {
-  late InternetConnectionStatus status;
-  InternetConnectionStatus? lastStatus;
+  late InternetConnectionStatus lastStatus;
 
   static Future<InternetChecker> create() async {
     final checker = InternetChecker();
-    checker.status = await InternetConnectionChecker().connectionStatus;
+    checker.lastStatus = await InternetConnectionChecker().connectionStatus;
     checker.onStatusChange.listen(checker._onInternetStatusChanged);
     return checker;
   }
 
-  bool get noInternet => lastStatus == InternetConnectionStatus.disconnected;
+  bool get disconnected => lastStatus == InternetConnectionStatus.disconnected;
+  bool get connected => lastStatus == InternetConnectionStatus.connected;
 
   Stream<InternetConnectionStatus> get onStatusChange => _internetChecker.onStatusChange;
 
@@ -31,9 +31,6 @@ class InternetChecker {
   void _onInternetStatusChanged(InternetConnectionStatus status) {
     log('Internet Status Changed $status');
 
-    if (lastStatus == null && status == InternetConnectionStatus.connected) {
-      return; // do not show connected after login
-    }
     if (lastStatus == status) {
       return; // do not show one msg twice
     }

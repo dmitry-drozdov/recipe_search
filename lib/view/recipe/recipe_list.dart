@@ -70,7 +70,7 @@ class _RecipeListState extends State<RecipeList> {
       value: recipeViewModel,
       child: Consumer<RecipeViewModel>(
         builder: (_, viewModel, ___) {
-          if (checker.noInternet) {
+          if (checker.disconnected) {
             return noInternet();
           }
           if (viewModel.count == 0 && !recipeViewModel.loading) {

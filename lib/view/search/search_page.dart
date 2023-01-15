@@ -149,7 +149,7 @@ class _SearchPageState extends State<SearchPage> {
               ),
             ),
           ],
-        ).hide(checker.noInternet),
+        ).hide(checker.disconnected),
         ChangeNotifierProvider.value(
           value: recipeViewModel,
           child: Consumer<RecipeViewModel>(
@@ -157,7 +157,7 @@ class _SearchPageState extends State<SearchPage> {
               return buildParams();
             },
           ),
-        ).hide(checker.noInternet),
+        ).hide(checker.disconnected),
         const Flexible(child: RecipeList()),
       ],
     );

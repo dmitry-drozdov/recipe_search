@@ -29,3 +29,6 @@ final tooltipDecoration = BoxDecoration(
   color: AppColors.blueBorder,
   borderRadius: const BorderRadius.all(Radius.circular(5.0)),
 );
+
+const snackbarDuration = Duration(seconds: 8);
+const snackbarShortDuration = Duration(seconds: 5);

@@ -311,9 +311,11 @@ class RecipeViewModelImpl extends RecipeViewModel {
       _favoriteData[recipe.id] = timestamp;
       recipe.likeTime = timestamp;
       _favoriteRecipes.add(recipe);
+      recipeRepository.cacheRecipe(recipe);
     } else {
       _favoriteData.remove(recipe.id);
       _favoriteRecipes.remove(recipe);
+      recipeRepository.deleteRecipeCache(recipeId);
     }
     notifyListeners();
   }

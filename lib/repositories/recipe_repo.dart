@@ -22,6 +22,10 @@ abstract class RecipeRepository {
 
   Future<RequestResultModel> getRecipeById(String recipeId);
 
+  void cacheRecipe(Recipe recipe);
+
+  void deleteRecipeCache(String recipeId);
+
   void onRemove();
 }
 
@@ -75,10 +79,7 @@ class RecipeRepositoryImpl extends RecipeRepository {
         return result;
       }
 
-      m.protect(() async {
-        log('cache recipe $recipeId');
-        await storage.setItem(recipeId, result.value);
-      });
+      cacheRecipe(result.value);
 
       return result;
     }
@@ -112,5 +113,22 @@ class RecipeRepositoryImpl extends RecipeRepository {
       return RequestResultModel(result: false, value: response.statusCode);
     }
     return RequestResultModel(result: true, value: Recipe.fromJson(jsonData['recipe']));
+  }
+
+  @override
+  void cacheRecipe(Recipe recipe) {
+    final recipeId = recipe.id;
+    m.protect(() async {
+      log('cache recipe $recipeId');
+      await storage.setItem(recipeId, recipe);
+    });
+  }
+
+  @override
+  void deleteRecipeCache(String recipeId) {
+    m.protect(() async {
+      log('delete recipe cache $recipeId');
+      await storage.deleteItem(recipeId);
+    });
   }
 }

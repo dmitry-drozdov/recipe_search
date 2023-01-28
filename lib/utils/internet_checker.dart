@@ -47,6 +47,18 @@ class InternetChecker {
           content: Text(msg, style: const TextStyle(fontSize: 16)),
           backgroundColor: AppColors.blueBorder,
           duration: connected ? snackbarShortDuration : snackbarDuration,
+          action: SnackBarAction(
+            label: "⨉",
+            textColor: Colors.white,
+            onPressed: () {
+              snackbarKey.currentState?.hideCurrentSnackBar();
+            },
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(connected ? 10.0 : 15.0),
+          ),
+          behavior: SnackBarBehavior.floating,
+          margin: const EdgeInsets.fromLTRB(7, 0, 7, 10),
         ),
       );
 

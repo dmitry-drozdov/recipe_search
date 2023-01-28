@@ -25,7 +25,7 @@ class RecipeCard extends StatelessWidget {
     required this.pageType,
   }) : super(key: key);
 
-  bool get showSaveTime => pageType == PageType.favoritePage;
+  bool get favoritePage => pageType == PageType.favoritePage;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class RecipeCard extends StatelessWidget {
             child: LikeButton(
               viewModel: viewModel,
               recipeId: recipe.id,
-              removingConfirmation: pageType == PageType.favoritePage,
+              removingConfirmation: favoritePage,
             ),
           ),
         ],
@@ -52,7 +52,7 @@ class RecipeCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(5),
-        constraints: BoxConstraints(maxHeight: 144 + (showSaveTime ? 16 : 0)),
+        constraints: BoxConstraints(maxHeight: 144 + (favoritePage ? 16 : 0)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
@@ -61,6 +61,7 @@ class RecipeCard extends StatelessWidget {
                 CustomCachedNetworkImage(
                   key: Key("${recipe.id}${recipe.image}"),
                   url: recipe.image,
+                  useLocalCache: favoritePage,
                 ),
                 Flexible(
                   child: Container(
@@ -84,7 +85,7 @@ class RecipeCard extends StatelessWidget {
                 ),
               ],
             ),
-            if (showSaveTime)
+            if (favoritePage)
               Text(
                 'Saved: ${recipe.likeTimeOrNow.human}',
                 style: const TextStyle(fontSize: 14, color: AppColors.grey),

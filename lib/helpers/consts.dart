@@ -5,6 +5,7 @@ import 'app_colors.dart';
 final placeholder = Icon(Icons.food_bank_outlined, color: AppColors.greyMedium, size: 65);
 final placeholderMedium = Icon(Icons.food_bank_outlined, color: AppColors.greyMedium, size: 200);
 final placeholderLarge = Icon(Icons.food_bank_outlined, color: AppColors.greyMedium, size: 260);
+final placeholderOpacity = Opacity(opacity: 0.6, child: placeholder);
 
 const listMarker = ' • ';
 

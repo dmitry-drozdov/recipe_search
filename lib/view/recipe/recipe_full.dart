@@ -81,7 +81,10 @@ class _RecipeFullState extends State<RecipeFull> {
             child: Scrollbar(
               child: CustomScrollView(
                 slivers: <Widget>[
-                  RecipeAppBar(image: recipe.bestImg),
+                  RecipeAppBar(
+                    image: recipe.bestImg,
+                    isFavorite: recipeViewModel.isFavorite(recipe.id),
+                  ),
                   SliverList(
                     delegate: SliverChildListDelegate(getContentWidgets()),
                   ),

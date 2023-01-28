@@ -1,16 +1,17 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart' hide Image;
 
 import '../../../helpers/app_colors.dart';
 import '../../../helpers/consts.dart';
 import '../../../helpers/images/images_model.dart';
+import '../../../helpers/widgets/cached_network_image.dart';
 
 final flexiblePlaceholder = FlexibleSpaceBar(background: placeholderMedium);
 
 class RecipeAppBar extends StatelessWidget {
-  const RecipeAppBar({Key? key, this.image}) : super(key: key);
+  const RecipeAppBar({Key? key, this.image, required this.isFavorite}) : super(key: key);
 
   final Image? image;
+  final bool isFavorite;
 
   @override
   Widget build(BuildContext context) {
@@ -32,10 +33,10 @@ class RecipeAppBar extends StatelessWidget {
       expandedHeight: 200,
       flexibleSpace: image == null
           ? flexiblePlaceholder
-          : CachedNetworkImage(
-              imageUrl: image!.url,
-              placeholder: (_, __) => placeholderLarge,
-              fit: BoxFit.cover,
+          : CustomCachedNetworkImage(
+              url: image!.url,
+              useLocalCache: isFavorite,
+              size: imageSizeFill,
             ),
     );
   }

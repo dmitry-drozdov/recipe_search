@@ -52,7 +52,7 @@ class _RecipeDigestState extends State<RecipeDigest> {
             child: Scrollbar(
               child: CustomScrollView(
                 slivers: <Widget>[
-                  RecipeAppBar(image: recipe.bestImg),
+                  RecipeAppBar(image: recipe.bestImg, isFavorite: false),
                   SliverList(
                     delegate: SliverChildListDelegate(getContentWidgets()),
                   ),

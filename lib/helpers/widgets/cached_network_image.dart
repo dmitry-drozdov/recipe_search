@@ -8,18 +8,21 @@ import 'package:recipe_search/helpers/consts.dart';
 
 const maxDepth = 10;
 const imageSize = 90.0;
+const double? imageSizeFill = null;
 
 class CustomCachedNetworkImage extends StatefulWidget {
   const CustomCachedNetworkImage({
     Key? key,
     this.depth,
     required this.url,
-    this.useLocalCache = false,
+    required this.useLocalCache,
+    this.size = imageSize,
   }) : super(key: key);
 
   final int? depth;
   final String url;
   final bool useLocalCache;
+  final double? size;
 
   @override
   State<CustomCachedNetworkImage> createState() => _CustomCachedNetworkImageState();
@@ -44,30 +47,30 @@ class _CustomCachedNetworkImageState extends State<CustomCachedNetworkImage> wit
     }
     return CachedNetworkImage(
       imageUrl: widget.url,
-      fit: BoxFit.contain,
-      placeholder: (_, __) => placeholder,
-      width: imageSize,
+      fit: BoxFit.cover,
+      placeholder: (_, __) => _placeholder,
+      width: widget.size,
       errorWidget: (_, __, e) => onError(e),
     );
   }
 
   Widget localCache() {
     return SizedBox(
-      height: imageSize,
-      width: imageSize,
+      height: widget.size,
+      width: widget.size,
       child: FutureBuilder<File>(
         future: file,
         builder: (ctx, snapshot) {
           if (snapshot.hasData) {
             return Image.file(
               snapshot.requireData,
-              fit: BoxFit.contain,
+              fit: BoxFit.cover,
             );
           }
           if (snapshot.hasError) {
             return onError(snapshot.error);
           }
-          return placeholderOpacity;
+          return _placeholder;
         },
       ),
     );
@@ -78,7 +81,7 @@ class _CustomCachedNetworkImageState extends State<CustomCachedNetworkImage> wit
 
     if (depthOrZero > maxDepth) {
       log("max depth reached");
-      return placeholder;
+      return _placeholder;
     }
 
     return CustomCachedNetworkImage(
@@ -87,5 +90,9 @@ class _CustomCachedNetworkImageState extends State<CustomCachedNetworkImage> wit
       depth: depthOrZero + 1,
       useLocalCache: widget.useLocalCache,
     );
+  }
+
+  Widget get _placeholder {
+    return Center(child: widget.size == imageSizeFill ? placeholderLarge : placeholder);
   }
 }

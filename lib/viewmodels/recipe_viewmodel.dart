@@ -61,6 +61,8 @@ abstract class RecipeViewModel extends BaseViewModel<Recipe, RecipeEvent> {
     required bool active,
   });
 
+  bool isFavorite(String recipeId);
+
   Set<String> get favoriteIds;
 
   List<Recipe> get favoriteRecipes;
@@ -328,6 +330,9 @@ class RecipeViewModelImpl extends RecipeViewModel {
     }
     notifyListeners();
   }
+
+  @override
+  bool isFavorite(String recipeId) => favoriteIds.contains(recipeId);
 
   //----------------------------------------- user settings -----------------------------------------
 

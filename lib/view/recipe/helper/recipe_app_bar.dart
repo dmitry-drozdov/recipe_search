@@ -33,7 +33,7 @@ class RecipeAppBar extends StatelessWidget {
       expandedHeight: 200,
       flexibleSpace: image == null
           ? flexiblePlaceholder
-          : CustomCachedNetworkImage(
+          : CacheImage.create(
               url: image!.url,
               useLocalCache: isFavorite,
               size: imageSizeFill,

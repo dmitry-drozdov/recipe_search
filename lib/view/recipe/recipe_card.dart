@@ -58,7 +58,7 @@ class RecipeCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                CustomCachedNetworkImage(
+                CacheImage.create(
                   key: Key("${recipe.id}${recipe.image}"),
                   url: recipe.image,
                   useLocalCache: favoritePage,

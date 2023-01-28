@@ -10,8 +10,22 @@ const maxDepth = 10;
 const imageSize = 90.0;
 const double? imageSizeFill = null;
 
-class CustomCachedNetworkImage extends StatefulWidget {
-  const CustomCachedNetworkImage({
+class CacheImage extends StatefulWidget {
+  static CacheImage create({
+    Key? key,
+    required String url,
+    required bool useLocalCache,
+    double? size = imageSize,
+  }) {
+    return CacheImage._(
+      key: key,
+      url: url,
+      useLocalCache: useLocalCache,
+      size: size,
+    );
+  }
+
+  const CacheImage._({
     Key? key,
     this.depth,
     required this.url,
@@ -25,10 +39,10 @@ class CustomCachedNetworkImage extends StatefulWidget {
   final double? size;
 
   @override
-  State<CustomCachedNetworkImage> createState() => _CustomCachedNetworkImageState();
+  State<CacheImage> createState() => _CacheImageState();
 }
 
-class _CustomCachedNetworkImageState extends State<CustomCachedNetworkImage> with TickerProviderStateMixin {
+class _CacheImageState extends State<CacheImage> with TickerProviderStateMixin {
   int get depthOrZero => widget.depth ?? 0;
   late final Future<File> file;
 
@@ -84,7 +98,7 @@ class _CustomCachedNetworkImageState extends State<CustomCachedNetworkImage> wit
       return _placeholder;
     }
 
-    return CustomCachedNetworkImage(
+    return CacheImage._(
       key: widget.key,
       url: widget.url,
       depth: depthOrZero + 1,

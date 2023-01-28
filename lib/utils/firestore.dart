@@ -70,17 +70,22 @@ class FirebaseStorage {
   Future<FavouriteData> getFavouriteRecipes({
     required String userId,
   }) async {
-    final id = 'F$userId';
-    final document = await _favouriteRecipes.doc(id).get();
-    final map = document.data() ?? <String, dynamic>{};
-    final FavouriteData result = {};
-    map.forEach((key, value) {
-      if (value is Map<String, dynamic> && value['active'] == true && value['timestamp'] is Timestamp) {
-        result[key] = (value['timestamp'] as Timestamp).toDate();
-      }
-    });
-    log('getFavouriteRecipes: $id $result');
-    return result;
+    try {
+      final id = 'F$userId';
+      final document = await _favouriteRecipes.doc(id).get();
+      final map = document.data() ?? <String, dynamic>{};
+      final FavouriteData result = {};
+      map.forEach((key, value) {
+        if (value is Map<String, dynamic> && value['active'] == true && value['timestamp'] is Timestamp) {
+          result[key] = (value['timestamp'] as Timestamp).toDate();
+        }
+      });
+      log('getFavouriteRecipes: $id $result');
+      return result;
+    } on Exception catch (e) {
+      log('getFavouriteRecipes error', error: e);
+      return {};
+    }
   }
 
   // ------------------- user settings -------------------
@@ -98,14 +103,19 @@ class FirebaseStorage {
   Future<UserSettings?> getUserSettings({
     required String userId,
   }) async {
-    final id = 'P$userId';
-    final document = await _userSettings.doc(id).get();
-    final map = document.data();
-    if (map == null) {
+    try {
+      final id = 'P$userId';
+      final document = await _userSettings.doc(id).get();
+      final map = document.data();
+      if (map == null) {
+        return null;
+      }
+      final result = UserSettings.fromJson(map);
+      log('getUserSettings: $id $result');
+      return result;
+    } on Exception catch (e) {
+      log('getUserSettings error', error: e);
       return null;
     }
-    final result = UserSettings.fromJson(map);
-    log('getFavouriteRecipes: $id $result');
-    return result;
   }
 }

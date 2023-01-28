@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:developer';
 
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:recipe_search/models/enums/diet_label.dart';
 import 'package:recipe_search/models/enums/health_label.dart';
 import 'package:recipe_search/models/recipe/recipe_model.dart';
@@ -12,6 +14,7 @@ import 'package:sorted_list/sorted_list.dart';
 import '../helpers/models/request_result_model.dart';
 import '../main.dart';
 import '../models/user_settings.dart';
+import '../utils/internet_checker.dart';
 import 'base_view_model.dart';
 
 enum RecipeEvent {
@@ -71,19 +74,25 @@ abstract class RecipeViewModel extends BaseViewModel<Recipe, RecipeEvent> {
 }
 
 class RecipeViewModelImpl extends RecipeViewModel {
+  final checker = locator<InternetChecker>();
   final storage = locator<FirebaseStorage>();
   final recipeRepository = RecipeRepository.create();
+  late final StreamSubscription<InternetConnectionStatus> listener;
   late String _userId;
   late UserSettings userSettings;
 
   RecipeViewModelImpl(String userId) : super() {
     _userId = userId;
+    listener = checker.onStatusChange.listen((_) {
+      updateRequire = true;
+    });
     loadUserSettings();
     loadFavoriteIds();
   }
 
   @override
   void onRemove() {
+    listener.cancel();
     recipeRepository.onRemove();
     super.onRemove();
   }

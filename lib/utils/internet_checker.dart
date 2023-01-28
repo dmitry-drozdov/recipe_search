@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:recipe_search/helpers/app_colors.dart';
+import 'package:recipe_search/helpers/extensions/internet_status_extension.dart';
 
 import '../helpers/consts.dart';
 import '../main.dart';
@@ -18,8 +19,8 @@ class InternetChecker {
     return checker;
   }
 
-  bool get disconnected => lastStatus == InternetConnectionStatus.disconnected;
-  bool get connected => lastStatus == InternetConnectionStatus.connected;
+  bool get connected => lastStatus.connected;
+  bool get disconnected => lastStatus.disconnected;
 
   Stream<InternetConnectionStatus> get onStatusChange => _internetChecker.onStatusChange;
 
@@ -35,7 +36,7 @@ class InternetChecker {
       return; // do not show one msg twice
     }
 
-    final connected = status == InternetConnectionStatus.connected;
+    final connected = status.connected;
     final msg = connected
         ? 'Data connection is available'
         : 'You are disconnected from the internet. Some features may not work';

@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:provider/provider.dart';
+import 'package:recipe_search/helpers/extensions/internet_status_extension.dart';
 import 'package:recipe_search/helpers/extensions/widget_extension.dart';
 import 'package:recipe_search/helpers/widgets/linear_loading.dart';
 import 'package:recipe_search/view/recipe/recipe_list.dart';
@@ -64,7 +65,7 @@ class _SearchPageState extends State<SearchPage> {
       create: () => RecipeViewModel.create(widget.user?.uid ?? widget.deviceId ?? 'unknown'),
     );
     listener = checker.onStatusChange.listen((status) {
-      if (expandableController.expanded && status == InternetConnectionStatus.disconnected) {
+      if (expandableController.expanded && status.disconnected) {
         expandableController.expanded = false;
       }
       if (mounted) setState(() {});

@@ -103,6 +103,7 @@ class _CacheImageState extends State<CacheImage> with TickerProviderStateMixin {
       url: widget.url,
       depth: depthOrZero + 1,
       useLocalCache: widget.useLocalCache,
+      size: widget.size,
     );
   }
 

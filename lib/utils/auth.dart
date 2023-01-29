@@ -1,6 +1,7 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:recipe_search/utils/firestore.dart';
 
@@ -13,33 +14,27 @@ class Authentication {
   Authentication(this.firebaseApp);
 
   Future<User?> signInWithGoogle() async {
-    FirebaseAuth auth = FirebaseAuth.instance;
+    final auth = FirebaseAuth.instance;
     User? user;
 
-    final GoogleSignIn googleSignIn = GoogleSignIn();
+    final googleSignIn = GoogleSignIn();
 
-    final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
+    final googleSignInAccount = await googleSignIn.signIn();
 
     if (googleSignInAccount != null) {
-      final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
+      final googleSignInAuthentication = await googleSignInAccount.authentication;
 
-      final AuthCredential credential = GoogleAuthProvider.credential(
+      final credential = GoogleAuthProvider.credential(
         accessToken: googleSignInAuthentication.accessToken,
         idToken: googleSignInAuthentication.idToken,
       );
 
       try {
-        final UserCredential userCredential = await auth.signInWithCredential(credential);
+        final userCredential = await auth.signInWithCredential(credential);
 
         user = userCredential.user;
-      } on FirebaseAuthException catch (e) {
-        if (e.code == 'account-exists-with-different-credential') {
-          // ...
-        } else if (e.code == 'invalid-credential') {
-          // ...
-        }
       } catch (e) {
-        // ...
+        log('signInWithCredential error', error: e);
       }
     }
 
@@ -51,13 +46,18 @@ class Authentication {
   }
 
   Future<void> signOut() async {
-    final GoogleSignIn googleSignIn = GoogleSignIn();
+    final googleSignIn = GoogleSignIn();
 
     try {
-      if (!kIsWeb) {
-        await googleSignIn.signOut();
-      }
+      await googleSignIn.signOut();
+    } catch (e) {
+      log('googleSignIn.signOut error', error: e);
+    }
+
+    try {
       await FirebaseAuth.instance.signOut();
-    } catch (e) {}
+    } catch (e) {
+      log('FirebaseAuth.signOut error', error: e);
+    }
   }
 }

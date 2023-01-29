@@ -6,6 +6,8 @@ import 'package:recipe_search/view/search/search_page.dart';
 import 'package:recipe_search/viewmodels/viewmodel_provider.dart';
 
 import '../helpers/widgets/screen_data.dart';
+import '../main.dart';
+import '../utils/auth.dart';
 import 'common/confirm_dialog.dart';
 import 'landing/landing.dart';
 
@@ -53,6 +55,7 @@ class _HomeNavigationState extends State<HomeNavigation> {
   }
 
   bool get firstPage => _selectedScreenIndex == 0;
+
   bool get secondPage => _selectedScreenIndex == 1;
 
   @override
@@ -90,7 +93,12 @@ class _HomeNavigationState extends State<HomeNavigation> {
             if (exit == ExitType.cancel || !mounted) {
               return;
             }
-
+            if (widget.user != null) {
+              await locator<Authentication>().signOut();
+            }
+            if (!mounted) {
+              return;
+            }
             ViewModelProvider.delete(recipeKey);
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(

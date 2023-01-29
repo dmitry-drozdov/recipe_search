@@ -326,7 +326,7 @@ class RecipeViewModelImpl extends RecipeViewModel {
     } else {
       _favoriteData.remove(recipe.id);
       _favoriteRecipes.remove(recipe);
-      recipeRepository.deleteRecipeCache(recipeId);
+      recipeRepository.deleteRecipeCache(recipe);
     }
     notifyListeners();
   }

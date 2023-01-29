@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:mutex/mutex.dart';
@@ -24,7 +25,7 @@ abstract class RecipeRepository {
 
   void cacheRecipe(Recipe recipe);
 
-  void deleteRecipeCache(String recipeId);
+  void deleteRecipeCache(Recipe recipe);
 
   void onRemove();
 }
@@ -33,6 +34,7 @@ class RecipeRepositoryImpl extends RecipeRepository {
   late HttpClient client;
   late LocalStorage storage;
   final m = Mutex();
+  final fileCacheManager = DefaultCacheManager();
 
   RecipeRepositoryImpl() {
     client = HttpClient();
@@ -118,6 +120,10 @@ class RecipeRepositoryImpl extends RecipeRepository {
   @override
   void cacheRecipe(Recipe recipe) {
     final recipeId = recipe.id;
+    final url = recipe.betImgUrl;
+    if (url != null) {
+      fileCacheManager.getSingleFile(url);
+    }
     m.protect(() async {
       log('cache recipe $recipeId');
       await storage.setItem(recipeId, recipe);
@@ -125,7 +131,12 @@ class RecipeRepositoryImpl extends RecipeRepository {
   }
 
   @override
-  void deleteRecipeCache(String recipeId) {
+  void deleteRecipeCache(Recipe recipe) {
+    final recipeId = recipe.id;
+    final url = recipe.betImgUrl;
+    if (url != null) {
+      fileCacheManager.removeFile(url);
+    }
     m.protect(() async {
       log('delete recipe cache $recipeId');
       await storage.deleteItem(recipeId);

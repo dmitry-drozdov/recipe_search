@@ -92,6 +92,8 @@ class Recipe extends Equatable {
 
   Image? get bestImg => largeImg ?? regularImg ?? smallImg ?? thumbnailImg;
 
+  String? get betImgUrl => bestImg?.url;
+
   // String getters for fields
   String get ingredientsStr => ingredients.map((e) => e.food).join(', ');
 

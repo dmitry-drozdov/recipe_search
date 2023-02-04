@@ -31,18 +31,15 @@ abstract class RecipeRepository {
 }
 
 class RecipeRepositoryImpl extends RecipeRepository {
-  late HttpClient client;
-  late LocalStorage storage;
+  final client = HttpClient()
+    ..idleTimeout = const Duration(seconds: 90)
+    ..maxConnectionsPerHost = 10;
+
   final m = Mutex();
   final fileCacheManager = DefaultCacheManager();
+  final storage = LocalStorage('recipe_repo');
 
-  RecipeRepositoryImpl() {
-    client = HttpClient();
-    client.idleTimeout = const Duration(seconds: 90);
-    client.maxConnectionsPerHost = 10;
-
-    storage = LocalStorage('recipe_repo');
-  }
+  RecipeRepositoryImpl();
 
   @override
   void onRemove() {

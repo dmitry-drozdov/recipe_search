@@ -3,15 +3,32 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:recipe_search/utils/firestore.dart';
 
 import '../main.dart';
+import '../models/app_user.dart';
+
+final userKey = 'user'.hashCode.toString();
 
 class Authentication {
-  final storage = locator<FirebaseStorage>();
+  final fbStorage = locator<FirebaseStorage>();
+  final storage = LocalStorage('auth');
   final FirebaseApp? firebaseApp;
 
   Authentication(this.firebaseApp);
+
+  Future<void> rememberAppUser(AppUser user) async {
+    await storage.setItem(userKey, user);
+  }
+
+  Future<AppUser?> getLastKnownAppUser() async {
+    final Map<String, dynamic>? json = await storage.getItem(userKey);
+    if (json != null) {
+      return AppUser.fromJson(json);
+    }
+    return null;
+  }
 
   Future<User?> signInWithGoogle() async {
     final auth = FirebaseAuth.instance;
@@ -39,7 +56,7 @@ class Authentication {
     }
 
     if (user != null) {
-      storage.logUserSession(user, DateTime.now());
+      fbStorage.logUserSession(user, DateTime.now());
     }
 
     return user;

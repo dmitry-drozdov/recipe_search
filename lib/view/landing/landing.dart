@@ -80,26 +80,43 @@ class Landing extends StatelessWidget {
       children: [
         auth.firebaseApp == null
             ? const Text('Error initializing Firebase')
-            : GoogleSignInButton(onSignIn: (user) => navigateToMain(ctx, user: user)),
+            : GoogleSignInButton(onSignIn: (user) => onAuth(ctx, user: user)),
         TextButton(
           child: const Text('Continue without sign in'),
-          onPressed: () async {
-            navigateToMain(ctx);
+          onPressed: () {
+            onWithoutAuth(ctx);
           },
         ),
       ],
     );
   }
 
-  Future<void> navigateToMain(BuildContext ctx, {User? user}) async {
-    AppUser.create(user).then(
-      (value) {
-        Navigator.of(ctx).pushReplacement(
-          MaterialPageRoute(
-            builder: (_) => HomeNavigation(user: value),
-          ),
-        );
-      },
+  void onWithoutAuth(BuildContext ctx) {
+    auth.getLastKnownAppUser().then((appUser) {
+      if (appUser != null) {
+        navigateToMain(ctx, appUser);
+        return;
+      }
+      authLocal(ctx);
+    });
+  }
+
+  void onAuth(BuildContext ctx, {User? user}) {
+    AppUser.create(googleUser: user).then((appUser) {
+      auth.rememberAppUser(appUser);
+      navigateToMain(ctx, appUser);
+    });
+  }
+
+  void authLocal(BuildContext ctx) {
+    AppUser.create().then((appUser) => navigateToMain(ctx, appUser));
+  }
+
+  void navigateToMain(BuildContext ctx, AppUser appUser) {
+    Navigator.of(ctx).pushReplacement(
+      MaterialPageRoute(
+        builder: (_) => HomeNavigation(user: appUser),
+      ),
     );
   }
 }

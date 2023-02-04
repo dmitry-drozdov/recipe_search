@@ -119,6 +119,7 @@ class _HomeNavigationState extends State<HomeNavigation> {
           builder: (BuildContext context) => const ConfirmDialog(
             title: 'Confirm log out',
             content: 'Are you sure you want to log out?',
+            yesNowText: 'Yes, log out',
             cancelText: 'No',
           ),
         ) ??

@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:platform_device_id/platform_device_id.dart';
 import 'package:recipe_search/helpers/app_colors.dart';
+import 'package:recipe_search/models/app_user.dart';
 
 import '../../main.dart';
 import '../../utils/auth.dart';
@@ -84,18 +84,22 @@ class Landing extends StatelessWidget {
         TextButton(
           child: const Text('Continue without sign in'),
           onPressed: () async {
-            navigateToMain(ctx, deviceId: await PlatformDeviceId.getDeviceId);
+            navigateToMain(ctx);
           },
         ),
       ],
     );
   }
 
-  void navigateToMain(BuildContext ctx, {User? user, String? deviceId}) {
-    Navigator.of(ctx).pushReplacement(
-      MaterialPageRoute(
-        builder: (_) => HomeNavigation(user: user, deviceId: deviceId),
-      ),
+  Future<void> navigateToMain(BuildContext ctx, {User? user}) async {
+    AppUser.create(user).then(
+      (value) {
+        Navigator.of(ctx).pushReplacement(
+          MaterialPageRoute(
+            builder: (_) => HomeNavigation(user: value),
+          ),
+        );
+      },
     );
   }
 }

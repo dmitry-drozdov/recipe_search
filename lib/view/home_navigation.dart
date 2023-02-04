@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:recipe_search/helpers/app_colors.dart';
 import 'package:recipe_search/view/recipe/favorite_recipes.dart';
@@ -7,20 +6,18 @@ import 'package:recipe_search/viewmodels/viewmodel_provider.dart';
 
 import '../helpers/widgets/screen_data.dart';
 import '../main.dart';
+import '../models/app_user.dart';
 import '../utils/auth.dart';
 import 'common/confirm_dialog.dart';
 import 'landing/landing.dart';
 
 class HomeNavigation extends StatefulWidget {
-  final User? user;
-  final String? deviceId;
+  final AppUser user;
 
   const HomeNavigation({
     Key? key,
-    this.user,
-    this.deviceId,
-  })  : assert(user != null || deviceId != null),
-        super(key: key);
+    required this.user,
+  }) : super(key: key);
 
   @override
   State<HomeNavigation> createState() => _HomeNavigationState();
@@ -39,12 +36,11 @@ class _HomeNavigationState extends State<HomeNavigation> {
   @override
   void initState() {
     super.initState();
-    final user = widget.user;
-    final suffix = user?.displayName?.isNotEmpty == true ? " — ${user?.displayName ?? 'Unknown'}" : "";
+    final suffix = widget.user.title;
 
     _screens = [
       ScreenData(
-        widget: SearchPage(user: widget.user, deviceId: widget.deviceId),
+        widget: SearchPage(user: widget.user),
         title: "Recipe search$suffix",
       ),
       ScreenData(
@@ -93,7 +89,7 @@ class _HomeNavigationState extends State<HomeNavigation> {
             if (exit == ExitType.cancel || !mounted) {
               return;
             }
-            if (widget.user != null) {
+            if (widget.user.googleAuth) {
               await locator<Authentication>().signOut();
             }
             if (!mounted) {

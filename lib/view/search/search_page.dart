@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'package:expandable/expandable.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:provider/provider.dart';
 import 'package:recipe_search/helpers/extensions/internet_status_extension.dart';
 import 'package:recipe_search/helpers/extensions/widget_extension.dart';
 import 'package:recipe_search/helpers/widgets/linear_loading.dart';
+import 'package:recipe_search/models/app_user.dart';
 import 'package:recipe_search/view/recipe/recipe_list.dart';
 import 'package:recipe_search/view/search/params.dart';
 import 'package:recipe_search/viewmodels/recipe_viewmodel.dart';
@@ -19,13 +19,10 @@ import '../../utils/internet_checker.dart';
 class SearchPage extends StatefulWidget {
   const SearchPage({
     Key? key,
-    this.user,
-    this.deviceId,
-  })  : assert(user != null || deviceId != null),
-        super(key: key);
+    required this.user,
+  }) : super(key: key);
 
-  final User? user;
-  final String? deviceId;
+  final AppUser user;
 
   @override
   State<SearchPage> createState() => _SearchPageState();
@@ -62,7 +59,7 @@ class _SearchPageState extends State<SearchPage> {
     super.initState();
     recipeViewModel = ViewModelProvider.getOrCreate(
       key: recipeKey,
-      create: () => RecipeViewModel.create(widget.user?.uid ?? widget.deviceId ?? 'unknown'),
+      create: () => RecipeViewModel.create(widget.user.userId),
     );
     listener = checker.onStatusChange.listen((status) {
       if (expandableController.expanded && status.disconnected) {

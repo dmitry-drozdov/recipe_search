@@ -15,6 +15,7 @@ class Authentication {
   final fbStorage = locator<FirebaseStorage>();
   final storage = LocalStorage('auth');
   final googleSignIn = GoogleSignIn();
+
   final FirebaseApp? firebaseApp;
 
   Authentication(this.firebaseApp);

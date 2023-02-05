@@ -97,23 +97,43 @@ class _LandingState extends State<Landing> {
           endIndent: 25,
         ),
         TextButton(
-          child: Text('Continue without sign in*', style: buttonStyle),
+          child: Text('Continue without sign in', style: buttonStyle),
           onPressed: () {
             onWithoutAuth();
           },
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("*Use data last saved using Google", style: buttonStyle.copyWith(fontSize: 15)),
-            Switch(
-              inactiveTrackColor: AppColors.lightBlueChip,
-              value: useLastKnownData,
-              onChanged: (val) {
-                if (mounted) setState(() => useLastKnownData = val);
-              },
-            ),
-          ],
+        useLastSaved(),
+      ],
+    );
+  }
+
+  Widget useLastSaved() {
+    return FutureBuilder<AppUser?>(
+      future: auth.getLastKnownAppUser(),
+      builder: (ctx, snapshot) {
+        if (snapshot.hasData) {
+          return toggleRow();
+        }
+        if (snapshot.hasError) {
+          return Text('Error ${snapshot.error}');
+        }
+        return const SizedBox();
+      },
+    );
+  }
+
+  Widget toggleRow() {
+    final buttonStyle = TextStyle(color: Theme.of(context).primaryColorDark, fontSize: 15);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text("*Use data last saved with Google", style: buttonStyle),
+        Switch(
+          inactiveTrackColor: AppColors.lightBlueChip,
+          value: useLastKnownData,
+          onChanged: (val) {
+            if (mounted) setState(() => useLastKnownData = val);
+          },
         ),
       ],
     );

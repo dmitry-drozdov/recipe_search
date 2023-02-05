@@ -124,18 +124,21 @@ class _LandingState extends State<Landing> {
 
   Widget toggleRow() {
     final buttonStyle = TextStyle(color: Theme.of(context).primaryColorDark, fontSize: 15);
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text("*Use data last saved with Google", style: buttonStyle),
-        Switch(
-          inactiveTrackColor: AppColors.lightBlueChip,
-          value: useLastKnownData,
-          onChanged: (val) {
-            if (mounted) setState(() => useLastKnownData = val);
-          },
-        ),
-      ],
+    return Opacity(
+      opacity: 0.7,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text("*Use data last saved with Google", style: buttonStyle),
+          Switch(
+            inactiveTrackColor: AppColors.lightBlueChip,
+            value: useLastKnownData,
+            onChanged: (val) {
+              if (mounted) setState(() => useLastKnownData = val);
+            },
+          ),
+        ],
+      ),
     );
   }
 

@@ -23,7 +23,7 @@ class Landing extends StatefulWidget {
 class _LandingState extends State<Landing> {
   final auth = locator<Authentication>();
 
-  var useLastKnownData = false;
+  var useLastKnownData = true;
 
   @override
   Widget build(BuildContext context) {

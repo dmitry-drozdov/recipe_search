@@ -54,6 +54,8 @@ class _HomeNavigationState extends State<HomeNavigation> {
 
   bool get secondPage => _selectedScreenIndex == 1;
 
+  bool get isGoogleAuth => widget.user.googleAuth;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,7 +91,7 @@ class _HomeNavigationState extends State<HomeNavigation> {
             if (exit == ExitType.cancel || !mounted) {
               return;
             }
-            if (widget.user.googleAuth) {
+            if (isGoogleAuth) {
               await locator<Authentication>().signOut(cleanAppUser: exit == ExitType.yesAlways);
             }
             if (!mounted) {
@@ -112,11 +114,11 @@ class _HomeNavigationState extends State<HomeNavigation> {
   Future<ExitType?> onExit() async {
     return await showDialog<ExitType>(
           context: context,
-          builder: (BuildContext context) => const ConfirmDialog(
+          builder: (BuildContext context) => ConfirmDialog(
             title: 'Confirm log out',
             content: 'Are you sure you want to log out?',
             yesNowText: 'Log out',
-            yesAlwaysText: 'Log out and forget',
+            yesAlwaysText: isGoogleAuth ? 'Log out and forget' : null,
             cancelText: 'Cancel',
           ),
         ) ??

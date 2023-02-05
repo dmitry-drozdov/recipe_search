@@ -35,7 +35,7 @@ class RecipeCard extends StatelessWidget {
           content(),
           Positioned(
             right: 1,
-            top: 1,
+            bottom: 1,
             child: LikeButton(
               viewModel: viewModel,
               recipeId: recipe.id,
@@ -54,7 +54,7 @@ class RecipeCard extends StatelessWidget {
         padding: const EdgeInsets.all(5),
         constraints: BoxConstraints(maxHeight: 144 + (favoritePage ? 16 : 0)),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
@@ -65,7 +65,6 @@ class RecipeCard extends StatelessWidget {
                 ),
                 Flexible(
                   child: Container(
-                    //    width: 270,
                     padding: const EdgeInsets.all(5),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,6 +84,7 @@ class RecipeCard extends StatelessWidget {
                 ),
               ],
             ),
+            const Spacer(),
             if (favoritePage)
               Text(
                 'Saved: ${recipe.likeTimeOrNow.human}',

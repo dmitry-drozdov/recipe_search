@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: Landing(title: 'Recipe Search Landing'),
+        home: const Landing(title: 'Recipe Search Landing'),
         scaffoldMessengerKey: snackbarKey,
       ),
     );

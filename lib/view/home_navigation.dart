@@ -90,7 +90,7 @@ class _HomeNavigationState extends State<HomeNavigation> {
               return;
             }
             if (widget.user.googleAuth) {
-              await locator<Authentication>().signOut();
+              await locator<Authentication>().signOut(cleanAppUser: exit == ExitType.yesAlways);
             }
             if (!mounted) {
               return;
@@ -98,7 +98,7 @@ class _HomeNavigationState extends State<HomeNavigation> {
             ViewModelProvider.delete(recipeKey);
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
-                builder: (_) => Landing(title: 'Recipe Search Landing'),
+                builder: (_) => const Landing(title: 'Recipe Search Landing'),
               ),
             );
           },
@@ -115,8 +115,9 @@ class _HomeNavigationState extends State<HomeNavigation> {
           builder: (BuildContext context) => const ConfirmDialog(
             title: 'Confirm log out',
             content: 'Are you sure you want to log out?',
-            yesNowText: 'Yes, log out',
-            cancelText: 'No',
+            yesNowText: 'Log out',
+            yesAlwaysText: 'Log out and forget',
+            cancelText: 'Cancel',
           ),
         ) ??
         ExitType.cancel;

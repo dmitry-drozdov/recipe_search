@@ -14,12 +14,17 @@ final userKey = 'user'.hashCode.toString();
 class Authentication {
   final fbStorage = locator<FirebaseStorage>();
   final storage = LocalStorage('auth');
+  final googleSignIn = GoogleSignIn();
   final FirebaseApp? firebaseApp;
 
   Authentication(this.firebaseApp);
 
   Future<void> rememberAppUser(AppUser user) async {
     await storage.setItem(userKey, user);
+  }
+
+  Future<void> removeLastKnownAppUser() async {
+    await storage.deleteItem(userKey);
   }
 
   Future<AppUser?> getLastKnownAppUser() async {
@@ -33,8 +38,6 @@ class Authentication {
   Future<User?> signInWithGoogle() async {
     final auth = FirebaseAuth.instance;
     User? user;
-
-    final googleSignIn = GoogleSignIn();
 
     final googleSignInAccount = await googleSignIn.signIn();
 
@@ -62,8 +65,10 @@ class Authentication {
     return user;
   }
 
-  Future<void> signOut() async {
-    final googleSignIn = GoogleSignIn();
+  Future<void> signOut({bool cleanAppUser = false}) async {
+    if (cleanAppUser) {
+      await removeLastKnownAppUser();
+    }
 
     try {
       await googleSignIn.signOut();

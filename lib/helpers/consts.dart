@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'app_colors.dart';
 
 final placeholder = Icon(Icons.food_bank_outlined, color: AppColors.greyMedium, size: 65);
-
+final placeholderMedium = Icon(Icons.food_bank_outlined, color: AppColors.greyMedium, size: 200);
 final placeholderLarge = Icon(Icons.food_bank_outlined, color: AppColors.greyMedium, size: 260);
 
 const listMarker = ' • ';
@@ -29,3 +29,6 @@ final tooltipDecoration = BoxDecoration(
   color: AppColors.blueBorder,
   borderRadius: const BorderRadius.all(Radius.circular(5.0)),
 );
+
+const snackbarDuration = Duration(seconds: 8);
+const snackbarShortDuration = Duration(seconds: 5);

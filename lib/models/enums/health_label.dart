@@ -68,3 +68,7 @@ HealthLabel healthLabelFromStr(String value) {
 List<HealthLabel> healthLabelFromJson(List<dynamic> json) {
   return json.map((e) => healthLabelFromStr(e)).toList();
 }
+
+List<dynamic> healthLabelToJson(List<HealthLabel> labels) {
+  return labels.map((e) => e.api).toList();
+}

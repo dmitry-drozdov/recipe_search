@@ -1,15 +1,14 @@
 import 'dart:developer';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 import 'image_type.dart';
 
-import 'package:json_annotation/json_annotation.dart';
-import 'package:collection/collection.dart';
-
 part 'images_model.g.dart';
 
-@JsonSerializable(createToJson: false)
+@JsonSerializable(createToJson: true)
 class Image {
   @JsonKey(ignore: true)
   @protected
@@ -26,10 +25,12 @@ class Image {
   });
 
   factory Image.fromJson(Map<String, dynamic> json) => _$ImageFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ImageToJson(this);
 }
 
 class Images {
-  final List<Image?> images;
+  final List<Image> images;
 
   Images({required this.images});
 
@@ -48,11 +49,20 @@ class Images {
     return Images(images: result);
   }
 
-  Image? get thumbnail => images.firstWhereOrNull((element) => element?.imageType == ImageType.thumbnail);
+  Image? get thumbnail => images.firstWhereOrNull((element) => element.imageType == ImageType.thumbnail);
 
-  Image? get small => images.firstWhereOrNull((element) => element?.imageType == ImageType.small);
+  Image? get small => images.firstWhereOrNull((element) => element.imageType == ImageType.small);
 
-  Image? get regular => images.firstWhereOrNull((element) => element?.imageType == ImageType.regular);
+  Image? get regular => images.firstWhereOrNull((element) => element.imageType == ImageType.regular);
 
-  Image? get large => images.firstWhereOrNull((element) => element?.imageType == ImageType.large);
+  Image? get large => images.firstWhereOrNull((element) => element.imageType == ImageType.large);
+}
+
+Map<String, dynamic> imagesToJson(Images im) {
+  final json = <String, dynamic>{};
+  for (final img in im.images) {
+    final type = img.imageType ?? ImageType.unknown;
+    json[type.apiName] = img.toJson();
+  }
+  return json;
 }

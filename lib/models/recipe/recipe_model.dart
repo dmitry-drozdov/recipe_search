@@ -9,18 +9,19 @@ import 'package:recipe_search/models/ingredient/ingredient_model.dart';
 
 part 'recipe_model.g.dart';
 
-@JsonSerializable(createToJson: false)
+@JsonSerializable(explicitToJson: true, createToJson: true)
 class Recipe extends Equatable {
   final String uri;
   final String label;
   final String image;
+  @JsonKey(toJson: imagesToJson)
   final Images images;
   final String source;
   final String url;
   final String shareAs;
-  @JsonKey(fromJson: dietLabelFromJson)
+  @JsonKey(fromJson: dietLabelFromJson, toJson: dietLabelToJson)
   final List<DietLabel> dietLabels;
-  @JsonKey(fromJson: healthLabelFromJson)
+  @JsonKey(fromJson: healthLabelFromJson, toJson: healthLabelToJson)
   final List<HealthLabel> healthLabels;
   final List<String> cautions;
   final List<String> ingredientLines;
@@ -67,6 +68,8 @@ class Recipe extends Equatable {
 
   factory Recipe.fromJson(Map<String, dynamic> json) => _$RecipeFromJson(json);
 
+  Map<String, dynamic> toJson() => _$RecipeToJson(this);
+
   String get id {
     final index = uri.indexOf("_");
     if (index == -1) {
@@ -88,6 +91,8 @@ class Recipe extends Equatable {
   Image? get largeImg => images.large;
 
   Image? get bestImg => largeImg ?? regularImg ?? smallImg ?? thumbnailImg;
+
+  String? get betImgUrl => bestImg?.url;
 
   // String getters for fields
   String get ingredientsStr => ingredients.map((e) => e.food).join(', ');

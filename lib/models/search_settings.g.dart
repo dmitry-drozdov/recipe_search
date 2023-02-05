@@ -6,17 +6,26 @@ part of 'search_settings.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-SearchSettings _$SearchSettingsFromJson(Map<String, dynamic> json) => SearchSettings(
+SearchSettings _$SearchSettingsFromJson(Map<String, dynamic> json) =>
+    SearchSettings(
       search: json['search'] as String,
-      dietLabels: (json['dietLabels'] as List<dynamic>).map((e) => $enumDecode(_$DietLabelEnumMap, e)).toList(),
-      healthLabels: (json['healthLabels'] as List<dynamic>).map((e) => $enumDecode(_$HealthLabelEnumMap, e)).toList(),
-      caloriesRange: Range.fromJson(json['caloriesRange'] as Map<String, dynamic>),
+      dietLabels: (json['dietLabels'] as List<dynamic>)
+          .map((e) => $enumDecode(_$DietLabelEnumMap, e))
+          .toList(),
+      healthLabels: (json['healthLabels'] as List<dynamic>)
+          .map((e) => $enumDecode(_$HealthLabelEnumMap, e))
+          .toList(),
+      caloriesRange:
+          Range.fromJson(json['caloriesRange'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$SearchSettingsToJson(SearchSettings instance) => <String, dynamic>{
+Map<String, dynamic> _$SearchSettingsToJson(SearchSettings instance) =>
+    <String, dynamic>{
       'search': instance.search,
-      'dietLabels': instance.dietLabels.map((e) => _$DietLabelEnumMap[e]!).toList(),
-      'healthLabels': instance.healthLabels.map((e) => _$HealthLabelEnumMap[e]!).toList(),
+      'dietLabels':
+          instance.dietLabels.map((e) => _$DietLabelEnumMap[e]!).toList(),
+      'healthLabels':
+          instance.healthLabels.map((e) => _$HealthLabelEnumMap[e]!).toList(),
       'caloriesRange': instance.caloriesRange.toJson(),
     };
 

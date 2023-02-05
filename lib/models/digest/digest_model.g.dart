@@ -14,5 +14,18 @@ Digest _$DigestFromJson(Map<String, dynamic> json) => Digest(
       hasRDI: json['hasRDI'] as bool,
       daily: (json['daily'] as num).toDouble(),
       unit: json['unit'] as String,
-      sub: digestFromJson(json['sub'] as List?),
+      sub: (json['sub'] as List<dynamic>?)
+          ?.map((e) => Digest.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
+
+Map<String, dynamic> _$DigestToJson(Digest instance) => <String, dynamic>{
+      'label': instance.label,
+      'tag': instance.tag,
+      'schemaOrgTag': instance.schemaOrgTag,
+      'total': instance.total,
+      'hasRDI': instance.hasRDI,
+      'daily': instance.daily,
+      'unit': instance.unit,
+      'sub': instance.sub?.map((e) => e.toJson()).toList(),
+    };

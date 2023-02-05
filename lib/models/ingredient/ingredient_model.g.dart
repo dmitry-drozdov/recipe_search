@@ -14,3 +14,13 @@ Ingredient _$IngredientFromJson(Map<String, dynamic> json) => Ingredient(
       weight: (json['weight'] as num).toDouble(),
       foodId: json['foodId'] as String,
     );
+
+Map<String, dynamic> _$IngredientToJson(Ingredient instance) =>
+    <String, dynamic>{
+      'text': instance.text,
+      'quantity': instance.quantity,
+      'measure': instance.measure,
+      'food': instance.food,
+      'weight': instance.weight,
+      'foodId': instance.foodId,
+    };

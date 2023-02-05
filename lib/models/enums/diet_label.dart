@@ -55,3 +55,7 @@ DietLabel dietLabelFromStr(String value) {
 List<DietLabel> dietLabelFromJson(List<dynamic> json) {
   return json.map((e) => dietLabelFromStr(e)).toList();
 }
+
+List<dynamic> dietLabelToJson(List<DietLabel> labels) {
+  return labels.map((e) => e.api).toList();
+}

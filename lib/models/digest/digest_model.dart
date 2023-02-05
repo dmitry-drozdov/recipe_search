@@ -7,7 +7,7 @@ import '../../view/recipe/helper/rich_row_widget.dart';
 
 part 'digest_model.g.dart';
 
-@JsonSerializable(createToJson: false)
+@JsonSerializable(explicitToJson: true, createToJson: true)
 class Digest {
   final String label;
   final String tag;
@@ -16,8 +16,7 @@ class Digest {
   final bool hasRDI;
   final double daily;
   final String unit;
-  @JsonKey(fromJson: digestFromJson)
-  final List<Digest> sub;
+  final List<Digest>? sub;
 
   Digest({
     required this.label,
@@ -30,7 +29,11 @@ class Digest {
     required this.sub,
   });
 
+  List<Digest> get subOrEmpty => sub ?? <Digest>[];
+
   factory Digest.fromJson(Map<String, dynamic> json) => _$DigestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$DigestToJson(this);
 
   Widget row({bool indent = false, int? services}) {
     final dTotal = convert(total, services);
@@ -53,8 +56,4 @@ class Digest {
     if (value < 1) precision = 2;
     return value.toPrecision(precision);
   }
-}
-
-List<Digest> digestFromJson(List<dynamic>? json) {
-  return json?.map((e) => Digest.fromJson(e as Map<String, dynamic>)).toList() ?? [];
 }

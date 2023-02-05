@@ -1,11 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:provider/provider.dart';
+import 'package:recipe_search/utils/internet_checker.dart';
 import 'package:recipe_search/view/recipe/recipe_card.dart';
 import 'package:recipe_search/view/recipe/recipe_full.dart';
 import 'package:recipe_search/viewmodels/recipe_viewmodel.dart';
 import 'package:recipe_search/viewmodels/viewmodel_provider.dart';
+
+import '../../main.dart';
 
 class RecipeList extends StatefulWidget {
   const RecipeList({Key? key}) : super(key: key);
@@ -17,11 +21,17 @@ class RecipeList extends StatefulWidget {
 class _RecipeListState extends State<RecipeList> {
   final recipeViewModel = ViewModelProvider.get<RecipeViewModel>(recipeKey);
   final scrollController = ScrollController();
+  final checker = locator<InternetChecker>();
+
+  late final StreamSubscription<InternetConnectionStatus> listener;
   late final StreamSubscription subscription;
 
   @override
   void initState() {
     super.initState();
+    listener = checker.onStatusChange.listen((_) {
+      if (mounted) setState(() {});
+    });
     subscription = recipeViewModel.startUIListening((event) {
       switch (event) {
         case RecipeEvent.openRecipe:
@@ -50,6 +60,7 @@ class _RecipeListState extends State<RecipeList> {
   @override
   void dispose() {
     recipeViewModel.removeUIListeners(subscription);
+    listener.cancel();
     super.dispose();
   }
 
@@ -59,6 +70,9 @@ class _RecipeListState extends State<RecipeList> {
       value: recipeViewModel,
       child: Consumer<RecipeViewModel>(
         builder: (_, viewModel, ___) {
+          if (checker.disconnected) {
+            return noInternet();
+          }
           if (viewModel.count == 0 && !recipeViewModel.loading) {
             return noResult();
           }
@@ -103,6 +117,25 @@ class _RecipeListState extends State<RecipeList> {
           Text(
             text,
             style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget noInternet() {
+    return Align(
+      alignment: Alignment.center,
+      child: Column(
+        children: [
+          Icon(
+            Icons.cell_wifi_rounded,
+            size: 220,
+            color: Theme.of(context).primaryColor.withOpacity(0.3),
+          ),
+          const Text(
+            'No internet connection',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
           ),
         ],
       ),

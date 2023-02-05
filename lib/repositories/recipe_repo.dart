@@ -1,6 +1,11 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:localstorage/localstorage.dart';
+import 'package:mutex/mutex.dart';
 import 'package:recipe_search/models/recipe/recipe_model.dart';
 import 'package:recipe_search/repositories/recipe_result.dart';
 
@@ -18,17 +23,23 @@ abstract class RecipeRepository {
 
   Future<RequestResultModel> getRecipeById(String recipeId);
 
+  void cacheRecipe(Recipe recipe);
+
+  void deleteRecipeCache(Recipe recipe);
+
   void onRemove();
 }
 
 class RecipeRepositoryImpl extends RecipeRepository {
-  late HttpClient client;
+  final client = HttpClient()
+    ..idleTimeout = const Duration(seconds: 90)
+    ..maxConnectionsPerHost = 10;
 
-  RecipeRepositoryImpl() {
-    client = HttpClient();
-    client.idleTimeout = const Duration(seconds: 90);
-    client.maxConnectionsPerHost = 10;
-  }
+  final m = Mutex();
+  final fileCacheManager = DefaultCacheManager();
+  final storage = LocalStorage('recipe_repo');
+
+  RecipeRepositoryImpl();
 
   @override
   void onRemove() {
@@ -59,6 +70,36 @@ class RecipeRepositoryImpl extends RecipeRepository {
   @override
   Future<RequestResultModel> getRecipeById(String recipeId) async {
     assert(recipeId != "");
+
+    // if has connection get recipe by id and update cache
+    if (await InternetConnectionChecker().hasConnection) {
+      final result = await getRecipeByIdApi(recipeId);
+      if (!result.result) {
+        return result;
+      }
+
+      cacheRecipe(result.value);
+
+      return result;
+    }
+
+    // otherwise try to get item from cache
+    final json = await m.protect<Map<String, dynamic>?>(() async {
+      return await storage.getItem(recipeId);
+    });
+
+    final found = json?.isNotEmpty == true;
+
+    log('got recipes from cache: $recipeId $found');
+
+    if (!found) {
+      return RequestResultModel(result: false);
+    }
+
+    return RequestResultModel(result: true, value: Recipe.fromJson(json!));
+  }
+
+  Future<RequestResultModel> getRecipeByIdApi(String recipeId) async {
     final query =
         'https://api.edamam.com/api/recipes/v2/$recipeId?type=public&app_id=$applicationId&app_key=$applicationKey';
 
@@ -71,5 +112,31 @@ class RecipeRepositoryImpl extends RecipeRepository {
       return RequestResultModel(result: false, value: response.statusCode);
     }
     return RequestResultModel(result: true, value: Recipe.fromJson(jsonData['recipe']));
+  }
+
+  @override
+  void cacheRecipe(Recipe recipe) {
+    final recipeId = recipe.id;
+    final url = recipe.betImgUrl;
+    if (url != null) {
+      fileCacheManager.getSingleFile(url);
+    }
+    m.protect(() async {
+      log('cache recipe $recipeId');
+      await storage.setItem(recipeId, recipe);
+    });
+  }
+
+  @override
+  void deleteRecipeCache(Recipe recipe) {
+    final recipeId = recipe.id;
+    final url = recipe.betImgUrl;
+    if (url != null) {
+      fileCacheManager.removeFile(url);
+    }
+    m.protect(() async {
+      log('delete recipe cache $recipeId');
+      await storage.deleteItem(recipeId);
+    });
   }
 }

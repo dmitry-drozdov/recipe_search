@@ -5,7 +5,7 @@ import '../helpers/update_dynamic.dart';
 
 part 'user_settings.g.dart';
 
-@JsonSerializable(createToJson: true)
+@JsonSerializable(explicitToJson: true, createToJson: true)
 class UserSettings {
   final bool askBeforeRemoving;
   final SearchSettings? lastSearch;

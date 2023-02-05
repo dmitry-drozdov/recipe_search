@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:developer';
 
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:recipe_search/models/enums/diet_label.dart';
 import 'package:recipe_search/models/enums/health_label.dart';
 import 'package:recipe_search/models/recipe/recipe_model.dart';
@@ -10,7 +12,9 @@ import 'package:recipe_search/utils/firestore.dart';
 import 'package:sorted_list/sorted_list.dart';
 
 import '../helpers/models/request_result_model.dart';
+import '../main.dart';
 import '../models/user_settings.dart';
+import '../utils/internet_checker.dart';
 import 'base_view_model.dart';
 
 enum RecipeEvent {
@@ -57,6 +61,8 @@ abstract class RecipeViewModel extends BaseViewModel<Recipe, RecipeEvent> {
     required bool active,
   });
 
+  bool isFavorite(String recipeId);
+
   Set<String> get favoriteIds;
 
   List<Recipe> get favoriteRecipes;
@@ -70,18 +76,25 @@ abstract class RecipeViewModel extends BaseViewModel<Recipe, RecipeEvent> {
 }
 
 class RecipeViewModelImpl extends RecipeViewModel {
+  final checker = locator<InternetChecker>();
+  final storage = locator<FirebaseStorage>();
   final recipeRepository = RecipeRepository.create();
+  late final StreamSubscription<InternetConnectionStatus> listener;
   late String _userId;
   late UserSettings userSettings;
 
   RecipeViewModelImpl(String userId) : super() {
     _userId = userId;
+    listener = checker.onStatusChange.listen((_) {
+      updateRequire = true;
+    });
     loadUserSettings();
     loadFavoriteIds();
   }
 
   @override
   void onRemove() {
+    listener.cancel();
     recipeRepository.onRemove();
     super.onRemove();
   }
@@ -176,7 +189,7 @@ class RecipeViewModelImpl extends RecipeViewModel {
         await Future.delayed(const Duration(seconds: 10));
       }
     }
-    Storage.logSearch(
+    storage.logSearch(
       searchSettings: searchSettings,
       firstPage: firstPage,
       timestamp: DateTime.now(),
@@ -263,7 +276,7 @@ class RecipeViewModelImpl extends RecipeViewModel {
   List<Recipe> get favoriteRecipes => _favoriteRecipes;
 
   Future<void> loadFavoriteIds() async {
-    final data = await Storage.getFavouriteRecipes(userId: _userId);
+    final data = await storage.getFavouriteRecipes(userId: _userId);
     _favoriteData.addAll(data);
     notifyListeners();
   }
@@ -299,7 +312,7 @@ class RecipeViewModelImpl extends RecipeViewModel {
     final recipe = active
         ? items.firstWhere((element) => element.id == recipeId)
         : _favoriteRecipes.firstWhere((element) => element.id == recipeId);
-    Storage.addOrUpdateFavouriteRecipe(
+    storage.addOrUpdateFavouriteRecipe(
       userId: _userId,
       recipeId: recipe.id,
       timestamp: timestamp,
@@ -309,12 +322,17 @@ class RecipeViewModelImpl extends RecipeViewModel {
       _favoriteData[recipe.id] = timestamp;
       recipe.likeTime = timestamp;
       _favoriteRecipes.add(recipe);
+      recipeRepository.cacheRecipe(recipe);
     } else {
       _favoriteData.remove(recipe.id);
       _favoriteRecipes.remove(recipe);
+      recipeRepository.deleteRecipeCache(recipe);
     }
     notifyListeners();
   }
+
+  @override
+  bool isFavorite(String recipeId) => favoriteIds.contains(recipeId);
 
   //----------------------------------------- user settings -----------------------------------------
 
@@ -322,7 +340,7 @@ class RecipeViewModelImpl extends RecipeViewModel {
   bool get askBeforeRemoving => userSettings.askBeforeRemoving;
 
   Future<void> loadUserSettings() async {
-    userSettings = await Storage.getUserSettings(userId: _userId) ?? UserSettings.base();
+    userSettings = await storage.getUserSettings(userId: _userId) ?? UserSettings.base();
     searchSettings = userSettings.lastSearch ?? SearchSettings.noSettings();
     loadRecipesFirstPage();
   }
@@ -337,7 +355,7 @@ class RecipeViewModelImpl extends RecipeViewModel {
       lastSearch: lastSearch,
       askBeforeRemoving: askBeforeRemoving,
     );
-    Storage.addOrUpdateUserSettings(
+    storage.addOrUpdateUserSettings(
       userId: _userId,
       userSettings: userSettings,
     );

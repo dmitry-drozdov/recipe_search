@@ -1,12 +1,11 @@
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:recipe_search/helpers/app_colors.dart';
 import 'package:recipe_search/helpers/consts.dart';
-import 'package:recipe_search/helpers/extensions/edge_extension.dart';
 import 'package:recipe_search/helpers/extensions/list_extension.dart';
+import 'package:recipe_search/helpers/extensions/widget_extension.dart';
 import 'package:recipe_search/models/recipe/recipe_model.dart';
 import 'package:recipe_search/view/recipe/like_button.dart';
 import 'package:recipe_search/view/recipe/recipe_digest.dart';
@@ -16,6 +15,7 @@ import 'package:recipe_search/viewmodels/viewmodel_provider.dart';
 import '../search/params.dart';
 import 'helper/circle_info_widget.dart';
 import 'helper/link_value_widget.dart';
+import 'helper/recipe_app_bar.dart';
 import 'helper/title_value_widget.dart';
 import 'helper/title_widget.dart';
 import 'helper/value_widget.dart';
@@ -81,27 +81,9 @@ class _RecipeFullState extends State<RecipeFull> {
             child: Scrollbar(
               child: CustomScrollView(
                 slivers: <Widget>[
-                  SliverAppBar(
-                    leadingWidth: 40,
-                    leading: Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: RawMaterialButton(
-                        onPressed: () => Navigator.of(context).pop(),
-                        elevation: 2.0,
-                        fillColor: AppColors.indigoButton,
-                        shape: const CircleBorder(),
-                        child: const Icon(Icons.arrow_back_rounded, size: 35.0),
-                      ),
-                    ),
-                    backgroundColor: Colors.white,
-                    pinned: true,
-                    stretch: true,
-                    expandedHeight: 260,
-                    flexibleSpace: CachedNetworkImage(
-                      imageUrl: recipe.bestImg!.url,
-                      placeholder: (_, __) => placeholderLarge,
-                      fit: BoxFit.cover,
-                    ),
+                  RecipeAppBar(
+                    image: recipe.bestImg,
+                    isFavorite: recipeViewModel.isFavorite(recipe.id),
                   ),
                   SliverList(
                     delegate: SliverChildListDelegate(getContentWidgets()),

@@ -1,15 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:platform_device_id/platform_device_id.dart';
 import 'package:recipe_search/helpers/app_colors.dart';
-import 'package:recipe_search/helpers/extensions/edge_extension.dart';
+import 'package:recipe_search/models/app_user.dart';
 
-import '../../helpers/widgets/circular_indicator.dart';
+import '../../main.dart';
 import '../../utils/auth.dart';
 import '../home_navigation.dart';
 import 'google_sign_in_button.dart';
 
-class Landing extends StatelessWidget {
+class Landing extends StatefulWidget {
   final String title;
 
   const Landing({
@@ -18,11 +17,20 @@ class Landing extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<Landing> createState() => _LandingState();
+}
+
+class _LandingState extends State<Landing> {
+  final auth = locator<Authentication>();
+
+  var useLastKnownData = true;
+
+  @override
   Widget build(BuildContext context) {
     final darkColor = Theme.of(context).primaryColorDark;
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Text(widget.title),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -47,7 +55,7 @@ class Landing extends StatelessWidget {
             firstLetterColor: AppColors.redLetter,
           ),
           const SizedBox(height: 50),
-          buttons(context),
+          buttons(),
         ],
       ),
     );
@@ -74,35 +82,87 @@ class Landing extends StatelessWidget {
     );
   }
 
-  Widget buttons(BuildContext ctx) {
+  Widget buttons() {
+    final buttonStyle = TextStyle(color: Theme.of(context).primaryColorDark, fontSize: 16);
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        FutureBuilder(
-          future: Authentication.initializeFirebase(),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return const Text('Error initializing Firebase');
-            } else if (snapshot.connectionState == ConnectionState.done) {
-              return GoogleSignInButton(onSignIn: (user) => navigateToMain(ctx, user: user));
-            }
-            return CircularLoading(Theme.of(context).primaryColor).paddingV8;
-          },
+        auth.firebaseApp == null
+            ? const Text('Error initializing Firebase')
+            : GoogleSignInButton(onSignIn: (googleUser) => onAuthGoogle(googleUser)),
+        Divider(
+          color: AppColors.blueBorder,
+          indent: 25,
+          endIndent: 25,
         ),
         TextButton(
-          child: const Text('Continue without sign in'),
-          onPressed: () async {
-            navigateToMain(ctx, deviceId: await PlatformDeviceId.getDeviceId);
+          child: Text('Continue without sign in', style: buttonStyle),
+          onPressed: () {
+            onWithoutAuth();
           },
         ),
+        useLastSaved(),
       ],
     );
   }
 
-  void navigateToMain(BuildContext ctx, {User? user, String? deviceId}) {
-    Navigator.of(ctx).pushReplacement(
+  Widget useLastSaved() {
+    return FutureBuilder<AppUser?>(
+      future: auth.getLastKnownAppUser(),
+      builder: (ctx, snapshot) {
+        if (snapshot.hasData) {
+          return toggleRow();
+        }
+        if (snapshot.hasError) {
+          return Text('Error ${snapshot.error}');
+        }
+        return const SizedBox();
+      },
+    );
+  }
+
+  Widget toggleRow() {
+    final buttonStyle = TextStyle(color: Theme.of(context).primaryColorDark, fontSize: 15);
+    return Opacity(
+      opacity: 0.7,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text("*Use data last saved with Google", style: buttonStyle),
+          Switch(
+            inactiveTrackColor: AppColors.lightBlueChip,
+            value: useLastKnownData,
+            onChanged: (val) {
+              if (mounted) setState(() => useLastKnownData = val);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> onWithoutAuth() async {
+    AppUser? appUser;
+    if (useLastKnownData) {
+      appUser = await auth.getLastKnownAppUser();
+    }
+
+    appUser ??= await AppUser.create();
+    navigateToMain(appUser);
+  }
+
+  Future<void> onAuthGoogle(User googleUser) async {
+    final appUser = await AppUser.create(googleUser: googleUser);
+    auth.rememberAppUser(appUser);
+    navigateToMain(appUser);
+  }
+
+  void navigateToMain(AppUser appUser) {
+    if (!mounted) return;
+    Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (_) => HomeNavigation(user: user, deviceId: deviceId),
+        builder: (_) => HomeNavigation(user: appUser),
       ),
     );
   }

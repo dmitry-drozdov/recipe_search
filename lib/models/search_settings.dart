@@ -9,7 +9,7 @@ part 'search_settings.g.dart';
 
 const delimiter = '&';
 
-@JsonSerializable(createToJson: true)
+@JsonSerializable(explicitToJson: true, createToJson: true)
 class SearchSettings extends Equatable {
   final String search;
   final List<DietLabel> dietLabels;

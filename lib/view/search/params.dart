@@ -136,7 +136,8 @@ class Params extends StatelessWidget {
           onValue: (value) {
             recipeViewModel.updateSearchSettings(caloriesMax: value as int);
           },
-        )
+        ),
+        const Text('/ serv', style: mainFont),
       ],
     );
   }

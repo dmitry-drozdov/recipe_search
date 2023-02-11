@@ -18,30 +18,20 @@ final buttonStyleLarge = TextButton.styleFrom(
 );
 final lineDivider = Divider(color: AppColors.blueBorder);
 
-enum ScreenMode { part, full }
-
 class Params extends StatelessWidget {
   final RecipeViewModel recipeViewModel;
   final void Function() onApply;
-  final ScreenMode screenMode;
 
   Params({
     Key? key,
     required this.recipeViewModel,
     required this.onApply,
-    required this.screenMode,
   }) : super(key: key);
 
   final controller = TextEditingController();
 
-  bool get partScreen => screenMode == ScreenMode.part;
-  bool get fullScreen => screenMode == ScreenMode.full;
-
   @override
   Widget build(BuildContext context) {
-    if (partScreen) {
-      return consumerContent();
-    }
     return Scaffold(
       appBar: AppBar(title: const Text('All params')),
       body: consumerContent().padding8880,
@@ -87,28 +77,21 @@ class Params extends StatelessWidget {
 
   Widget buttonsRow(BuildContext ctx) {
     return Row(
-      mainAxisAlignment: partScreen ? MainAxisAlignment.spaceBetween : MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        if (partScreen) const SizedBox(width: 15),
         TextButton(
           onPressed: recipeViewModel.searchSettingsUpdated
               ? () {
-                  if (fullScreen) Navigator.of(ctx).pop();
+                  if (ctx.mounted) Navigator.of(ctx).pop();
                   onApply();
                 }
               : null,
           style: buttonStyle,
           child: Text(
             'Apply',
-            style: TextStyle(color: recipeViewModel.searchSettingsUpdated ? null : Colors.grey),
+            style: TextStyle(color: recipeViewModel.searchSettingsUpdated ? null : Colors.grey, fontSize: 16),
           ),
         ),
-        if (partScreen)
-          TextButton(
-            onPressed: recipeViewModel.onAllParamsTap,
-            style: buttonStyle,
-            child: const Text('All params'),
-          ),
       ],
     );
   }

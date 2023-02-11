@@ -35,9 +35,9 @@ class _FavoriteRecipesState extends State<FavoriteRecipes> {
             MaterialPageRoute(builder: (_) => RecipeFull(key: Key('recipeFull$id'), id: id)),
           );
           break;
-        case RecipeEvent.hideParams:
         case RecipeEvent.openAllParams:
         case RecipeEvent.openDigest:
+        case RecipeEvent.userLoaded:
           break;
       }
     });

@@ -52,15 +52,15 @@ class _RecipeFullState extends State<RecipeFull> {
           }
           final id = recipeViewModel.currentRecipeId;
           if (id == null) {
-            throw Exception('Cannot open recipe full page. It was null');
+            throw Exception('Cannot open recipe digest page. It was null');
           }
           Navigator.of(context).push(
             MaterialPageRoute(builder: (_) => RecipeDigest(key: Key('recipeDigest$id'), id: id)),
           );
           break;
-        case RecipeEvent.hideParams:
         case RecipeEvent.openAllParams:
         case RecipeEvent.openRecipe:
+        case RecipeEvent.userLoaded:
           break;
       }
     });

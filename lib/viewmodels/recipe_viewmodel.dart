@@ -19,9 +19,9 @@ import 'base_view_model.dart';
 
 enum RecipeEvent {
   openRecipe,
-  hideParams,
   openAllParams,
   openDigest,
+  userLoaded,
 }
 
 abstract class RecipeViewModel extends BaseViewModel<Recipe, RecipeEvent> {
@@ -137,9 +137,6 @@ class RecipeViewModelImpl extends RecipeViewModel {
       );
       silenceClearItems();
       await _processRequest(request, firstPage: true);
-      if (items.isNotEmpty) {
-        uiEventSubject.add(RecipeEvent.hideParams);
-      }
     } on Exception catch (e) {
       log('loadRecipes| Exception during getting recipes: $e');
     }
@@ -348,6 +345,7 @@ class RecipeViewModelImpl extends RecipeViewModel {
   Future<void> loadUserSettings() async {
     userSettings = await storage.getUserSettings(userId: _userId) ?? UserSettings.base();
     searchSettings = userSettings.lastSearch ?? SearchSettings.noSettings();
+    uiEventSubject.add(RecipeEvent.userLoaded);
     loadRecipesFirstPage();
   }
 

@@ -45,11 +45,13 @@ class _MultiSelectFieldState extends State<MultiSelectField> {
       items: multiSelectItems.toList(),
       initialValue: widget.initialItems,
       title: Text(widget.title),
-      headerColor: AppColors.blueChip,
+      headerColor: AppColors.lightBlueChip,
       decoration: BoxDecoration(border: Border.all(color: AppColors.blueBorder, width: 1.8)),
-      selectedChipColor: AppColors.blueChip,
+      selectedChipColor: AppColors.lightBlueChip,
       selectedTextStyle: const TextStyle(color: AppColors.black),
       onTap: (values) => widget.onSelect(values),
+      searchable: true,
+      searchHint: 'Enter search text...',
     );
   }
 }

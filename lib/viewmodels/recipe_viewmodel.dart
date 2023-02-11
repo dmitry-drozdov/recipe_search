@@ -49,6 +49,8 @@ abstract class RecipeViewModel extends BaseViewModel<Recipe, RecipeEvent> {
     List<HealthLabel>? newHealthLabels,
     int? caloriesMin,
     int? caloriesMax,
+    int? ingredientsMin,
+    int? ingredientsMax,
   });
 
   void onAllParamsTap();
@@ -235,6 +237,8 @@ class RecipeViewModelImpl extends RecipeViewModel {
     List<HealthLabel>? newHealthLabels,
     int? caloriesMin,
     int? caloriesMax,
+    int? ingredientsMin,
+    int? ingredientsMax,
   }) {
     final newSearchSettings = SearchSettings.copyWith(
       searchSettings,
@@ -243,6 +247,8 @@ class RecipeViewModelImpl extends RecipeViewModel {
       healthLabels: newHealthLabels,
       caloriesMin: caloriesMin,
       caloriesMax: caloriesMax,
+      ingredientsMin: ingredientsMin,
+      ingredientsMax: ingredientsMax,
     );
     updateRequire = newSearchSettings != searchSettings;
     if (!updateRequire) {

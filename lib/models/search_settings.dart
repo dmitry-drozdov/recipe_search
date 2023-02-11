@@ -15,12 +15,14 @@ class SearchSettings extends Equatable {
   final List<DietLabel> dietLabels;
   final List<HealthLabel> healthLabels;
   final Range caloriesRange;
+  final Range ingredientsRange;
 
   const SearchSettings({
     required this.search,
     required this.dietLabels,
     required this.healthLabels,
     required this.caloriesRange,
+    required this.ingredientsRange,
   });
 
   factory SearchSettings.fromJson(Map<String, dynamic> json) => _$SearchSettingsFromJson(json);
@@ -34,12 +36,15 @@ class SearchSettings extends Equatable {
     List<HealthLabel>? healthLabels,
     int? caloriesMin,
     int? caloriesMax,
+    int? ingredientsMin,
+    int? ingredientsMax,
   }) {
     return SearchSettings(
       search: update(old.search, search),
       dietLabels: update(old.dietLabels, dietLabels),
       healthLabels: update(old.healthLabels, healthLabels),
       caloriesRange: Range.copyWith(old.caloriesRange, min: caloriesMin, max: caloriesMax),
+      ingredientsRange: Range.copyWith(old.ingredientsRange, min: ingredientsMin, max: ingredientsMax),
     );
   }
 
@@ -49,6 +54,7 @@ class SearchSettings extends Equatable {
       dietLabels: const <DietLabel>[],
       healthLabels: const <HealthLabel>[],
       caloriesRange: Range.defaultCaloriesRange(),
+      ingredientsRange: Range.defaultIngredientsRange(),
     );
   }
 
@@ -56,10 +62,15 @@ class SearchSettings extends Equatable {
 
   String get healthLabelsQuery => healthLabels.map((e) => e.query).join(delimiter);
 
-  String get query => [dietLabelsQuery, healthLabelsQuery, caloriesRange.caloriesQuery].join(delimiter);
+  String get query => [
+        dietLabelsQuery,
+        healthLabelsQuery,
+        caloriesRange.caloriesQuery,
+        ingredientsRange.ingredientsQuery,
+      ].join(delimiter);
 
   bool get emptySearchText => search.isEmpty;
 
   @override
-  List<Object?> get props => [search, ...dietLabels, ...healthLabels, caloriesRange];
+  List<Object?> get props => [search, ...dietLabels, ...healthLabels, caloriesRange, ingredientsRange];
 }

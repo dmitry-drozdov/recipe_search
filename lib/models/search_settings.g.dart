@@ -17,6 +17,8 @@ SearchSettings _$SearchSettingsFromJson(Map<String, dynamic> json) =>
           .toList(),
       caloriesRange:
           Range.fromJson(json['caloriesRange'] as Map<String, dynamic>),
+      ingredientsRange:
+          Range.fromJson(json['ingredientsRange'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$SearchSettingsToJson(SearchSettings instance) =>
@@ -27,6 +29,7 @@ Map<String, dynamic> _$SearchSettingsToJson(SearchSettings instance) =>
       'healthLabels':
           instance.healthLabels.map((e) => _$HealthLabelEnumMap[e]!).toList(),
       'caloriesRange': instance.caloriesRange.toJson(),
+      'ingredientsRange': instance.ingredientsRange.toJson(),
     };
 
 const _$DietLabelEnumMap = {

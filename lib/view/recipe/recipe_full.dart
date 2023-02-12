@@ -207,7 +207,7 @@ class _RecipeFullState extends State<RecipeFull> {
       Value(value: listMarker + recipe.ingredientLines.join('\n$listMarker'), fontSize: 20),
       //-----------------------------------------------
       const TitleWidget(title: 'Link'),
-      LinkValue(value: recipe.shareAs, color: theme.primaryColor),
+      LinkValue(value: recipe.url, color: theme.primaryColor),
       //-----------------------------------------------
       const TitleWidget(title: 'Digest'),
       TextButton(

@@ -64,14 +64,17 @@ class Params extends StatelessWidget {
   }
 
   List<Widget> content(BuildContext ctx) {
+    final mealTypes = recipeViewModel.searchSettings.mealTypes;
+    final dietLabels = recipeViewModel.searchSettings.dietLabels;
+    final healthLabels = recipeViewModel.searchSettings.healthLabels;
     return [
       MultiSelectField<MealType>(
         items: MealType.values,
         onSelect: (values) {
           recipeViewModel.updateSearchSettings(newMealTypes: values.map((e) => e as MealType).toList());
         },
-        title: 'Meal types',
-        initialItems: recipeViewModel.searchSettings.mealTypes,
+        title: 'Meal types ${suffix(mealTypes)}',
+        initialItems: mealTypes,
         searchable: false,
       ),
       divider,
@@ -80,8 +83,8 @@ class Params extends StatelessWidget {
         onSelect: (values) {
           recipeViewModel.updateSearchSettings(newDietLabels: values.map((e) => e as DietLabel).toList());
         },
-        title: 'Diet labels',
-        initialItems: recipeViewModel.searchSettings.dietLabels,
+        title: 'Diet labels ${suffix(dietLabels)}',
+        initialItems: dietLabels,
         searchable: false,
       ),
       divider,
@@ -90,8 +93,8 @@ class Params extends StatelessWidget {
         onSelect: (values) {
           recipeViewModel.updateSearchSettings(newHealthLabels: values.map((e) => e as HealthLabel).toList());
         },
-        title: 'Health labels',
-        initialItems: recipeViewModel.searchSettings.healthLabels,
+        title: 'Health labels ${suffix(healthLabels)}',
+        initialItems: healthLabels,
         searchable: true,
       ),
       lineDivider,
@@ -103,9 +106,13 @@ class Params extends StatelessWidget {
     ];
   }
 
+  String suffix(List list) {
+    return list.isEmpty ? "" : "(${list.length})";
+  }
+
   Widget buttonsRow(BuildContext ctx) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         TextButton(
           onPressed: recipeViewModel.searchSettingsUpdated

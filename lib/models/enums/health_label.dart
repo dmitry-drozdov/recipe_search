@@ -1,4 +1,5 @@
 import 'package:recipe_search/helpers/extensions/string_capitalize.dart';
+import 'package:recipe_search/models/enums/labels.dart';
 
 enum HealthLabel {
   alcoholCocktail,
@@ -60,15 +61,10 @@ extension HealthLabelExtension on HealthLabel {
   }
 }
 
-HealthLabel healthLabelFromStr(String value) {
-  final lower = value.toLowerCase();
-  return HealthLabel.values.firstWhere((element) => element.api == lower || element.view.toLowerCase() == lower);
-}
-
 List<HealthLabel> healthLabelFromJson(List<dynamic> json) {
-  return json.map((e) => healthLabelFromStr(e)).toList();
+  return labelFromJson<HealthLabel>(json);
 }
 
 List<dynamic> healthLabelToJson(List<HealthLabel> labels) {
-  return labels.map((e) => e.api).toList();
+  return labelToJson<HealthLabel>(labels);
 }

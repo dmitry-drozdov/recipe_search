@@ -11,6 +11,7 @@ class MultiSelectField<T> extends StatefulWidget {
   final List<T> initialItems;
   final Function(List) onSelect;
   final String title;
+  final bool searchable;
 
   const MultiSelectField({
     Key? key,
@@ -18,6 +19,7 @@ class MultiSelectField<T> extends StatefulWidget {
     required this.onSelect,
     required this.title,
     required this.initialItems,
+    required this.searchable,
   }) : super(key: key);
 
   @override
@@ -57,7 +59,7 @@ class _MultiSelectFieldState extends State<MultiSelectField> {
       selectedChipColor: AppColors.lightBlueChip,
       selectedTextStyle: const TextStyle(color: AppColors.black),
       onTap: (values) => widget.onSelect(values),
-      searchable: true,
+      searchable: widget.searchable,
       searchHint: 'Enter search text...',
     );
   }

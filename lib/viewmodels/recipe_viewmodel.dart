@@ -44,6 +44,8 @@ abstract class RecipeViewModel extends BaseViewModel<Recipe, RecipeEvent> {
 
   bool get searchSettingsUpdated;
 
+  bool get searchSettingsCleared;
+
   void updateSearchSettings({
     String? newSearch,
     List<DietLabel>? newDietLabels,
@@ -53,6 +55,7 @@ abstract class RecipeViewModel extends BaseViewModel<Recipe, RecipeEvent> {
     int? caloriesMax,
     int? ingredientsMin,
     int? ingredientsMax,
+    bool? clearSettings,
   });
 
   void onAllParamsTap();
@@ -230,6 +233,9 @@ class RecipeViewModelImpl extends RecipeViewModel {
   bool get searchSettingsUpdated => searchSettings != backUpSearchSettings || firstLaunch;
 
   @override
+  bool get searchSettingsCleared => searchSettings == SearchSettings.noSettings();
+
+  @override
   void updateSearchSettings({
     String? newSearch,
     List<DietLabel>? newDietLabels,
@@ -239,18 +245,21 @@ class RecipeViewModelImpl extends RecipeViewModel {
     int? caloriesMax,
     int? ingredientsMin,
     int? ingredientsMax,
+    bool? clearSettings,
   }) {
-    final newSearchSettings = SearchSettings.copyWith(
-      searchSettings,
-      search: newSearch,
-      dietLabels: newDietLabels,
-      healthLabels: newHealthLabels,
-      mealTypes: newMealTypes,
-      caloriesMin: caloriesMin,
-      caloriesMax: caloriesMax,
-      ingredientsMin: ingredientsMin,
-      ingredientsMax: ingredientsMax,
-    );
+    final newSearchSettings = clearSettings == true
+        ? SearchSettings.noSettings()
+        : SearchSettings.copyWith(
+            searchSettings,
+            search: newSearch,
+            dietLabels: newDietLabels,
+            healthLabels: newHealthLabels,
+            mealTypes: newMealTypes,
+            caloriesMin: caloriesMin,
+            caloriesMax: caloriesMax,
+            ingredientsMin: ingredientsMin,
+            ingredientsMax: ingredientsMax,
+          );
     updateRequire = newSearchSettings != searchSettings;
     if (!updateRequire) {
       return;

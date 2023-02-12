@@ -11,7 +11,7 @@ import 'package:recipe_search/viewmodels/recipe_viewmodel.dart';
 import '../../helpers/consts.dart';
 import 'multi_select_field.dart';
 
-const divider = SizedBox(height: 5);
+const divider = SizedBox(height: 7);
 final buttonStyle = TextButton.styleFrom(padding: const EdgeInsets.all(0.0));
 final buttonStyleLarge = TextButton.styleFrom(
   textStyle: const TextStyle(fontSize: 16),
@@ -45,6 +45,7 @@ class Params extends StatelessWidget {
       child: Consumer<RecipeViewModel>(
         builder: (ctx, _, __) {
           return Column(
+            key: recipeViewModel.searchSettingsCleared ? UniqueKey() : null,
             children: [
               Expanded(
                 child: Scrollbar(
@@ -64,6 +65,16 @@ class Params extends StatelessWidget {
 
   List<Widget> content(BuildContext ctx) {
     return [
+      MultiSelectField<MealType>(
+        items: MealType.values,
+        onSelect: (values) {
+          recipeViewModel.updateSearchSettings(newMealTypes: values.map((e) => e as MealType).toList());
+        },
+        title: 'Meal types',
+        initialItems: recipeViewModel.searchSettings.mealTypes,
+        searchable: false,
+      ),
+      divider,
       MultiSelectField<DietLabel>(
         items: DietLabel.values,
         onSelect: (values) {
@@ -71,6 +82,7 @@ class Params extends StatelessWidget {
         },
         title: 'Diet labels',
         initialItems: recipeViewModel.searchSettings.dietLabels,
+        searchable: false,
       ),
       divider,
       MultiSelectField<HealthLabel>(
@@ -80,15 +92,7 @@ class Params extends StatelessWidget {
         },
         title: 'Health labels',
         initialItems: recipeViewModel.searchSettings.healthLabels,
-      ),
-      divider,
-      MultiSelectField<MealType>(
-        items: MealType.values,
-        onSelect: (values) {
-          recipeViewModel.updateSearchSettings(newMealTypes: values.map((e) => e as MealType).toList());
-        },
-        title: 'Meal types',
-        initialItems: recipeViewModel.searchSettings.mealTypes,
+        searchable: true,
       ),
       lineDivider,
       caloriesRow(ctx),
@@ -114,6 +118,16 @@ class Params extends StatelessWidget {
           child: Text(
             'Apply',
             style: TextStyle(color: recipeViewModel.searchSettingsUpdated ? null : Colors.grey, fontSize: 16),
+          ),
+        ),
+        TextButton(
+          onPressed: recipeViewModel.searchSettingsCleared
+              ? null
+              : () => recipeViewModel.updateSearchSettings(clearSettings: true),
+          style: buttonStyle,
+          child: Text(
+            'Reset',
+            style: TextStyle(color: recipeViewModel.searchSettingsCleared ? Colors.grey : null, fontSize: 16),
           ),
         ),
       ],

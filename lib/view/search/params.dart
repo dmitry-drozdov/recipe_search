@@ -42,47 +42,61 @@ class Params extends StatelessWidget {
   Widget consumerContent() {
     return ChangeNotifierProvider.value(
       value: recipeViewModel,
-      child: Consumer<RecipeViewModel>(builder: (ctx, _, __) => content(ctx)),
+      child: Consumer<RecipeViewModel>(
+        builder: (ctx, _, __) {
+          return Column(
+            children: [
+              Expanded(
+                child: Scrollbar(
+                  child: CustomScrollView(
+                    slivers: <Widget>[
+                      SliverList(delegate: SliverChildListDelegate(content(ctx))),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 
-  Widget content(BuildContext ctx) {
-    return Column(
-      children: [
-        MultiSelectField<DietLabel>(
-          items: DietLabel.values,
-          onSelect: (values) {
-            recipeViewModel.updateSearchSettings(newDietLabels: values.map((e) => e as DietLabel).toList());
-          },
-          title: 'Diet labels',
-          initialItems: recipeViewModel.searchSettings.dietLabels,
-        ),
-        divider,
-        MultiSelectField<HealthLabel>(
-          items: HealthLabel.values,
-          onSelect: (values) {
-            recipeViewModel.updateSearchSettings(newHealthLabels: values.map((e) => e as HealthLabel).toList());
-          },
-          title: 'Health labels',
-          initialItems: recipeViewModel.searchSettings.healthLabels,
-        ),
-        divider,
-        MultiSelectField<MealType>(
-          items: MealType.values,
-          onSelect: (values) {
-            recipeViewModel.updateSearchSettings(newMealTypes: values.map((e) => e as MealType).toList());
-          },
-          title: 'Meal types',
-          initialItems: recipeViewModel.searchSettings.mealTypes,
-        ),
-        lineDivider,
-        caloriesRow(ctx),
-        lineDivider,
-        ingredientsRow(ctx),
-        lineDivider,
-        buttonsRow(ctx),
-      ],
-    );
+  List<Widget> content(BuildContext ctx) {
+    return [
+      MultiSelectField<DietLabel>(
+        items: DietLabel.values,
+        onSelect: (values) {
+          recipeViewModel.updateSearchSettings(newDietLabels: values.map((e) => e as DietLabel).toList());
+        },
+        title: 'Diet labels',
+        initialItems: recipeViewModel.searchSettings.dietLabels,
+      ),
+      divider,
+      MultiSelectField<HealthLabel>(
+        items: HealthLabel.values,
+        onSelect: (values) {
+          recipeViewModel.updateSearchSettings(newHealthLabels: values.map((e) => e as HealthLabel).toList());
+        },
+        title: 'Health labels',
+        initialItems: recipeViewModel.searchSettings.healthLabels,
+      ),
+      divider,
+      MultiSelectField<MealType>(
+        items: MealType.values,
+        onSelect: (values) {
+          recipeViewModel.updateSearchSettings(newMealTypes: values.map((e) => e as MealType).toList());
+        },
+        title: 'Meal types',
+        initialItems: recipeViewModel.searchSettings.mealTypes,
+      ),
+      lineDivider,
+      caloriesRow(ctx),
+      lineDivider,
+      ingredientsRow(ctx),
+      lineDivider,
+      buttonsRow(ctx),
+    ];
   }
 
   Widget buttonsRow(BuildContext ctx) {

@@ -23,4 +23,8 @@ class Ingredient {
   factory Ingredient.fromJson(Map<String, dynamic> json) => _$IngredientFromJson(json);
 
   Map<String, dynamic> toJson() => _$IngredientToJson(this);
+
+  String get weightStr {
+    return weight > 0.5 ? "(${weight.toStringAsFixed(0)} g)" : "";
+  }
 }

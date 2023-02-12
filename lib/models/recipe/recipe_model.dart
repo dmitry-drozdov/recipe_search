@@ -120,4 +120,23 @@ class Recipe extends Equatable {
     final perServ = (iVal / servings).round().toString();
     return "$base ($perServ/serv)";
   }
+
+  List<String> get ingredientLinesEx {
+    final res = <String>[];
+
+    for (final line in ingredientLines) {
+      for (final ingredient in ingredients) {
+        if (ingredient.text == line) {
+          res.add('${line.toLowerCase()} ${ingredient.weightStr}');
+          break;
+        }
+      }
+    }
+
+    if (res.length != ingredientLines.length) {
+      throw Exception("some data was not found $res $ingredientLines");
+    }
+
+    return res;
+  }
 }

@@ -152,6 +152,11 @@ class _RecipeFullState extends State<RecipeFull> {
         ],
       ).paddingB8,
       //-----------------------------------------------
+      if (recipe.cautions.isNotEmpty) ...[
+        TitleWidget(title: 'Cautions', color: AppColors.redBackground),
+        Value(value: recipe.cautions.view, color: AppColors.redLetter, fontWeight: FontWeight.w500),
+      ],
+      //-----------------------------------------------
       if (recipe.ingredients.isNotEmpty) ...[
         const TitleWidget(title: 'Ingredients', fontWeight: FontWeight.w600),
         Value(
@@ -160,10 +165,8 @@ class _RecipeFullState extends State<RecipeFull> {
         ),
       ],
       //-----------------------------------------------
-      if (recipe.cautions.isNotEmpty) ...[
-        TitleWidget(title: 'Cautions', color: AppColors.redBackground),
-        Value(value: recipe.cautions.view, color: AppColors.redLetter, fontWeight: FontWeight.w500),
-      ],
+      const TitleWidget(title: 'Ingredients details', fontWeight: FontWeight.w600),
+      Value(value: listMarker + recipe.ingredientLinesEx.join('\n$listMarker'), fontSize: 20),
       //-----------------------------------------------
       if (recipe.cuisineType.isNotEmpty) ...[
         const TitleWidget(title: 'Cuisine type'),
@@ -202,9 +205,6 @@ class _RecipeFullState extends State<RecipeFull> {
       //-----------------------------------------------
       if (recipe.co2EmissionsClass != null)
         TitleValue(title: 'CO2 Emissions Class', value: recipe.co2EmissionsClass!, color: blueColor),
-      //-----------------------------------------------
-      const TitleWidget(title: 'Ingredients details', fontWeight: FontWeight.w600),
-      Value(value: listMarker + recipe.ingredientLines.join('\n$listMarker'), fontSize: 20),
       //-----------------------------------------------
       const TitleWidget(title: 'Link'),
       LinkValue(value: recipe.url, color: theme.primaryColor),

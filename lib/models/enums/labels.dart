@@ -36,9 +36,8 @@ String _getApi<T>(T v) {
       return (v as DietLabel).api;
     case MealType:
       return (v as MealType).api;
-    default:
-      return "";
   }
+  return "";
 }
 
 String _getView<T>(T v) {
@@ -47,7 +46,6 @@ String _getView<T>(T v) {
       return (v as HealthLabel).view;
     case DietLabel:
       return (v as DietLabel).view;
-    default:
-      return "";
   }
+  return "";
 }

@@ -15,6 +15,9 @@ SearchSettings _$SearchSettingsFromJson(Map<String, dynamic> json) =>
       healthLabels: (json['healthLabels'] as List<dynamic>)
           .map((e) => $enumDecode(_$HealthLabelEnumMap, e))
           .toList(),
+      mealTypes: (json['mealTypes'] as List<dynamic>)
+          .map((e) => $enumDecode(_$MealTypeEnumMap, e))
+          .toList(),
       caloriesRange:
           Range.fromJson(json['caloriesRange'] as Map<String, dynamic>),
       ingredientsRange:
@@ -28,6 +31,8 @@ Map<String, dynamic> _$SearchSettingsToJson(SearchSettings instance) =>
           instance.dietLabels.map((e) => _$DietLabelEnumMap[e]!).toList(),
       'healthLabels':
           instance.healthLabels.map((e) => _$HealthLabelEnumMap[e]!).toList(),
+      'mealTypes':
+          instance.mealTypes.map((e) => _$MealTypeEnumMap[e]!).toList(),
       'caloriesRange': instance.caloriesRange.toJson(),
       'ingredientsRange': instance.ingredientsRange.toJson(),
     };
@@ -78,4 +83,12 @@ const _$HealthLabelEnumMap = {
   HealthLabel.vegan: 'vegan',
   HealthLabel.vegetarian: 'vegetarian',
   HealthLabel.wheatFree: 'wheatFree',
+};
+
+const _$MealTypeEnumMap = {
+  MealType.breakfast: 'breakfast',
+  MealType.brunch: 'brunch',
+  MealType.lunchDinner: 'lunchDinner',
+  MealType.snack: 'snack',
+  MealType.teatime: 'teatime',
 };

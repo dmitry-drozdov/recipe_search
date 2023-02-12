@@ -5,6 +5,8 @@ import 'package:recipe_search/helpers/update_dynamic.dart';
 import 'package:recipe_search/models/enums/diet_label.dart';
 import 'package:recipe_search/models/enums/health_label.dart';
 
+import 'enums/meal_type.dart';
+
 part 'search_settings.g.dart';
 
 const delimiter = '&';
@@ -14,6 +16,7 @@ class SearchSettings extends Equatable {
   final String search;
   final List<DietLabel> dietLabels;
   final List<HealthLabel> healthLabels;
+  final List<MealType> mealTypes;
   final Range caloriesRange;
   final Range ingredientsRange;
 
@@ -21,6 +24,7 @@ class SearchSettings extends Equatable {
     required this.search,
     required this.dietLabels,
     required this.healthLabels,
+    required this.mealTypes,
     required this.caloriesRange,
     required this.ingredientsRange,
   });
@@ -34,6 +38,7 @@ class SearchSettings extends Equatable {
     String? search,
     List<DietLabel>? dietLabels,
     List<HealthLabel>? healthLabels,
+    List<MealType>? mealTypes,
     int? caloriesMin,
     int? caloriesMax,
     int? ingredientsMin,
@@ -43,6 +48,7 @@ class SearchSettings extends Equatable {
       search: update(old.search, search),
       dietLabels: update(old.dietLabels, dietLabels),
       healthLabels: update(old.healthLabels, healthLabels),
+      mealTypes: update(old.mealTypes, mealTypes),
       caloriesRange: Range.copyWith(old.caloriesRange, min: caloriesMin, max: caloriesMax),
       ingredientsRange: Range.copyWith(old.ingredientsRange, min: ingredientsMin, max: ingredientsMax),
     );
@@ -53,6 +59,7 @@ class SearchSettings extends Equatable {
       search: '',
       dietLabels: const <DietLabel>[],
       healthLabels: const <HealthLabel>[],
+      mealTypes: const <MealType>[],
       caloriesRange: Range.defaultCaloriesRange(),
       ingredientsRange: Range.defaultIngredientsRange(),
     );
@@ -62,9 +69,12 @@ class SearchSettings extends Equatable {
 
   String get healthLabelsQuery => healthLabels.map((e) => e.query).join(delimiter);
 
+  String get mealTypesQuery => mealTypes.map((e) => e.query).join(delimiter);
+
   String get query => [
         dietLabelsQuery,
         healthLabelsQuery,
+        mealTypesQuery,
         caloriesRange.caloriesQuery,
         ingredientsRange.ingredientsQuery,
       ].join(delimiter);
@@ -72,5 +82,12 @@ class SearchSettings extends Equatable {
   bool get emptySearchText => search.isEmpty;
 
   @override
-  List<Object?> get props => [search, ...dietLabels, ...healthLabels, caloriesRange, ingredientsRange];
+  List<Object?> get props => [
+        search,
+        ...dietLabels,
+        ...healthLabels,
+        ...mealTypes,
+        caloriesRange,
+        ingredientsRange,
+      ];
 }

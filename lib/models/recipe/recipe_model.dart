@@ -7,6 +7,8 @@ import 'package:recipe_search/models/enums/diet_label.dart';
 import 'package:recipe_search/models/enums/health_label.dart';
 import 'package:recipe_search/models/ingredient/ingredient_model.dart';
 
+import '../enums/meal_type.dart';
+
 part 'recipe_model.g.dart';
 
 @JsonSerializable(explicitToJson: true, createToJson: true)
@@ -32,7 +34,8 @@ class Recipe extends Equatable {
   final String? co2EmissionsClass;
   final double totalWeight;
   final List<String> cuisineType;
-  final List<String> mealType;
+  @JsonKey(fromJson: mealTypeFromJson, toJson: mealTypeToJson)
+  final List<MealType> mealType;
   final List<String>? dishType;
   final List<Digest> digest;
   final double yield;

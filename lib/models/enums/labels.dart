@@ -1,4 +1,5 @@
 import 'package:recipe_search/models/enums/diet_label.dart';
+import 'package:recipe_search/models/enums/meal_type.dart';
 
 import 'health_label.dart';
 
@@ -20,6 +21,9 @@ T _labelFromStr<T>(String value) {
     case DietLabel:
       values = DietLabel.values;
       break;
+    case MealType:
+      values = MealType.values;
+      break;
   }
   return values.firstWhere((e) => _getApi<T>(e) == lower || _getView<T>(e).toLowerCase() == lower);
 }
@@ -30,6 +34,8 @@ String _getApi<T>(T v) {
       return (v as HealthLabel).api;
     case DietLabel:
       return (v as DietLabel).api;
+    case MealType:
+      return (v as MealType).api;
     default:
       return "";
   }

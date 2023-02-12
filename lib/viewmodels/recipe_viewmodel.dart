@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:recipe_search/models/enums/diet_label.dart';
 import 'package:recipe_search/models/enums/health_label.dart';
+import 'package:recipe_search/models/enums/meal_type.dart';
 import 'package:recipe_search/models/recipe/recipe_model.dart';
 import 'package:recipe_search/models/search_settings.dart';
 import 'package:recipe_search/repositories/recipe_repo.dart';
@@ -47,6 +48,7 @@ abstract class RecipeViewModel extends BaseViewModel<Recipe, RecipeEvent> {
     String? newSearch,
     List<DietLabel>? newDietLabels,
     List<HealthLabel>? newHealthLabels,
+    List<MealType>? newMealTypes,
     int? caloriesMin,
     int? caloriesMax,
     int? ingredientsMin,
@@ -232,6 +234,7 @@ class RecipeViewModelImpl extends RecipeViewModel {
     String? newSearch,
     List<DietLabel>? newDietLabels,
     List<HealthLabel>? newHealthLabels,
+    List<MealType>? newMealTypes,
     int? caloriesMin,
     int? caloriesMax,
     int? ingredientsMin,
@@ -242,6 +245,7 @@ class RecipeViewModelImpl extends RecipeViewModel {
       search: newSearch,
       dietLabels: newDietLabels,
       healthLabels: newHealthLabels,
+      mealTypes: newMealTypes,
       caloriesMin: caloriesMin,
       caloriesMax: caloriesMax,
       ingredientsMin: ingredientsMin,

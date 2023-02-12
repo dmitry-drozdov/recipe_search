@@ -4,6 +4,8 @@ enum MealType {
   breakfast,
   brunch,
   lunchDinner,
+  lunch,
+  dinner,
   snack,
   teatime,
 }
@@ -21,6 +23,10 @@ extension MealTypeExtension on MealType {
         return 'Snack';
       case MealType.teatime:
         return 'Teatime';
+      case MealType.lunch:
+        return 'Lunch';
+      case MealType.dinner:
+        return 'Dinner';
     }
   }
 
@@ -36,6 +42,10 @@ extension MealTypeExtension on MealType {
         return 'snack';
       case MealType.teatime:
         return 'teatime';
+      case MealType.lunch:
+        return 'lunch';
+      case MealType.dinner:
+        return 'dinner';
     }
   }
 

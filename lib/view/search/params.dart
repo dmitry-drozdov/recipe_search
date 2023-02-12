@@ -5,6 +5,7 @@ import 'package:recipe_search/helpers/app_colors.dart';
 import 'package:recipe_search/helpers/extensions/widget_extension.dart';
 import 'package:recipe_search/models/enums/diet_label.dart';
 import 'package:recipe_search/models/enums/health_label.dart';
+import 'package:recipe_search/models/enums/meal_type.dart';
 import 'package:recipe_search/viewmodels/recipe_viewmodel.dart';
 
 import '../../helpers/consts.dart';
@@ -64,6 +65,15 @@ class Params extends StatelessWidget {
           },
           title: 'Health labels',
           initialItems: recipeViewModel.searchSettings.healthLabels,
+        ),
+        divider,
+        MultiSelectField<MealType>(
+          items: MealType.values,
+          onSelect: (values) {
+            recipeViewModel.updateSearchSettings(newMealTypes: values.map((e) => e as MealType).toList());
+          },
+          title: 'Meal types',
+          initialItems: recipeViewModel.searchSettings.mealTypes,
         ),
         lineDivider,
         caloriesRow(ctx),

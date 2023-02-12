@@ -89,6 +89,8 @@ const _$MealTypeEnumMap = {
   MealType.breakfast: 'breakfast',
   MealType.brunch: 'brunch',
   MealType.lunchDinner: 'lunchDinner',
+  MealType.lunch: 'lunch',
+  MealType.dinner: 'dinner',
   MealType.snack: 'snack',
   MealType.teatime: 'teatime',
 };

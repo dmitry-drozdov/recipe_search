@@ -4,6 +4,7 @@ import 'package:multi_select_flutter/util/multi_select_item.dart';
 import 'package:recipe_search/helpers/app_colors.dart';
 import 'package:recipe_search/models/enums/diet_label.dart';
 import 'package:recipe_search/models/enums/health_label.dart';
+import 'package:recipe_search/models/enums/meal_type.dart';
 
 class MultiSelectField<T> extends StatefulWidget {
   final List<T> items;
@@ -35,6 +36,12 @@ class _MultiSelectFieldState extends State<MultiSelectField> {
     }
     if (widget.items.runtimeType == List<HealthLabel>) {
       multiSelectItems = widget.items.map((e) => MultiSelectItem<HealthLabel?>(e as HealthLabel, e.view));
+      return;
+    }
+    if (widget.items.runtimeType == List<MealType>) {
+      multiSelectItems = widget.items
+          .where((e) => e != MealType.lunchDinner)
+          .map((e) => MultiSelectItem<MealType?>(e as MealType, e.view));
       return;
     }
   }

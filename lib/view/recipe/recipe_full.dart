@@ -213,7 +213,7 @@ class _RecipeFullState extends State<RecipeFull> {
       TextButton(
         onPressed: recipeViewModel.onDigestTap,
         style: buttonStyleLarge,
-        child: const Text('View fats, carbs, vitamins and minerals'),
+        child: const Text('View fats, carbs, vitamins and minerals', style: TextStyle(fontSize: 18)),
       ),
       //-----------------------------------------------
       const SizedBox(height: 2),

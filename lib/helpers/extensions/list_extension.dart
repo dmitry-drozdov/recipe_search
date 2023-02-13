@@ -11,7 +11,7 @@ extension DietLabelListExtension on List<DietLabel> {
 }
 
 extension HealthLabelListExtension on List<HealthLabel> {
-  String get view => map((e) => e.view).join(", ");
+  List<String> get view => map((e) => e.view).toList();
 }
 
 extension MealTypeListExtension on List<MealType> {

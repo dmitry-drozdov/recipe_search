@@ -7,6 +7,7 @@ import 'package:recipe_search/helpers/consts.dart';
 import 'package:recipe_search/helpers/extensions/list_extension.dart';
 import 'package:recipe_search/helpers/extensions/widget_extension.dart';
 import 'package:recipe_search/models/recipe/recipe_model.dart';
+import 'package:recipe_search/view/recipe/helper/labels_widget.dart';
 import 'package:recipe_search/view/recipe/like_button.dart';
 import 'package:recipe_search/view/recipe/recipe_digest.dart';
 import 'package:recipe_search/viewmodels/recipe_viewmodel.dart';
@@ -190,7 +191,7 @@ class _RecipeFullState extends State<RecipeFull> {
       //-----------------------------------------------
       if (recipe.healthLabels.isNotEmpty) ...[
         const TitleWidget(title: 'Health labels'),
-        Value(value: recipe.healthLabels.view),
+        Labels(values: recipe.healthLabels.view),
       ],
       //-----------------------------------------------
       if (recipe.glycemicIndex != null)

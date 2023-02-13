@@ -125,8 +125,13 @@ class Recipe extends Equatable {
     final res = <String>[];
 
     for (final line in ingredientLines) {
+      if (!line.contains(RegExp(r'[\d½¼⅓⅔¾]'))) {
+        // does not contains measurement
+        res.add(line);
+        continue;
+      }
       for (final ingredient in ingredients) {
-        if (ingredient.text == line) {
+        if (ingredient.text.toLowerCase() == line.toLowerCase()) {
           res.add('${line.toLowerCase()} ${ingredient.weightStr}');
           break;
         }
@@ -134,7 +139,7 @@ class Recipe extends Equatable {
     }
 
     if (res.length != ingredientLines.length) {
-      throw Exception("some data was not found $res $ingredientLines");
+      throw Exception("some data was not found\nRES: ${res.join("\n")}\nORIG: ${ingredientLines.join("\n")}");
     }
 
     return res;

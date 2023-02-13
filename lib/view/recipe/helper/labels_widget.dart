@@ -1,6 +1,5 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-
-import '../../../helpers/consts.dart';
 
 class Labels extends StatelessWidget {
   final List<String> values;
@@ -24,6 +23,8 @@ class Labels extends StatelessWidget {
       color: color,
     );
 
+    values.sort((a, b) => a.length.compareTo(b.length));
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Wrap(
@@ -45,25 +46,16 @@ class Labels extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.blue, width: 1),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Flexible(
-            child: Tooltip(
-              message: text,
-              decoration: tooltipDecoration,
-              triggerMode: TooltipTriggerMode.tap,
-              child: Text(
-                text,
-                style: style,
-                maxLines: 1,
-                overflow: TextOverflow.fade,
-                softWrap: false,
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
-        ],
+      child: Align(
+        alignment: Alignment.center,
+        child: AutoSizeText(
+          text,
+          textAlign: TextAlign.center,
+          style: style,
+          overflow: TextOverflow.fade,
+          softWrap: false,
+          maxLines: 1,
+        ),
       ),
     );
   }

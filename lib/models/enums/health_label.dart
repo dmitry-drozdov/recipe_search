@@ -48,7 +48,7 @@ extension HealthLabelExtension on HealthLabel {
 
   // HealthLabel.redMeatFree -> Red meat free
   String get view {
-    return name.replaceAllMapped(RegExp(r"[A-Z]"), (m) => ' ${m[0]}').trim().toLowerCase().capitalizeFirst();
+    return name.replaceAllMapped(RegExp(r"[A-Z]"), (m) => ' ${m[0]}').trim().toLowerCase().capitalizeFirstAPI;
   }
 
   // HealthLabel.redMeatFree -> red-meat-free

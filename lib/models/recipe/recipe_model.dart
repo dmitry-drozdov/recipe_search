@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:recipe_search/helpers/extensions/string_capitalize.dart';
 import 'package:recipe_search/helpers/images/images_model.dart';
 import 'package:recipe_search/models/digest/digest_model.dart';
 import 'package:recipe_search/models/enums/diet_label.dart';
@@ -98,7 +99,7 @@ class Recipe extends Equatable {
   String? get betImgUrl => bestImg?.url;
 
   // String getters for fields
-  String get ingredientsStr => ingredients.map((e) => e.food).join(', ');
+  String get ingredientsStr => ingredients.map((e) => e.food.capitalizeFirst).join(', ');
 
   String get caloriesStr => _formatPerServ(calories);
 
@@ -132,7 +133,7 @@ class Recipe extends Equatable {
       }
       for (final ingredient in ingredients) {
         if (ingredient.text.toLowerCase() == line.toLowerCase()) {
-          res.add('${line.toLowerCase()} ${ingredient.weightStr}');
+          res.add('${line.capitalizeFirst} ${ingredient.weightStr}');
           break;
         }
       }

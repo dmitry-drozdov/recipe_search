@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:recipe_search/helpers/app_colors.dart';
 import 'package:recipe_search/helpers/consts.dart';
 import 'package:recipe_search/helpers/extensions/list_extension.dart';
+import 'package:recipe_search/helpers/extensions/string_capitalize.dart';
 import 'package:recipe_search/helpers/extensions/widget_extension.dart';
 import 'package:recipe_search/models/recipe/recipe_model.dart';
 import 'package:recipe_search/view/recipe/helper/labels_widget.dart';
@@ -161,7 +162,7 @@ class _RecipeFullState extends State<RecipeFull> {
       if (recipe.ingredients.isNotEmpty) ...[
         const TitleWidget(title: 'Ingredients', fontWeight: FontWeight.w600),
         Value(
-          value: recipe.ingredients.map((e) => e.food).join(', '),
+          value: recipe.ingredients.map((e) => e.food.capitalizeFirst).join(', '),
           fontSize: 20,
         ),
       ],

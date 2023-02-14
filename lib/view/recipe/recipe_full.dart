@@ -191,7 +191,10 @@ class _RecipeFullState extends State<RecipeFull> {
       //-----------------------------------------------
       if (recipe.healthLabels.isNotEmpty) ...[
         const TitleWidget(title: 'Health labels'),
-        Labels(values: recipe.healthLabels.view),
+        Labels(
+          values: recipe.healthLabels.view,
+          selectedValues: recipeViewModel.searchSettings.healthLabels.view,
+        ),
       ],
       //-----------------------------------------------
       if (recipe.glycemicIndex != null)

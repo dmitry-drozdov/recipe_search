@@ -1,8 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
+import '../../../helpers/app_colors.dart';
+
 class Labels extends StatelessWidget {
   final List<String> values;
+  final List<String> selectedValues;
   final double? fontSize;
   final Color color;
   final FontWeight fontWeight;
@@ -10,6 +13,7 @@ class Labels extends StatelessWidget {
   const Labels({
     Key? key,
     required this.values,
+    this.selectedValues = const <String>[],
     this.fontSize = 18,
     this.color = Colors.black,
     this.fontWeight = FontWeight.normal,
@@ -43,8 +47,9 @@ class Labels extends StatelessWidget {
       width: MediaQuery.of(context).size.width / 3.3,
       height: 26,
       decoration: BoxDecoration(
+        color: selectedValues.contains(text) ? AppColors.lightestBlueChip : null,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.blue, width: 1),
+        border: Border.all(color: AppColors.blueBorder, width: 1),
       ),
       child: Align(
         alignment: Alignment.center,

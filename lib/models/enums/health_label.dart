@@ -16,7 +16,7 @@ enum HealthLabel {
   ketoFriendly,
   kidneyFriendly,
   kosher,
-  lowFatAbs,
+  // lowFatAbs,
   lowPotassium,
   lowSugar,
   lupineFree,
@@ -53,6 +53,14 @@ extension HealthLabelExtension on HealthLabel {
 
   // HealthLabel.redMeatFree -> red-meat-free
   String get api {
+    switch (this) {
+      case HealthLabel.mediterranean:
+        return 'Mediterranean';
+      case HealthLabel.dash:
+        return 'DASH';
+      default:
+        break;
+    }
     return view.replaceAll(" ", "-").toLowerCase();
   }
 

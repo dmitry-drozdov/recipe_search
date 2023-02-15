@@ -1,10 +1,9 @@
 import 'dart:async';
 
-import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:provider/provider.dart';
-import 'package:recipe_search/helpers/extensions/internet_status_extension.dart';
+import 'package:recipe_search/helpers/app_colors.dart';
 import 'package:recipe_search/helpers/extensions/widget_extension.dart';
 import 'package:recipe_search/helpers/widgets/linear_loading.dart';
 import 'package:recipe_search/models/app_user.dart';
@@ -35,7 +34,6 @@ class _SearchPageState extends State<SearchPage> {
 
   final checker = locator<InternetChecker>();
   final controller = TextEditingController();
-  final expandableController = ExpandableController();
   final focusNode = FocusNode();
 
   String searchText = '';
@@ -62,35 +60,27 @@ class _SearchPageState extends State<SearchPage> {
       create: () => RecipeViewModel.create(widget.user.userId),
     );
     listener = checker.onStatusChange.listen((status) {
-      if (expandableController.expanded && status.disconnected) {
-        expandableController.expanded = false;
-      }
       if (mounted) setState(() {});
     });
     updateTextController();
     subscription = recipeViewModel.startUIListening((event) {
       switch (event) {
-        case RecipeEvent.hideParams:
-          updateTextController();
-          if (expandableController.expanded) {
-            expandableController.expanded = false;
-          }
-          break;
         case RecipeEvent.openAllParams:
           if (!mounted) return;
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (_) => Params(
                 key: Key('params${recipeViewModel.searchSettings.hashCode}'),
-                screenMode: ScreenMode.full,
                 onApply: _loadRecipes,
                 recipeViewModel: recipeViewModel,
               ),
             ),
           );
           break;
-        case RecipeEvent.openRecipe:
+        case RecipeEvent.userLoaded:
+          updateTextController();
           break;
+        case RecipeEvent.openRecipe:
         case RecipeEvent.openDigest:
           break;
       }
@@ -102,7 +92,6 @@ class _SearchPageState extends State<SearchPage> {
     listener.cancel();
     recipeViewModel.removeUIListeners(subscription);
     controller.dispose();
-    expandableController.dispose();
     focusNode.dispose();
     super.dispose();
   }
@@ -139,45 +128,18 @@ class _SearchPageState extends State<SearchPage> {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(8, 0, 8, 4),
-              child: TextButton(
-                onPressed: _loadRecipes,
-                child: const Text('Search'),
-              ),
+            IconButton(
+              icon: Icon(Icons.search, color: AppColors.blueBorder),
+              onPressed: _loadRecipes,
+            ),
+            IconButton(
+              icon: Icon(Icons.settings_outlined, color: AppColors.blueBorder),
+              onPressed: () => recipeViewModel.onAllParamsTap(),
             ),
           ],
-        ).hide(checker.disconnected),
-        ChangeNotifierProvider.value(
-          value: recipeViewModel,
-          child: Consumer<RecipeViewModel>(
-            builder: (_, viewModel, ___) {
-              return buildParams();
-            },
-          ),
         ).hide(checker.disconnected),
         const Flexible(child: RecipeList()),
       ],
     );
-  }
-
-  Widget buildParams() {
-    return ExpandablePanel(
-      header: const Text('Params', style: TextStyle(fontSize: 18)),
-      theme: ExpandableThemeData(
-        headerAlignment: ExpandablePanelHeaderAlignment.center,
-        iconColor: Theme.of(context).primaryColor,
-        animationDuration: const Duration(milliseconds: 400),
-        scrollAnimationDuration: const Duration(milliseconds: 400),
-      ),
-      controller: expandableController,
-      collapsed: Container(),
-      expanded: Params(
-        key: Key('searchPageParams${recipeViewModel.searchSettings.hashCode}'),
-        recipeViewModel: recipeViewModel,
-        onApply: _loadRecipes,
-        screenMode: ScreenMode.part,
-      ),
-    ).padding8880;
   }
 }

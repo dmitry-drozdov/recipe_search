@@ -1,11 +1,14 @@
 import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:recipe_search/helpers/extensions/string_capitalize.dart';
 import 'package:recipe_search/helpers/images/images_model.dart';
 import 'package:recipe_search/models/digest/digest_model.dart';
 import 'package:recipe_search/models/enums/diet_label.dart';
 import 'package:recipe_search/models/enums/health_label.dart';
 import 'package:recipe_search/models/ingredient/ingredient_model.dart';
+
+import '../enums/meal_type.dart';
 
 part 'recipe_model.g.dart';
 
@@ -32,7 +35,8 @@ class Recipe extends Equatable {
   final String? co2EmissionsClass;
   final double totalWeight;
   final List<String> cuisineType;
-  final List<String> mealType;
+  @JsonKey(fromJson: mealTypeFromJson, toJson: mealTypeToJson)
+  final List<MealType> mealType;
   final List<String>? dishType;
   final List<Digest> digest;
   final double yield;
@@ -95,7 +99,7 @@ class Recipe extends Equatable {
   String? get betImgUrl => bestImg?.url;
 
   // String getters for fields
-  String get ingredientsStr => ingredients.map((e) => e.food).join(', ');
+  String get ingredientsStr => ingredients.map((e) => e.food.capitalizeFirst).join(', ');
 
   String get caloriesStr => _formatPerServ(calories);
 
@@ -116,5 +120,29 @@ class Recipe extends Equatable {
     }
     final perServ = (iVal / servings).round().toString();
     return "$base ($perServ/serv)";
+  }
+
+  List<String> get ingredientLinesEx {
+    final res = <String>[];
+
+    for (final line in ingredientLines) {
+      if (!line.contains(RegExp(r'[\d½¼⅓⅔¾]'))) {
+        // does not contains measurement
+        res.add(line);
+        continue;
+      }
+      for (final ingredient in ingredients) {
+        if (ingredient.text.toLowerCase() == line.toLowerCase()) {
+          res.add('${line.capitalizeFirst} ${ingredient.weightStr}');
+          break;
+        }
+      }
+    }
+
+    if (res.length != ingredientLines.length) {
+      throw Exception("some data was not found\nRES: ${res.join("\n")}\nORIG: ${ingredientLines.join("\n")}");
+    }
+
+    return res;
   }
 }

@@ -32,8 +32,7 @@ Recipe _$RecipeFromJson(Map<String, dynamic> json) => Recipe(
       cuisineType: (json['cuisineType'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
-      mealType:
-          (json['mealType'] as List<dynamic>).map((e) => e as String).toList(),
+      mealType: mealTypeFromJson(json['mealType'] as List),
       dishType: (json['dishType'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
@@ -65,7 +64,7 @@ Map<String, dynamic> _$RecipeToJson(Recipe instance) => <String, dynamic>{
       'co2EmissionsClass': instance.co2EmissionsClass,
       'totalWeight': instance.totalWeight,
       'cuisineType': instance.cuisineType,
-      'mealType': instance.mealType,
+      'mealType': mealTypeToJson(instance.mealType),
       'dishType': instance.dishType,
       'digest': instance.digest.map((e) => e.toJson()).toList(),
       'yield': instance.yield,

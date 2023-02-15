@@ -58,6 +58,7 @@ class RecipeRepositoryImpl extends RecipeRepository {
 
     final recipes = <Recipe>[];
     final jsonData = jsonDecode(body);
+    print(jsonData);
     if (jsonData['hits'] == null || jsonData['hits'].length == 0 || jsonData['hits'][0] == null) {
       return RequestResultModel(result: false, value: response.statusCode);
     }

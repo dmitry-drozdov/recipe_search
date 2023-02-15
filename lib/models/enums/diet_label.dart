@@ -1,3 +1,5 @@
+import 'package:recipe_search/models/enums/labels.dart';
+
 enum DietLabel {
   balanced,
   highFiber,
@@ -47,15 +49,10 @@ extension DietLabelExtension on DietLabel {
   }
 }
 
-DietLabel dietLabelFromStr(String value) {
-  final lower = value.toLowerCase();
-  return DietLabel.values.firstWhere((element) => element.api == lower || element.view.toLowerCase() == lower);
-}
-
 List<DietLabel> dietLabelFromJson(List<dynamic> json) {
-  return json.map((e) => dietLabelFromStr(e)).toList();
+  return labelFromJson<DietLabel>(json);
 }
 
 List<dynamic> dietLabelToJson(List<DietLabel> labels) {
-  return labels.map((e) => e.api).toList();
+  return labelToJson<DietLabel>(labels);
 }

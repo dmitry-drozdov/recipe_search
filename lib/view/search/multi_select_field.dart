@@ -4,12 +4,14 @@ import 'package:multi_select_flutter/util/multi_select_item.dart';
 import 'package:recipe_search/helpers/app_colors.dart';
 import 'package:recipe_search/models/enums/diet_label.dart';
 import 'package:recipe_search/models/enums/health_label.dart';
+import 'package:recipe_search/models/enums/meal_type.dart';
 
 class MultiSelectField<T> extends StatefulWidget {
   final List<T> items;
   final List<T> initialItems;
   final Function(List) onSelect;
   final String title;
+  final bool searchable;
 
   const MultiSelectField({
     Key? key,
@@ -17,6 +19,7 @@ class MultiSelectField<T> extends StatefulWidget {
     required this.onSelect,
     required this.title,
     required this.initialItems,
+    required this.searchable,
   }) : super(key: key);
 
   @override
@@ -37,6 +40,12 @@ class _MultiSelectFieldState extends State<MultiSelectField> {
       multiSelectItems = widget.items.map((e) => MultiSelectItem<HealthLabel?>(e as HealthLabel, e.view));
       return;
     }
+    if (widget.items.runtimeType == List<MealType>) {
+      multiSelectItems = widget.items
+          .where((e) => e != MealType.lunchDinner)
+          .map((e) => MultiSelectItem<MealType?>(e as MealType, e.view));
+      return;
+    }
   }
 
   @override
@@ -45,11 +54,13 @@ class _MultiSelectFieldState extends State<MultiSelectField> {
       items: multiSelectItems.toList(),
       initialValue: widget.initialItems,
       title: Text(widget.title),
-      headerColor: AppColors.blueChip,
+      headerColor: AppColors.lightBlueChip,
       decoration: BoxDecoration(border: Border.all(color: AppColors.blueBorder, width: 1.8)),
-      selectedChipColor: AppColors.blueChip,
+      selectedChipColor: AppColors.lightBlueChip,
       selectedTextStyle: const TextStyle(color: AppColors.black),
       onTap: (values) => widget.onSelect(values),
+      searchable: widget.searchable,
+      searchHint: 'Enter search text...',
     );
   }
 }

@@ -5,8 +5,10 @@ import 'package:intl/intl.dart';
 import 'package:recipe_search/helpers/app_colors.dart';
 import 'package:recipe_search/helpers/consts.dart';
 import 'package:recipe_search/helpers/extensions/list_extension.dart';
+import 'package:recipe_search/helpers/extensions/string_capitalize.dart';
 import 'package:recipe_search/helpers/extensions/widget_extension.dart';
 import 'package:recipe_search/models/recipe/recipe_model.dart';
+import 'package:recipe_search/view/recipe/helper/labels_widget.dart';
 import 'package:recipe_search/view/recipe/like_button.dart';
 import 'package:recipe_search/view/recipe/recipe_digest.dart';
 import 'package:recipe_search/viewmodels/recipe_viewmodel.dart';
@@ -52,15 +54,15 @@ class _RecipeFullState extends State<RecipeFull> {
           }
           final id = recipeViewModel.currentRecipeId;
           if (id == null) {
-            throw Exception('Cannot open recipe full page. It was null');
+            throw Exception('Cannot open recipe digest page. It was null');
           }
           Navigator.of(context).push(
             MaterialPageRoute(builder: (_) => RecipeDigest(key: Key('recipeDigest$id'), id: id)),
           );
           break;
-        case RecipeEvent.hideParams:
         case RecipeEvent.openAllParams:
         case RecipeEvent.openRecipe:
+        case RecipeEvent.userLoaded:
           break;
       }
     });
@@ -152,18 +154,21 @@ class _RecipeFullState extends State<RecipeFull> {
         ],
       ).paddingB8,
       //-----------------------------------------------
-      if (recipe.ingredients.isNotEmpty) ...[
-        const TitleWidget(title: 'Ingredients', fontWeight: FontWeight.w600),
-        Value(
-          value: recipe.ingredients.map((e) => e.food).join(', '),
-          fontSize: 20,
-        ),
-      ],
-      //-----------------------------------------------
       if (recipe.cautions.isNotEmpty) ...[
         TitleWidget(title: 'Cautions', color: AppColors.redBackground),
         Value(value: recipe.cautions.view, color: AppColors.redLetter, fontWeight: FontWeight.w500),
       ],
+      //-----------------------------------------------
+      if (recipe.ingredients.isNotEmpty) ...[
+        const TitleWidget(title: 'Ingredients', fontWeight: FontWeight.w600),
+        Value(
+          value: recipe.ingredients.map((e) => e.food.capitalizeFirst).join(', '),
+          fontSize: 20,
+        ),
+      ],
+      //-----------------------------------------------
+      const TitleWidget(title: 'Ingredients details', fontWeight: FontWeight.w600),
+      Value(value: listMarker + recipe.ingredientLinesEx.join('\n$listMarker'), fontSize: 20),
       //-----------------------------------------------
       if (recipe.cuisineType.isNotEmpty) ...[
         const TitleWidget(title: 'Cuisine type'),
@@ -187,7 +192,10 @@ class _RecipeFullState extends State<RecipeFull> {
       //-----------------------------------------------
       if (recipe.healthLabels.isNotEmpty) ...[
         const TitleWidget(title: 'Health labels'),
-        Value(value: recipe.healthLabels.view),
+        Labels(
+          values: recipe.healthLabels.view,
+          selectedValues: recipeViewModel.searchSettings.healthLabels.view,
+        ),
       ],
       //-----------------------------------------------
       if (recipe.glycemicIndex != null)
@@ -203,17 +211,14 @@ class _RecipeFullState extends State<RecipeFull> {
       if (recipe.co2EmissionsClass != null)
         TitleValue(title: 'CO2 Emissions Class', value: recipe.co2EmissionsClass!, color: blueColor),
       //-----------------------------------------------
-      const TitleWidget(title: 'Ingredients details', fontWeight: FontWeight.w600),
-      Value(value: listMarker + recipe.ingredientLines.join('\n$listMarker'), fontSize: 20),
-      //-----------------------------------------------
       const TitleWidget(title: 'Link'),
-      LinkValue(value: recipe.shareAs, color: theme.primaryColor),
+      LinkValue(value: recipe.url, color: theme.primaryColor),
       //-----------------------------------------------
       const TitleWidget(title: 'Digest'),
       TextButton(
         onPressed: recipeViewModel.onDigestTap,
         style: buttonStyleLarge,
-        child: const Text('View fats, carbs, vitamins and minerals'),
+        child: const Text('View fats, carbs, vitamins and minerals', style: TextStyle(fontSize: 18)),
       ),
       //-----------------------------------------------
       const SizedBox(height: 2),

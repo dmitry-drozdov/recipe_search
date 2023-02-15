@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:recipe_search/models/enums/diet_label.dart';
 import 'package:recipe_search/models/enums/health_label.dart';
+import 'package:recipe_search/models/enums/meal_type.dart';
 import 'package:recipe_search/models/recipe/recipe_model.dart';
 import 'package:recipe_search/models/search_settings.dart';
 import 'package:recipe_search/repositories/recipe_repo.dart';
@@ -19,9 +20,9 @@ import 'base_view_model.dart';
 
 enum RecipeEvent {
   openRecipe,
-  hideParams,
   openAllParams,
   openDigest,
+  userLoaded,
 }
 
 abstract class RecipeViewModel extends BaseViewModel<Recipe, RecipeEvent> {
@@ -43,12 +44,18 @@ abstract class RecipeViewModel extends BaseViewModel<Recipe, RecipeEvent> {
 
   bool get searchSettingsUpdated;
 
+  bool get searchSettingsCleared;
+
   void updateSearchSettings({
     String? newSearch,
     List<DietLabel>? newDietLabels,
     List<HealthLabel>? newHealthLabels,
+    List<MealType>? newMealTypes,
     int? caloriesMin,
     int? caloriesMax,
+    int? ingredientsMin,
+    int? ingredientsMax,
+    bool? clearSettings,
   });
 
   void onAllParamsTap();
@@ -135,9 +142,6 @@ class RecipeViewModelImpl extends RecipeViewModel {
       );
       silenceClearItems();
       await _processRequest(request, firstPage: true);
-      if (items.isNotEmpty) {
-        uiEventSubject.add(RecipeEvent.hideParams);
-      }
     } on Exception catch (e) {
       log('loadRecipes| Exception during getting recipes: $e');
     }
@@ -229,21 +233,33 @@ class RecipeViewModelImpl extends RecipeViewModel {
   bool get searchSettingsUpdated => searchSettings != backUpSearchSettings || firstLaunch;
 
   @override
+  bool get searchSettingsCleared => searchSettings == SearchSettings.noSettings();
+
+  @override
   void updateSearchSettings({
     String? newSearch,
     List<DietLabel>? newDietLabels,
     List<HealthLabel>? newHealthLabels,
+    List<MealType>? newMealTypes,
     int? caloriesMin,
     int? caloriesMax,
+    int? ingredientsMin,
+    int? ingredientsMax,
+    bool? clearSettings,
   }) {
-    final newSearchSettings = SearchSettings.copyWith(
-      searchSettings,
-      search: newSearch,
-      dietLabels: newDietLabels,
-      healthLabels: newHealthLabels,
-      caloriesMin: caloriesMin,
-      caloriesMax: caloriesMax,
-    );
+    final newSearchSettings = clearSettings == true
+        ? SearchSettings.noSettings()
+        : SearchSettings.copyWith(
+            searchSettings,
+            search: newSearch,
+            dietLabels: newDietLabels,
+            healthLabels: newHealthLabels,
+            mealTypes: newMealTypes,
+            caloriesMin: caloriesMin,
+            caloriesMax: caloriesMax,
+            ingredientsMin: ingredientsMin,
+            ingredientsMax: ingredientsMax,
+          );
     updateRequire = newSearchSettings != searchSettings;
     if (!updateRequire) {
       return;
@@ -342,6 +358,7 @@ class RecipeViewModelImpl extends RecipeViewModel {
   Future<void> loadUserSettings() async {
     userSettings = await storage.getUserSettings(userId: _userId) ?? UserSettings.base();
     searchSettings = userSettings.lastSearch ?? SearchSettings.noSettings();
+    uiEventSubject.add(RecipeEvent.userLoaded);
     loadRecipesFirstPage();
   }
 

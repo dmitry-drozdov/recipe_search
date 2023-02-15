@@ -1,4 +1,5 @@
 import 'package:recipe_search/helpers/extensions/string_capitalize.dart';
+import 'package:recipe_search/models/enums/labels.dart';
 
 enum HealthLabel {
   alcoholCocktail,
@@ -15,7 +16,7 @@ enum HealthLabel {
   ketoFriendly,
   kidneyFriendly,
   kosher,
-  lowFatAbs,
+  // lowFatAbs,
   lowPotassium,
   lowSugar,
   lupineFree,
@@ -47,11 +48,19 @@ extension HealthLabelExtension on HealthLabel {
 
   // HealthLabel.redMeatFree -> Red meat free
   String get view {
-    return name.replaceAllMapped(RegExp(r"[A-Z]"), (m) => ' ${m[0]}').trim().toLowerCase().capitalizeFirst();
+    return name.replaceAllMapped(RegExp(r"[A-Z]"), (m) => ' ${m[0]}').trim().toLowerCase().capitalizeFirstAPI;
   }
 
   // HealthLabel.redMeatFree -> red-meat-free
   String get api {
+    switch (this) {
+      case HealthLabel.mediterranean:
+        return 'Mediterranean';
+      case HealthLabel.dash:
+        return 'DASH';
+      default:
+        break;
+    }
     return view.replaceAll(" ", "-").toLowerCase();
   }
 
@@ -60,15 +69,10 @@ extension HealthLabelExtension on HealthLabel {
   }
 }
 
-HealthLabel healthLabelFromStr(String value) {
-  final lower = value.toLowerCase();
-  return HealthLabel.values.firstWhere((element) => element.api == lower || element.view.toLowerCase() == lower);
-}
-
 List<HealthLabel> healthLabelFromJson(List<dynamic> json) {
-  return json.map((e) => healthLabelFromStr(e)).toList();
+  return labelFromJson<HealthLabel>(json);
 }
 
 List<dynamic> healthLabelToJson(List<HealthLabel> labels) {
-  return labels.map((e) => e.api).toList();
+  return labelToJson<HealthLabel>(labels);
 }

@@ -52,20 +52,25 @@ class RecipeRepositoryImpl extends RecipeRepository {
     final query = nextUrl ??
         'https://api.edamam.com/api/recipes/v2?type=public&q=$text&app_id=$applicationId&app_key=$applicationKey&$params';
 
-    final request = await client.getUrl(Uri.parse(query));
-    final response = await request.close();
-    final body = await response.transform(utf8.decoder).join();
+    try {
+      final request = await client.getUrl(Uri.parse(query));
+      final response = await request.close();
+      final body = await response.transform(utf8.decoder).join();
 
-    final recipes = <Recipe>[];
-    final jsonData = jsonDecode(body);
-    print(jsonData);
-    if (jsonData['hits'] == null || jsonData['hits'].length == 0 || jsonData['hits'][0] == null) {
-      return RequestResultModel(result: false, value: response.statusCode);
+      final recipes = <Recipe>[];
+      final jsonData = jsonDecode(body);
+      if (jsonData['hits'] == null || jsonData['hits'].length == 0 || jsonData['hits'][0] == null) {
+        return RequestResultModel(result: false, value: response.statusCode);
+      }
+      jsonData['hits'].forEach((r) => recipes.add(Recipe.fromJson(r['recipe'])));
+      final href = jsonData['_links'] == null || jsonData['_links'].isEmpty ? '' : jsonData['_links']['next']['href'];
+      final result = RecipeResult(nextUrl: href, recipes: recipes, end: href.isEmpty);
+      return RequestResultModel(result: true, value: result);
+    } on Exception catch (e) {
+      log('getRecipes error: ', error: e);
+
+      return RequestResultModel(result: false, value: 500);
     }
-    jsonData['hits'].forEach((r) => recipes.add(Recipe.fromJson(r['recipe'])));
-    final href = jsonData['_links'] == null || jsonData['_links'].isEmpty ? '' : jsonData['_links']['next']['href'];
-    final result = RecipeResult(nextUrl: href, recipes: recipes, end: href.isEmpty);
-    return RequestResultModel(result: true, value: result);
   }
 
   @override

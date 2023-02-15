@@ -46,10 +46,10 @@ class _LandingState extends State<Landing> {
             firstLetterColor: AppColors.redLetter,
           ),
           highLightFirstLetter(
-            text: 'Searching & Reviewing & Saving',
+            text: 'Search & Review & Keep',
             style: TextStyle(
               color: darkColor,
-              fontSize: 20,
+              fontSize: 22,
               fontWeight: FontWeight.w400,
             ),
             firstLetterColor: AppColors.redLetter,

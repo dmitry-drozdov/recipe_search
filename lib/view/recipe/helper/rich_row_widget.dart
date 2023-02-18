@@ -34,6 +34,7 @@ class RichRow extends StatelessWidget {
             message: rightTooltip ?? '',
             decoration: tooltipDecoration,
             preferBelow: false,
+            triggerMode: TooltipTriggerMode.tap,
             child: Row(
               children: [
                 Text(right, style: textStyle),

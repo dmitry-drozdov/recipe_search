@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_number_picker/flutter_number_picker.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:provider/provider.dart';
 import 'package:recipe_search/helpers/app_colors.dart';
+import 'package:recipe_search/helpers/extensions/internet_status_extension.dart';
 import 'package:recipe_search/helpers/extensions/widget_extension.dart';
 import 'package:recipe_search/models/enums/diet_label.dart';
 import 'package:recipe_search/models/enums/health_label.dart';
@@ -9,6 +13,8 @@ import 'package:recipe_search/models/enums/meal_type.dart';
 import 'package:recipe_search/viewmodels/recipe_viewmodel.dart';
 
 import '../../helpers/consts.dart';
+import '../../main.dart';
+import '../../utils/internet_checker.dart';
 import 'multi_select_field.dart';
 
 const divider = SizedBox(height: 7);
@@ -19,17 +25,39 @@ final buttonStyleLarge = TextButton.styleFrom(
 );
 final lineDivider = Divider(color: AppColors.blueBorder);
 
-class Params extends StatelessWidget {
+class Params extends StatefulWidget {
   final RecipeViewModel recipeViewModel;
   final void Function() onApply;
 
-  Params({
+  const Params({
     Key? key,
     required this.recipeViewModel,
     required this.onApply,
   }) : super(key: key);
 
+  @override
+  State<Params> createState() => _ParamsState();
+}
+
+class _ParamsState extends State<Params> {
+  late final StreamSubscription<InternetConnectionStatus> listener;
+  final checker = locator<InternetChecker>();
   final controller = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    listener = checker.onStatusChange.listen((status) {
+      if (mounted && status.disconnected) Navigator.of(context).pop();
+    });
+  }
+
+  @override
+  void dispose() {
+    listener.cancel();
+    controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,11 +69,11 @@ class Params extends StatelessWidget {
 
   Widget consumerContent() {
     return ChangeNotifierProvider.value(
-      value: recipeViewModel,
+      value: widget.recipeViewModel,
       child: Consumer<RecipeViewModel>(
         builder: (ctx, _, __) {
           return Column(
-            key: recipeViewModel.searchSettingsCleared ? UniqueKey() : null,
+            key: widget.recipeViewModel.searchSettingsCleared ? UniqueKey() : null,
             children: [
               Expanded(
                 child: Scrollbar(
@@ -64,14 +92,14 @@ class Params extends StatelessWidget {
   }
 
   List<Widget> content(BuildContext ctx) {
-    final mealTypes = recipeViewModel.searchSettings.mealTypes;
-    final dietLabels = recipeViewModel.searchSettings.dietLabels;
-    final healthLabels = recipeViewModel.searchSettings.healthLabels;
+    final mealTypes = widget.recipeViewModel.searchSettings.mealTypes;
+    final dietLabels = widget.recipeViewModel.searchSettings.dietLabels;
+    final healthLabels = widget.recipeViewModel.searchSettings.healthLabels;
     return [
       MultiSelectField<MealType>(
         items: MealType.values,
         onSelect: (values) {
-          recipeViewModel.updateSearchSettings(newMealTypes: values.map((e) => e as MealType).toList());
+          widget.recipeViewModel.updateSearchSettings(newMealTypes: values.map((e) => e as MealType).toList());
         },
         title: 'Meal types ${suffix(mealTypes)}',
         initialItems: mealTypes,
@@ -81,7 +109,7 @@ class Params extends StatelessWidget {
       MultiSelectField<DietLabel>(
         items: DietLabel.values,
         onSelect: (values) {
-          recipeViewModel.updateSearchSettings(newDietLabels: values.map((e) => e as DietLabel).toList());
+          widget.recipeViewModel.updateSearchSettings(newDietLabels: values.map((e) => e as DietLabel).toList());
         },
         title: 'Diet labels ${suffix(dietLabels)}',
         initialItems: dietLabels,
@@ -91,7 +119,7 @@ class Params extends StatelessWidget {
       MultiSelectField<HealthLabel>(
         items: HealthLabel.values,
         onSelect: (values) {
-          recipeViewModel.updateSearchSettings(newHealthLabels: values.map((e) => e as HealthLabel).toList());
+          widget.recipeViewModel.updateSearchSettings(newHealthLabels: values.map((e) => e as HealthLabel).toList());
         },
         title: 'Health labels ${suffix(healthLabels)}',
         initialItems: healthLabels,
@@ -115,26 +143,26 @@ class Params extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         TextButton(
-          onPressed: recipeViewModel.searchSettingsUpdated
+          onPressed: widget.recipeViewModel.searchSettingsUpdated
               ? () {
                   if (ctx.mounted) Navigator.of(ctx).pop();
-                  onApply();
+                  widget.onApply();
                 }
               : null,
           style: buttonStyle,
           child: Text(
             'Apply',
-            style: TextStyle(color: recipeViewModel.searchSettingsUpdated ? null : Colors.grey, fontSize: 16),
+            style: TextStyle(color: widget.recipeViewModel.searchSettingsUpdated ? null : Colors.grey, fontSize: 16),
           ),
         ),
         TextButton(
-          onPressed: recipeViewModel.searchSettingsCleared
+          onPressed: widget.recipeViewModel.searchSettingsCleared
               ? null
-              : () => recipeViewModel.updateSearchSettings(clearSettings: true),
+              : () => widget.recipeViewModel.updateSearchSettings(clearSettings: true),
           style: buttonStyle,
           child: Text(
             'Reset',
-            style: TextStyle(color: recipeViewModel.searchSettingsCleared ? Colors.grey : null, fontSize: 16),
+            style: TextStyle(color: widget.recipeViewModel.searchSettingsCleared ? Colors.grey : null, fontSize: 16),
           ),
         ),
       ],
@@ -142,8 +170,8 @@ class Params extends StatelessWidget {
   }
 
   Widget caloriesRow(BuildContext ctx) {
-    final settingsMin = recipeViewModel.searchSettings.caloriesRange.min;
-    final settingsMax = recipeViewModel.searchSettings.caloriesRange.max;
+    final settingsMin = widget.recipeViewModel.searchSettings.caloriesRange.min;
+    final settingsMax = widget.recipeViewModel.searchSettings.caloriesRange.max;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -155,7 +183,7 @@ class Params extends StatelessWidget {
           minValue: 0,
           step: 10,
           onValue: (value) {
-            recipeViewModel.updateSearchSettings(caloriesMin: value as int);
+            widget.recipeViewModel.updateSearchSettings(caloriesMin: value as int);
           },
         ),
         const Text('to', style: mainFont),
@@ -166,7 +194,7 @@ class Params extends StatelessWidget {
           minValue: settingsMin,
           step: 10,
           onValue: (value) {
-            recipeViewModel.updateSearchSettings(caloriesMax: value as int);
+            widget.recipeViewModel.updateSearchSettings(caloriesMax: value as int);
           },
         ),
         const Text('/ serv', style: mainFont),
@@ -175,8 +203,8 @@ class Params extends StatelessWidget {
   }
 
   Widget ingredientsRow(BuildContext ctx) {
-    final settingsMin = recipeViewModel.searchSettings.ingredientsRange.min;
-    final settingsMax = recipeViewModel.searchSettings.ingredientsRange.max;
+    final settingsMin = widget.recipeViewModel.searchSettings.ingredientsRange.min;
+    final settingsMax = widget.recipeViewModel.searchSettings.ingredientsRange.max;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -188,7 +216,7 @@ class Params extends StatelessWidget {
           minValue: 0,
           step: 1,
           onValue: (value) {
-            recipeViewModel.updateSearchSettings(ingredientsMin: value as int);
+            widget.recipeViewModel.updateSearchSettings(ingredientsMin: value as int);
           },
         ),
         const Text('to', style: mainFont),
@@ -199,7 +227,7 @@ class Params extends StatelessWidget {
           minValue: settingsMin,
           step: 1,
           onValue: (value) {
-            recipeViewModel.updateSearchSettings(ingredientsMax: value as int);
+            widget.recipeViewModel.updateSearchSettings(ingredientsMax: value as int);
           },
         ),
         const SizedBox(),

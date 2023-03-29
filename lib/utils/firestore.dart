@@ -9,7 +9,7 @@ import 'package:recipe_search/models/user_settings.dart';
 
 typedef FavouriteData = Map<String, DateTime>;
 
-const cacheSize = 50 * 1024 * 1024; // 50 MB
+const cacheSize = 20 * 1024 * 1024; // 20 MB
 
 class FirebaseStorage {
   final _userSessions = FirebaseFirestore.instance.collection('userSessions');

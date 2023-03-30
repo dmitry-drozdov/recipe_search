@@ -117,7 +117,7 @@ class _LandingState extends State<Landing> {
         if (snapshot.hasError) {
           return Text('Error ${snapshot.error}');
         }
-        return const SizedBox();
+        return const SizedBox(height: 46);
       },
     );
   }

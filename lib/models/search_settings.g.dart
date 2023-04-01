@@ -24,7 +24,7 @@ Map<String, dynamic> _$SearchSettingsToJson(SearchSettings instance) => <String,
       'ingredientsRange': instance.ingredientsRange.toJson(),
     };
 
-const _$DietLabelEnumMap = {
+var _$DietLabelEnumMap = {
   DietLabel.balanced: 'balanced',
   DietLabel.highFiber: 'highFiber',
   DietLabel.highProtein: 'highProtein',
@@ -33,7 +33,7 @@ const _$DietLabelEnumMap = {
   DietLabel.lowSodium: 'lowSodium',
 };
 
-const _$HealthLabelEnumMap = {
+var _$HealthLabelEnumMap = {
   HealthLabel.alcoholCocktail: 'alcoholCocktail',
   HealthLabel.alcoholFree: 'alcoholFree',
   HealthLabel.celeryFree: 'celeryFree',
@@ -72,7 +72,7 @@ const _$HealthLabelEnumMap = {
   HealthLabel.wheatFree: 'wheatFree',
 };
 
-const _$MealTypeEnumMap = {
+var _$MealTypeEnumMap = {
   MealType.breakfast: 'breakfast',
   MealType.brunch: 'brunch',
   MealType.lunchDinner: 'lunchDinner',

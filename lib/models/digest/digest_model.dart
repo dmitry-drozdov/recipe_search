@@ -40,7 +40,7 @@ class Digest {
     final dDaily = convert(daily, services);
     return RichRow(
       color: indent ? null : AppColors.white,
-      padding: indent ? const EdgeInsets.fromLTRB(24, 4, 8, 4) : null,
+      padding: indent ? EdgeInsets.fromLTRB(24, 4, 8, 4) : null,
       left: label,
       right: "${dTotal.trimZero()} $unit",
       rightTooltip: dDaily > 0 ? "${dDaily.trimZero()}% Daily Value" : null,

@@ -10,7 +10,7 @@ class Labels extends StatelessWidget {
   final Color color;
   final FontWeight fontWeight;
 
-  const Labels({
+  Labels({
     Key? key,
     required this.values,
     this.selectedValues = const <String>[],
@@ -30,7 +30,7 @@ class Labels extends StatelessWidget {
     values.sort((a, b) => a.length.compareTo(b.length));
 
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(8.0),
       child: Wrap(
         spacing: 0,
         runSpacing: 9,
@@ -42,8 +42,8 @@ class Labels extends StatelessWidget {
 
   Widget textInBorder(BuildContext context, String text, TextStyle style) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 2),
-      padding: const EdgeInsets.symmetric(horizontal: 3),
+      margin: EdgeInsets.symmetric(horizontal: 2),
+      padding: EdgeInsets.symmetric(horizontal: 3),
       width: MediaQuery.of(context).size.width / 3.3,
       height: 26,
       decoration: BoxDecoration(

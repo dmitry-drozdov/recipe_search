@@ -1,4 +1,4 @@
-const recipeKey = 'recipeKey';
+var recipeKey = 'recipeKey';
 
 // ignore: avoid_classes_with_only_static_members
 class ViewModelProvider {

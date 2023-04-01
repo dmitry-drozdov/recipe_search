@@ -6,7 +6,7 @@ class TitleWidget extends StatelessWidget {
   final Color? color;
   final FontWeight? fontWeight;
 
-  const TitleWidget({
+  TitleWidget({
     Key? key,
     required this.title,
     this.color,
@@ -16,7 +16,7 @@ class TitleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(8.0),
       color: color ?? AppColors.indigoTitle,
       child: Text(title, style: TextStyle(fontSize: 20, fontWeight: fontWeight)),
     );

@@ -9,7 +9,7 @@ class Range extends Equatable {
   final int min;
   final int max;
 
-  const Range({
+  Range({
     required this.min,
     required this.max,
   }) : assert(0 <= min && min <= max);
@@ -45,11 +45,11 @@ class Range extends Equatable {
   }
 
   factory Range.defaultCaloriesRange() {
-    return const Range(min: 10, max: 200);
+    return Range(min: 10, max: 200);
   }
 
   factory Range.defaultIngredientsRange() {
-    return const Range(min: 1, max: 15);
+    return Range(min: 1, max: 15);
   }
 
   String get caloriesQuery {

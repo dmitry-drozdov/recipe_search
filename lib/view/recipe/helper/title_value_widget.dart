@@ -6,7 +6,7 @@ class TitleValue extends StatelessWidget {
   final String value;
   final Color? color;
 
-  const TitleValue({
+  TitleValue({
     Key? key,
     required this.title,
     required this.value,
@@ -16,14 +16,14 @@ class TitleValue extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 2),
-      padding: const EdgeInsets.all(8.0),
+      margin: EdgeInsets.symmetric(vertical: 2),
+      padding: EdgeInsets.all(8.0),
       color: color ?? AppColors.indigoTitle,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
-          Text(value, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w400)),
+          Text(title, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
+          Text(value, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400)),
         ],
       ),
     );

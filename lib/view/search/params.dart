@@ -17,11 +17,11 @@ import '../../main.dart';
 import '../../utils/internet_checker.dart';
 import 'multi_select_field.dart';
 
-const divider = SizedBox(height: 7);
-final buttonStyle = TextButton.styleFrom(padding: const EdgeInsets.all(0.0));
+var divider = SizedBox(height: 7);
+final buttonStyle = TextButton.styleFrom(padding: EdgeInsets.all(0.0));
 final buttonStyleLarge = TextButton.styleFrom(
-  textStyle: const TextStyle(fontSize: 16),
-  padding: const EdgeInsets.all(0.0),
+  textStyle: TextStyle(fontSize: 16),
+  padding: EdgeInsets.all(0.0),
 );
 final lineDivider = Divider(color: AppColors.blueBorder);
 
@@ -29,7 +29,7 @@ class Params extends StatefulWidget {
   final RecipeViewModel recipeViewModel;
   final void Function() onApply;
 
-  const Params({
+  Params({
     Key? key,
     required this.recipeViewModel,
     required this.onApply,
@@ -62,7 +62,7 @@ class _ParamsState extends State<Params> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('All params')),
+      appBar: AppBar(title: Text('All params')),
       body: consumerContent().padding8880,
     );
   }
@@ -175,7 +175,7 @@ class _ParamsState extends State<Params> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Text('Calories from', style: mainFont),
+        Text('Calories from', style: mainFont),
         CustomNumberPicker(
           shape: numberPickerShape,
           initialValue: settingsMin,
@@ -186,7 +186,7 @@ class _ParamsState extends State<Params> {
             widget.recipeViewModel.updateSearchSettings(caloriesMin: value as int);
           },
         ),
-        const Text('to', style: mainFont),
+        Text('to', style: mainFont),
         CustomNumberPicker(
           shape: numberPickerShape,
           initialValue: settingsMax,
@@ -197,7 +197,7 @@ class _ParamsState extends State<Params> {
             widget.recipeViewModel.updateSearchSettings(caloriesMax: value as int);
           },
         ),
-        const Text('/ serv', style: mainFont),
+        Text('/ serv', style: mainFont),
       ],
     );
   }
@@ -208,7 +208,7 @@ class _ParamsState extends State<Params> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Text('Ingredients from', style: mainFont),
+        Text('Ingredients from', style: mainFont),
         CustomNumberPicker(
           shape: numberPickerShape,
           initialValue: settingsMin,
@@ -219,7 +219,7 @@ class _ParamsState extends State<Params> {
             widget.recipeViewModel.updateSearchSettings(ingredientsMin: value as int);
           },
         ),
-        const Text('to', style: mainFont),
+        Text('to', style: mainFont),
         CustomNumberPicker(
           shape: numberPickerShape,
           initialValue: settingsMax,
@@ -230,7 +230,7 @@ class _ParamsState extends State<Params> {
             widget.recipeViewModel.updateSearchSettings(ingredientsMax: value as int);
           },
         ),
-        const SizedBox(),
+        SizedBox(),
       ],
     );
   }

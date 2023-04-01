@@ -16,7 +16,7 @@ import '../../main.dart';
 import '../../utils/internet_checker.dart';
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({
+  SearchPage({
     Key? key,
     required this.user,
   }) : super(key: key);
@@ -105,7 +105,7 @@ class _SearchPageState extends State<SearchPage> {
           child: Consumer<RecipeViewModel>(
             builder: (_, viewModel, ___) {
               return Padding(
-                padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                padding: EdgeInsets.fromLTRB(8, 8, 8, 0),
                 child: LinearLoading(
                   Theme.of(context).primaryColor,
                   show: recipeViewModel.loading,
@@ -118,7 +118,7 @@ class _SearchPageState extends State<SearchPage> {
           children: [
             Flexible(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(8, 0, 8, 4),
+                padding: EdgeInsets.fromLTRB(8, 0, 8, 4),
                 child: TextField(
                   controller: controller,
                   focusNode: focusNode,
@@ -138,7 +138,7 @@ class _SearchPageState extends State<SearchPage> {
             ),
           ],
         ).hide(checker.disconnected),
-        const Flexible(child: RecipeList()),
+        Flexible(child: RecipeList()),
       ],
     );
   }

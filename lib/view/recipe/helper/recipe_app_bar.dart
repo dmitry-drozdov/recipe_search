@@ -8,7 +8,7 @@ import '../../../helpers/widgets/cached_network_image.dart';
 final flexiblePlaceholder = FlexibleSpaceBar(background: placeholderMedium);
 
 class RecipeAppBar extends StatelessWidget {
-  const RecipeAppBar({Key? key, this.image, required this.isFavorite}) : super(key: key);
+  RecipeAppBar({Key? key, this.image, required this.isFavorite}) : super(key: key);
 
   final Image? image;
   final bool isFavorite;
@@ -18,13 +18,13 @@ class RecipeAppBar extends StatelessWidget {
     return SliverAppBar(
       leadingWidth: 40,
       leading: Padding(
-        padding: const EdgeInsets.all(2.0),
+        padding: EdgeInsets.all(2.0),
         child: RawMaterialButton(
           onPressed: () => Navigator.of(context).pop(),
           elevation: 2.0,
           fillColor: AppColors.indigoButton,
-          shape: const CircleBorder(),
-          child: const Icon(Icons.arrow_back_rounded, size: 35.0),
+          shape: CircleBorder(),
+          child: Icon(Icons.arrow_back_rounded, size: 35.0),
         ),
       ),
       backgroundColor: Colors.white,

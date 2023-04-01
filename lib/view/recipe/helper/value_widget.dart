@@ -6,7 +6,7 @@ class Value extends StatelessWidget {
   final Color color;
   final FontWeight fontWeight;
 
-  const Value({
+  Value({
     Key? key,
     required this.value,
     this.fontSize = 18,
@@ -17,7 +17,7 @@ class Value extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(8.0),
       child: Text(
         value,
         style: TextStyle(

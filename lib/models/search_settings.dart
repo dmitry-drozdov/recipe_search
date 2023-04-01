@@ -9,7 +9,7 @@ import 'enums/meal_type.dart';
 
 part 'search_settings.g.dart';
 
-const delimiter = '&';
+var delimiter = '&';
 
 @JsonSerializable(explicitToJson: true, createToJson: true)
 class SearchSettings extends Equatable {
@@ -20,7 +20,7 @@ class SearchSettings extends Equatable {
   final Range caloriesRange;
   final Range ingredientsRange;
 
-  const SearchSettings({
+  SearchSettings({
     required this.search,
     required this.dietLabels,
     required this.healthLabels,
@@ -57,9 +57,9 @@ class SearchSettings extends Equatable {
   factory SearchSettings.noSettings() {
     return SearchSettings(
       search: '',
-      dietLabels: const <DietLabel>[],
-      healthLabels: const <HealthLabel>[],
-      mealTypes: const <MealType>[],
+      dietLabels: <DietLabel>[],
+      healthLabels: <HealthLabel>[],
+      mealTypes: <MealType>[],
       caloriesRange: Range.defaultCaloriesRange(),
       ingredientsRange: Range.defaultIngredientsRange(),
     );

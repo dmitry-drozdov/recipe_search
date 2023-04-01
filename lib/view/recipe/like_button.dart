@@ -11,7 +11,7 @@ class LikeButton extends StatefulWidget {
   final String recipeId;
   final bool removingConfirmation;
 
-  const LikeButton({
+  LikeButton({
     Key? key,
     required this.viewModel,
     required this.recipeId,
@@ -64,7 +64,7 @@ class _LikeButtonState extends State<LikeButton> {
   Future<ExitType?> onRemoveLike(BuildContext ctx) async {
     return await showDialog<ExitType>(
       context: ctx,
-      builder: (BuildContext context) => const ConfirmDialog(
+      builder: (BuildContext context) => ConfirmDialog(
         title: 'Confirm removing',
         content: 'Are you sure you want to remove this recipe from favorite list?',
         yesAlwaysText: 'Yes always',

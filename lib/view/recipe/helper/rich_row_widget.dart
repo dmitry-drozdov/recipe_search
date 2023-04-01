@@ -10,7 +10,7 @@ class RichRow extends StatelessWidget {
   final FontWeight? fontWeight;
   final EdgeInsets? padding;
 
-  const RichRow({
+  RichRow({
     Key? key,
     required this.left,
     required this.right,
@@ -24,7 +24,7 @@ class RichRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final textStyle = TextStyle(fontSize: 20, fontWeight: fontWeight);
     return Container(
-      padding: padding ?? const EdgeInsets.all(8.0),
+      padding: padding ?? EdgeInsets.all(8.0),
       color: color ?? AppColors.indigoTitle,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -39,7 +39,7 @@ class RichRow extends StatelessWidget {
             child: Row(
               children: [
                 Text(right, style: textStyle),
-                const SizedBox(width: 5),
+                SizedBox(width: 5),
                 Icon(
                   Icons.info_outline_rounded,
                   color: rightTooltip != null ? AppColors.blueChip : Colors.transparent,

@@ -14,7 +14,7 @@ import 'landing/landing.dart';
 class HomeNavigation extends StatefulWidget {
   final AppUser user;
 
-  const HomeNavigation({
+  HomeNavigation({
     Key? key,
     required this.user,
   }) : super(key: key);
@@ -44,7 +44,7 @@ class _HomeNavigationState extends State<HomeNavigation> {
         title: "Recipe search$suffix",
       ),
       ScreenData(
-        widget: const FavoriteRecipes(),
+        widget: FavoriteRecipes(),
         title: "Favorite recipes$suffix",
       ),
     ];
@@ -100,12 +100,12 @@ class _HomeNavigationState extends State<HomeNavigation> {
             ViewModelProvider.delete(recipeKey);
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
-                builder: (_) => const Landing(title: 'Recipe Search Landing'),
+                builder: (_) => Landing(title: 'Recipe Search Landing'),
               ),
             );
           },
-          shape: const CircleBorder(),
-          child: const Icon(Icons.logout),
+          shape: CircleBorder(),
+          child: Icon(Icons.logout),
         ),
       ],
     );

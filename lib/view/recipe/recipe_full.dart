@@ -25,7 +25,7 @@ import 'helper/value_widget.dart';
 class RecipeFull extends StatefulWidget {
   final String id;
 
-  const RecipeFull({
+  RecipeFull({
     Key? key,
     required this.id,
   }) : super(key: key);
@@ -114,7 +114,7 @@ class _RecipeFullState extends State<RecipeFull> {
             constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.8),
             child: Text(
               recipe.label,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: Colors.indigo),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: Colors.indigo),
               overflow: TextOverflow.ellipsis,
               maxLines: 2,
             ).padding8888,
@@ -160,38 +160,38 @@ class _RecipeFullState extends State<RecipeFull> {
       ],
       //-----------------------------------------------
       if (recipe.ingredients.isNotEmpty) ...[
-        const TitleWidget(title: 'Ingredients', fontWeight: FontWeight.w600),
+        TitleWidget(title: 'Ingredients', fontWeight: FontWeight.w600),
         Value(
           value: recipe.ingredients.map((e) => e.food.capitalizeFirst).join(', '),
           fontSize: 20,
         ),
       ],
       //-----------------------------------------------
-      const TitleWidget(title: 'Ingredients details', fontWeight: FontWeight.w600),
+      TitleWidget(title: 'Ingredients details', fontWeight: FontWeight.w600),
       Value(value: listMarker + recipe.ingredientLinesEx.join('\n$listMarker'), fontSize: 20),
       //-----------------------------------------------
       if (recipe.cuisineType.isNotEmpty) ...[
-        const TitleWidget(title: 'Cuisine type'),
+        TitleWidget(title: 'Cuisine type'),
         Value(value: recipe.cuisineType.view),
       ],
       //-----------------------------------------------
       if (recipe.dietLabels.isNotEmpty) ...[
-        const TitleWidget(title: 'Diet labels'),
+        TitleWidget(title: 'Diet labels'),
         Value(value: recipe.dietLabels.view),
       ],
       //-----------------------------------------------
       if (recipe.dishType?.isNotEmpty == true) ...[
-        const TitleWidget(title: 'Dish type'),
+        TitleWidget(title: 'Dish type'),
         Value(value: recipe.dishType!.view),
       ],
       //-----------------------------------------------
       if (recipe.mealType.isNotEmpty) ...[
-        const TitleWidget(title: 'Meal type'),
+        TitleWidget(title: 'Meal type'),
         Value(value: recipe.mealType.view),
       ],
       //-----------------------------------------------
       if (recipe.healthLabels.isNotEmpty) ...[
-        const TitleWidget(title: 'Health labels'),
+        TitleWidget(title: 'Health labels'),
         Labels(
           values: recipe.healthLabels.view,
           selectedValues: recipeViewModel.searchSettings.healthLabels.view,
@@ -211,17 +211,17 @@ class _RecipeFullState extends State<RecipeFull> {
       if (recipe.co2EmissionsClass != null)
         TitleValue(title: 'CO2 Emissions Class', value: recipe.co2EmissionsClass!, color: blueColor),
       //-----------------------------------------------
-      const TitleWidget(title: 'Link'),
+      TitleWidget(title: 'Link'),
       LinkValue(value: recipe.url, color: theme.primaryColor),
       //-----------------------------------------------
-      const TitleWidget(title: 'Digest'),
+      TitleWidget(title: 'Digest'),
       TextButton(
         onPressed: recipeViewModel.onDigestTap,
         style: buttonStyleLarge,
-        child: const Text('View fats, carbs, vitamins and minerals', style: TextStyle(fontSize: 18)),
+        child: Text('View fats, carbs, vitamins and minerals', style: TextStyle(fontSize: 18)),
       ),
       //-----------------------------------------------
-      const SizedBox(height: 2),
+      SizedBox(height: 2),
     ];
   }
 }

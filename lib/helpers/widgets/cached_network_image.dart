@@ -6,9 +6,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:recipe_search/helpers/consts.dart';
 
-const maxDepth = 10;
+var maxDepth = 10;
 const imageSize = 95.0;
-const double? imageSizeFill = null;
+double? imageSizeFill = null;
 
 class CacheImage extends StatefulWidget {
   static CacheImage create({
@@ -25,7 +25,7 @@ class CacheImage extends StatefulWidget {
     );
   }
 
-  const CacheImage._({
+  CacheImage._({
     Key? key,
     this.depth,
     required this.url,

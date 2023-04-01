@@ -7,8 +7,8 @@ Widget titleValue({required String title, required String value}) {
     overflow: TextOverflow.ellipsis,
     text: TextSpan(
       children: [
-        TextSpan(text: title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.indigo)),
-        TextSpan(text: value, style: const TextStyle(fontSize: 16, color: Colors.black)),
+        TextSpan(text: title, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.indigo)),
+        TextSpan(text: value, style: TextStyle(fontSize: 16, color: Colors.black)),
       ],
     ),
   );

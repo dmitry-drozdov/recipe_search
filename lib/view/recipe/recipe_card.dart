@@ -17,7 +17,7 @@ class RecipeCard extends StatelessWidget {
   final RecipeViewModel viewModel;
   final PageType pageType;
 
-  const RecipeCard({
+  RecipeCard({
     Key? key,
     required this.recipe,
     required this.onTap,
@@ -51,7 +51,7 @@ class RecipeCard extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(5),
+        padding: EdgeInsets.all(5),
         constraints: BoxConstraints(maxHeight: 144 + (favoritePage ? 16 : 0)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,13 +65,13 @@ class RecipeCard extends StatelessWidget {
                 ),
                 Flexible(
                   child: Container(
-                    padding: const EdgeInsets.all(5),
+                    padding: EdgeInsets.all(5),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           recipe.label,
-                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                           overflow: TextOverflow.ellipsis,
                         ).paddingV1,
                         titleValue(title: 'Ingredients: ', value: recipe.ingredientsStr).paddingV1,
@@ -84,11 +84,11 @@ class RecipeCard extends StatelessWidget {
                 ),
               ],
             ),
-            const Spacer(),
+            Spacer(),
             if (favoritePage)
               Text(
                 'Saved: ${recipe.likeTimeOrNow.human}',
-                style: const TextStyle(fontSize: 14, color: AppColors.grey),
+                style: TextStyle(fontSize: 14, color: AppColors.grey),
               ),
           ],
         ),

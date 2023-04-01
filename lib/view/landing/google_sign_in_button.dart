@@ -12,7 +12,7 @@ import '../../utils/internet_checker.dart';
 class GoogleSignInButton extends StatefulWidget {
   final Function(User) onSignIn;
 
-  const GoogleSignInButton({
+  GoogleSignInButton({
     Key? key,
     required this.onSignIn,
   }) : super(key: key);
@@ -43,11 +43,11 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
       style: signButtonStyle,
       onPressed: _isSigningIn || checker.disconnected ? null : onPressed,
       child: _isSigningIn
-          ? const CircularLoading().paddingV8
+          ? CircularLoading().paddingV8
           : Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const <Widget>[
+              children: <Widget>[
                 Icon(Icons.vpn_key_outlined),
                 SizedBox(width: 5),
                 Text(

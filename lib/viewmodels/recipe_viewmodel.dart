@@ -150,7 +150,7 @@ class RecipeViewModelImpl extends RecipeViewModel {
   }
 
   Future<void> _exitWithFakeLoading() async {
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(Duration(seconds: 1));
     setLoading(value: false);
   }
 
@@ -190,7 +190,7 @@ class RecipeViewModelImpl extends RecipeViewModel {
     } else {
       errorCode = request.value as int;
       if (errorCode > 400) {
-        await Future.delayed(const Duration(seconds: 10));
+        await Future.delayed(Duration(seconds: 10));
       }
     }
     storage.logSearch(

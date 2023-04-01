@@ -6,12 +6,12 @@ class LinkValue extends StatelessWidget {
   final String value;
   final Color color;
 
-  const LinkValue({Key? key, required this.value, required this.color}) : super(key: key);
+  LinkValue({Key? key, required this.value, required this.color}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(8.0),
       child: Linkify(
         onOpen: (link) async {
           if (await canLaunch(link.url)) {
@@ -22,7 +22,7 @@ class LinkValue extends StatelessWidget {
         },
         text: value,
         linkStyle: TextStyle(fontSize: 18, color: color),
-        options: const LinkifyOptions(removeWww: true),
+        options: LinkifyOptions(removeWww: true),
       ),
     );
   }

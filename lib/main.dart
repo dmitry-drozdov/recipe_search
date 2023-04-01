@@ -23,11 +23,11 @@ Future<void> init() async {
 }
 
 void main() {
-  init().then((value) => runApp(const MyApp()));
+  init().then((value) => runApp(MyApp()));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const Landing(title: 'Recipe Search Landing'),
+        home: Landing(title: 'Recipe Search Landing'),
         scaffoldMessengerKey: snackbarKey,
       ),
     );

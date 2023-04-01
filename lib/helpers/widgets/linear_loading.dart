@@ -4,7 +4,7 @@ class LinearLoading extends StatelessWidget {
   final Color color;
   final bool show;
 
-  const LinearLoading(this.color, {this.show = true, Key? key}) : super(key: key);
+  LinearLoading(this.color, {this.show = true, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

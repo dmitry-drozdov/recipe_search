@@ -4,7 +4,7 @@ import 'package:platform_device_id/platform_device_id.dart';
 
 part 'app_user.g.dart';
 
-const unknownDevice = 'unknown_device';
+var unknownDevice = 'unknown_device';
 
 @JsonSerializable(createToJson: true, constructor: '_')
 class AppUser {

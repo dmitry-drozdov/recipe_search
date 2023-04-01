@@ -25,8 +25,8 @@ class InternetChecker {
   Stream<InternetConnectionStatus> get onStatusChange => _internetChecker.onStatusChange;
 
   final _internetChecker = InternetConnectionChecker.createInstance(
-    checkTimeout: const Duration(seconds: 5),
-    checkInterval: const Duration(seconds: 5),
+    checkTimeout: Duration(seconds: 5),
+    checkInterval: Duration(seconds: 5),
   );
 
   void _onInternetStatusChanged(InternetConnectionStatus status) {
@@ -45,7 +45,7 @@ class InternetChecker {
       ?..hideCurrentSnackBar()
       ..showSnackBar(
         SnackBar(
-          content: Text(msg, style: const TextStyle(fontSize: 16)),
+          content: Text(msg, style: TextStyle(fontSize: 16)),
           backgroundColor: AppColors.blueBorder,
           duration: connected ? snackbarShortDuration : snackbarDuration,
           action: SnackBarAction(
@@ -59,7 +59,7 @@ class InternetChecker {
             borderRadius: BorderRadius.circular(connected ? 10.0 : 15.0),
           ),
           behavior: SnackBarBehavior.floating,
-          margin: const EdgeInsets.fromLTRB(7, 0, 7, 10),
+          margin: EdgeInsets.fromLTRB(7, 0, 7, 10),
         ),
       );
 

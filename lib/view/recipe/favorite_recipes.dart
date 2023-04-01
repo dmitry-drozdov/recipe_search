@@ -10,7 +10,7 @@ import '../../viewmodels/viewmodel_provider.dart';
 import 'recipe_full.dart';
 
 class FavoriteRecipes extends StatefulWidget {
-  const FavoriteRecipes({Key? key}) : super(key: key);
+  FavoriteRecipes({Key? key}) : super(key: key);
 
   @override
   State<FavoriteRecipes> createState() => _FavoriteRecipesState();
@@ -62,7 +62,7 @@ class _FavoriteRecipesState extends State<FavoriteRecipes> {
           return Column(
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                padding: EdgeInsets.fromLTRB(8, 8, 8, 0),
                 child: LinearLoading(
                   Theme.of(context).primaryColor,
                   show: recipeViewModel.loading,
@@ -98,17 +98,17 @@ class _FavoriteRecipesState extends State<FavoriteRecipes> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Spacer(flex: 1),
+          Spacer(flex: 1),
           Icon(
             Icons.favorite,
             size: 220,
             color: Theme.of(context).primaryColor.withOpacity(0.1),
           ),
-          const Text(
+          Text(
             "There is no favorite recipes",
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
           ),
-          const Spacer(flex: 2),
+          Spacer(flex: 2),
         ],
       ),
     );

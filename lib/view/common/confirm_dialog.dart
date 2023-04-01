@@ -6,7 +6,7 @@ import '../../helpers/consts.dart';
 enum ExitType { cancel, yesNow, yesAlways }
 
 class ConfirmDialog extends StatelessWidget {
-  const ConfirmDialog({
+  ConfirmDialog({
     Key? key,
     required this.title,
     required this.content,

@@ -8,7 +8,7 @@ import 'package:recipe_search/viewmodels/viewmodel_provider.dart';
 
 import 'helper/recipe_app_bar.dart';
 
-const toggleTitle = Text(
+var toggleTitle = Text(
   "Show per serving",
   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.indigo),
 );
@@ -16,7 +16,7 @@ const toggleTitle = Text(
 class RecipeDigest extends StatefulWidget {
   final String id;
 
-  const RecipeDigest({
+  RecipeDigest({
     Key? key,
     required this.id,
   }) : super(key: key);
@@ -72,7 +72,7 @@ class _RecipeDigestState extends State<RecipeDigest> {
           Flexible(
             child: Text(
               "${recipe.label}\u{00A0}—\u{00A0}Digest",
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: Colors.indigo),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: Colors.indigo),
               overflow: TextOverflow.ellipsis,
               maxLines: 2,
             ).padding8880,

@@ -6,13 +6,13 @@ final placeholder = Icon(Icons.food_bank_outlined, color: AppColors.greyMedium, 
 final placeholderMedium = Icon(Icons.food_bank_outlined, color: AppColors.greyMedium, size: 200);
 final placeholderLarge = Icon(Icons.food_bank_outlined, color: AppColors.greyMedium, size: 260);
 
-const listMarker = ' • ';
+var listMarker = ' • ';
 
-const mainFont = TextStyle(fontSize: 18);
+var mainFont = TextStyle(fontSize: 18);
 
 final numberPickerShape = RoundedRectangleBorder(side: BorderSide(color: AppColors.blueBorder, width: 1.8));
 
-final buttonSize = MaterialStateProperty.all(const Size(250, 40));
+final buttonSize = MaterialStateProperty.all(Size(250, 40));
 final buttonShape = MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)));
 final buttonColor = MaterialStateProperty.all(AppColors.white);
 
@@ -27,8 +27,8 @@ final alertTextStyle = TextStyle(color: AppColors.blueBorder, fontWeight: FontWe
 
 final tooltipDecoration = BoxDecoration(
   color: AppColors.blueBorder,
-  borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+  borderRadius: BorderRadius.all(Radius.circular(5.0)),
 );
 
-const snackbarDuration = Duration(seconds: 8);
-const snackbarShortDuration = Duration(seconds: 5);
+var snackbarDuration = Duration(seconds: 8);
+var snackbarShortDuration = Duration(seconds: 5);

@@ -12,7 +12,7 @@ import 'package:recipe_search/viewmodels/viewmodel_provider.dart';
 import '../../main.dart';
 
 class RecipeList extends StatefulWidget {
-  const RecipeList({Key? key}) : super(key: key);
+  RecipeList({Key? key}) : super(key: key);
 
   @override
   State<RecipeList> createState() => _RecipeListState();
@@ -113,7 +113,7 @@ class _RecipeListState extends State<RecipeList> {
           ),
           Text(
             text,
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
           ),
         ],
       ),
@@ -130,7 +130,7 @@ class _RecipeListState extends State<RecipeList> {
             size: 220,
             color: Theme.of(context).primaryColor.withOpacity(0.3),
           ),
-          const Text(
+          Text(
             'No internet connection',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
           ),

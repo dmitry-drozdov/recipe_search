@@ -32,7 +32,7 @@ abstract class RecipeRepository {
 
 class RecipeRepositoryImpl extends RecipeRepository {
   final client = HttpClient()
-    ..idleTimeout = const Duration(seconds: 90)
+    ..idleTimeout = Duration(seconds: 90)
     ..maxConnectionsPerHost = 10;
 
   final m = Mutex();

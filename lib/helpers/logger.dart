@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:http/http.dart';
 
-const delimiter = '--------------------------------';
+var delimiter = '--------------------------------';
 
 void logRequest(String query, Response response) {
   log(delimiter);

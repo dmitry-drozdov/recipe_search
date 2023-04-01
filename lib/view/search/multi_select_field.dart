@@ -13,7 +13,7 @@ class MultiSelectField<T> extends StatefulWidget {
   final String title;
   final bool searchable;
 
-  const MultiSelectField({
+  MultiSelectField({
     Key? key,
     required this.items,
     required this.onSelect,
@@ -57,7 +57,7 @@ class _MultiSelectFieldState extends State<MultiSelectField> {
       headerColor: AppColors.lightBlueChip,
       decoration: BoxDecoration(border: Border.all(color: AppColors.blueBorder, width: 1.8)),
       selectedChipColor: AppColors.lightBlueChip,
-      selectedTextStyle: const TextStyle(color: AppColors.black),
+      selectedTextStyle: TextStyle(color: AppColors.black),
       onTap: (values) => widget.onSelect(values),
       searchable: widget.searchable,
       searchHint: 'Enter search text...',

@@ -11,7 +11,7 @@ import 'google_sign_in_button.dart';
 class Landing extends StatefulWidget {
   final String title;
 
-  const Landing({
+  Landing({
     Key? key,
     required this.title,
   }) : super(key: key);
@@ -54,7 +54,7 @@ class _LandingState extends State<Landing> {
             ),
             firstLetterColor: AppColors.redLetter,
           ),
-          const SizedBox(height: 50),
+          SizedBox(height: 50),
           buttons(),
         ],
       ),
@@ -89,7 +89,7 @@ class _LandingState extends State<Landing> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         auth.firebaseApp == null
-            ? const Text('Error initializing Firebase')
+            ? Text('Error initializing Firebase')
             : GoogleSignInButton(onSignIn: (googleUser) => onAuthGoogle(googleUser)),
         Divider(
           color: AppColors.blueBorder,
@@ -117,7 +117,7 @@ class _LandingState extends State<Landing> {
         if (snapshot.hasError) {
           return Text('Error ${snapshot.error}');
         }
-        return const SizedBox(height: 46);
+        return SizedBox(height: 46);
       },
     );
   }

@@ -45,11 +45,11 @@ class Range extends Equatable {
   }
 
   factory Range.defaultCaloriesRange() {
-    return const Range(min: 10, max: 200);
+    return const Range(min: 0, max: 10000);
   }
 
   factory Range.defaultIngredientsRange() {
-    return const Range(min: 1, max: 15);
+    return const Range(min: 0, max: 20);
   }
 
   String get caloriesQuery {

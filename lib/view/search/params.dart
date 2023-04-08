@@ -181,7 +181,7 @@ class _ParamsState extends State<Params> {
           initialValue: settingsMin,
           maxValue: settingsMax,
           minValue: 0,
-          step: 10,
+          step: 100,
           onValue: (value) {
             widget.recipeViewModel.updateSearchSettings(caloriesMin: value as int);
           },
@@ -192,7 +192,7 @@ class _ParamsState extends State<Params> {
           initialValue: settingsMax,
           maxValue: 10000,
           minValue: settingsMin,
-          step: 10,
+          step: 100,
           onValue: (value) {
             widget.recipeViewModel.updateSearchSettings(caloriesMax: value as int);
           },

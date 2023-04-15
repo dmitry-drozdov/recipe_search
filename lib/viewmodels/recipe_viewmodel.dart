@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:queue/queue.dart';
 import 'package:recipe_search/models/enums/diet_label.dart';
 import 'package:recipe_search/models/enums/health_label.dart';
 import 'package:recipe_search/models/enums/meal_type.dart';
@@ -314,7 +315,11 @@ class RecipeViewModelImpl extends RecipeViewModel {
     final alreadyFetched = _favoriteRecipes.map((e) => e.id).toSet();
     final diff = favoriteIds.difference(alreadyFetched);
 
-    await Future.wait(diff.map((id) => _processFavorite(id)));
+    final queue = Queue(parallel: 2);
+    for (final id in diff) {
+      queue.add(() => _processFavorite(id));
+    }
+    await queue.onComplete;
 
     setLoading(value: false);
   }

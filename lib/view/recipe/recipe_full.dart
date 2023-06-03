@@ -200,17 +200,7 @@ class _RecipeFullState extends State<RecipeFull> {
       //-----------------------------------------------
       if (recipe.glycemicIndex != null)
         TitleValue(title: 'Glycemic index', value: recipe.glycemicIndex.toString(), color: blueColor),
-      //-----------------------------------------------
-      if (recipe.totalCO2Emissions != null)
-        TitleValue(
-          title: 'Total CO2 Emissions',
-          value: recipe.totalCO2Emissions.toString(),
-          color: blueColor,
-        ),
-      //-----------------------------------------------
-      if (recipe.co2EmissionsClass != null)
-        TitleValue(title: 'CO2 Emissions Class', value: recipe.co2EmissionsClass!, color: blueColor),
-      //-----------------------------------------------
+      //----------------------------------------------
       const TitleWidget(title: 'Link'),
       LinkValue(value: recipe.url, color: theme.primaryColor),
       //-----------------------------------------------

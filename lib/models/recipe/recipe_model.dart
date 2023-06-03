@@ -31,8 +31,6 @@ class Recipe extends Equatable {
   final List<Ingredient> ingredients;
   final double calories;
   final int? glycemicIndex;
-  final int? totalCO2Emissions;
-  final String? co2EmissionsClass;
   final double totalWeight;
   final List<String> cuisineType;
   @JsonKey(fromJson: mealTypeFromJson, toJson: mealTypeToJson)
@@ -59,8 +57,6 @@ class Recipe extends Equatable {
     required this.ingredients,
     required this.calories,
     this.glycemicIndex,
-    this.totalCO2Emissions,
-    this.co2EmissionsClass,
     required this.totalWeight,
     required this.cuisineType,
     required this.mealType,

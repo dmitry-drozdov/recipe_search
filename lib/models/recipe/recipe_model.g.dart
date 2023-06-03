@@ -16,33 +16,19 @@ Recipe _$RecipeFromJson(Map<String, dynamic> json) => Recipe(
       shareAs: json['shareAs'] as String,
       dietLabels: dietLabelFromJson(json['dietLabels'] as List),
       healthLabels: healthLabelFromJson(json['healthLabels'] as List),
-      cautions:
-          (json['cautions'] as List<dynamic>).map((e) => e as String).toList(),
-      ingredientLines: (json['ingredientLines'] as List<dynamic>)
-          .map((e) => e as String)
-          .toList(),
-      ingredients: (json['ingredients'] as List<dynamic>)
-          .map((e) => Ingredient.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      cautions: (json['cautions'] as List<dynamic>).map((e) => e as String).toList(),
+      ingredientLines: (json['ingredientLines'] as List<dynamic>).map((e) => e as String).toList(),
+      ingredients:
+          (json['ingredients'] as List<dynamic>).map((e) => Ingredient.fromJson(e as Map<String, dynamic>)).toList(),
       calories: (json['calories'] as num).toDouble(),
       glycemicIndex: json['glycemicIndex'] as int?,
-      totalCO2Emissions: json['totalCO2Emissions'] as int?,
-      co2EmissionsClass: json['co2EmissionsClass'] as String?,
       totalWeight: (json['totalWeight'] as num).toDouble(),
-      cuisineType: (json['cuisineType'] as List<dynamic>)
-          .map((e) => e as String)
-          .toList(),
+      cuisineType: (json['cuisineType'] as List<dynamic>).map((e) => e as String).toList(),
       mealType: mealTypeFromJson(json['mealType'] as List),
-      dishType: (json['dishType'] as List<dynamic>?)
-          ?.map((e) => e as String)
-          .toList(),
-      digest: (json['digest'] as List<dynamic>)
-          .map((e) => Digest.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      dishType: (json['dishType'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      digest: (json['digest'] as List<dynamic>).map((e) => Digest.fromJson(e as Map<String, dynamic>)).toList(),
       yield: (json['yield'] as num).toDouble(),
-      likeTime: json['likeTime'] == null
-          ? null
-          : DateTime.parse(json['likeTime'] as String),
+      likeTime: json['likeTime'] == null ? null : DateTime.parse(json['likeTime'] as String),
     );
 
 Map<String, dynamic> _$RecipeToJson(Recipe instance) => <String, dynamic>{
@@ -60,8 +46,6 @@ Map<String, dynamic> _$RecipeToJson(Recipe instance) => <String, dynamic>{
       'ingredients': instance.ingredients.map((e) => e.toJson()).toList(),
       'calories': instance.calories,
       'glycemicIndex': instance.glycemicIndex,
-      'totalCO2Emissions': instance.totalCO2Emissions,
-      'co2EmissionsClass': instance.co2EmissionsClass,
       'totalWeight': instance.totalWeight,
       'cuisineType': instance.cuisineType,
       'mealType': mealTypeToJson(instance.mealType),
